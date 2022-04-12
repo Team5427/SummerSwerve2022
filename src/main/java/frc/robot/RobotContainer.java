@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
@@ -18,12 +23,34 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private static CANSparkMax frontLeftSpeedMotor;
+  private static CANSparkMax frontRightSpeedMotor;
+  private static CANSparkMax backLeftSpeedMotor;
+  private static CANSparkMax backRightSpeedMotor;
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private static CANSparkMax frontLeftTurnMotor;
+  private static CANSparkMax frontRightTurnMotor;
+  private static CANSparkMax backLeftTurnMotor;
+  private static CANSparkMax backRightTurnMotor;
+
+  private static RelativeEncoder frontLeftSpeedEncoder;
+  private static RelativeEncoder frontRightSpeedEncoder;
+  private static RelativeEncoder backLeftSpeedEncoder;
+  private static RelativeEncoder backRightSpeedEncoder;
+
+  private static RelativeEncoder frontLeftTurnEncoder;
+  private static RelativeEncoder frontRightTurnEncoder;
+  private static RelativeEncoder backLeftTurnEncoder;
+  private static RelativeEncoder backRightTurnEncoder;
+
+  private static AnalogInput frontLeftAbsEnc;
+  private static AnalogInput frontRightAbsEnc;
+  private static AnalogInput backLeftAbsEnc;
+  private static AnalogInput backRightAbsEnc;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -43,6 +70,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    // return m_autoCommand;
+    return null;
   }
 }
