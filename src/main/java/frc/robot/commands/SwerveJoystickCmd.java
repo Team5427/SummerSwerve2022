@@ -27,8 +27,8 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void initialize() {        
         swerveSubsystem = RobotContainer.getSwerve();
-        xSpdFunction = RobotContainer.getController().getLeftX();
-        ySpdFunction = RobotContainer.getController().getLeftY();
+        xSpdFunction = RobotContainer.getController().getLeftY();
+        ySpdFunction = RobotContainer.getController().getLeftX();
         turningSpdFunction = RobotContainer.getController().getRightX();
         toggleOrientation = RobotContainer.getController().getAButton();        
         xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -58,7 +58,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
         if (isFieldOriented) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-        } else {
+        } else if (!isFieldOriented) {
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
         }
 
