@@ -12,4 +12,12 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+    
+    public static final double DT_WHEEL_DIAMETER_INCHES = 1.5;
+    //SwerveStuff
+    public static final double SWERVE_CONVERSION_FACTOR_DEG_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_INCHES) / 180;
+    public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = 6 * SWERVE_CONVERSION_FACTOR_DEG_TO_METER;
+    public static final double SWERVE_CONVERSION_FACTOR_DEG_TO_RAD = Math.PI/180;
+    public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = 6 * SWERVE_CONVERSION_FACTOR_DEG_TO_RAD;
+}

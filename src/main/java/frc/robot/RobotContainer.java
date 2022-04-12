@@ -7,6 +7,7 @@ package frc.robot;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -50,7 +51,34 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    frontLeftSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
+    frontRightSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
+    backLeftSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
+    backRightSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
     
+    frontLeftTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
+    frontRightTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
+    backLeftTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
+    backRightTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
+    
+    frontLeftSpeedEncoder = frontLeftSpeedMotor.getEncoder();
+    frontRightSpeedEncoder = frontRightSpeedMotor.getEncoder();
+    backLeftSpeedEncoder = backLeftSpeedMotor.getEncoder();
+    backRightSpeedEncoder = backRightSpeedMotor.getEncoder();
+
+    frontLeftTurnEncoder = frontLeftTurnMotor.getEncoder();
+    frontRightTurnEncoder = frontRightTurnMotor.getEncoder();
+    backLeftTurnEncoder = backLeftTurnMotor.getEncoder();
+    backRightTurnEncoder = backRightTurnMotor.getEncoder();
+
+    frontLeftAbsEnc = new AnalogInput(0);
+    frontRightAbsEnc = new AnalogInput(0);
+    backLeftAbsEnc = new AnalogInput(0);
+    backRightAbsEnc = new AnalogInput(0);
+
+    
+
     // Configure the button bindings
     configureButtonBindings();
   }

@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class SwerveModule extends SubsystemBase{
 
@@ -21,5 +22,12 @@ public class SwerveModule extends SubsystemBase{
         this.speedEnc = speedEnc;
         this.turnEnc = turnEnc;
         this.absEnc = absEnc;
+    }
+
+    public void initModule() {
+        speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_DEG_TO_METER);
+        speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
+        turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_DEG_TO_RAD);
+        turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
     }
 }
