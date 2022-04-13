@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -44,10 +45,10 @@ public class RobotContainer {
   private static RelativeEncoder backLeftTurnEncoder;
   private static RelativeEncoder backRightTurnEncoder;
 
-  private static AnalogInput frontLeftAbsEnc;
-  private static AnalogInput frontRightAbsEnc;
-  private static AnalogInput backLeftAbsEnc;
-  private static AnalogInput backRightAbsEnc;
+  private static CANCoder frontLeftAbsEnc;
+  private static CANCoder frontRightAbsEnc;
+  private static CANCoder backLeftAbsEnc;
+  private static CANCoder backRightAbsEnc;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -72,10 +73,10 @@ public class RobotContainer {
     backLeftTurnEncoder = backLeftTurnMotor.getEncoder();
     backRightTurnEncoder = backRightTurnMotor.getEncoder();
 
-    frontLeftAbsEnc = new AnalogInput(0);
-    frontRightAbsEnc = new AnalogInput(0);
-    backLeftAbsEnc = new AnalogInput(0);
-    backRightAbsEnc = new AnalogInput(0);
+    frontLeftAbsEnc = new CANCoder(0);
+    frontRightAbsEnc = new CANCoder(0);
+    backLeftAbsEnc = new CANCoder(0);
+    backRightAbsEnc = new CANCoder(0);
 
     
 

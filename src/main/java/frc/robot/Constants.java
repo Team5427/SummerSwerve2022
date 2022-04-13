@@ -20,4 +20,5 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = 6 * SWERVE_CONVERSION_FACTOR_DEG_TO_METER;
     public static final double SWERVE_CONVERSION_FACTOR_DEG_TO_RAD = Math.PI/180;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = 6 * SWERVE_CONVERSION_FACTOR_DEG_TO_RAD;
+    public static final double MODULE_KP_CONSTANT = 0.0001;
 }
