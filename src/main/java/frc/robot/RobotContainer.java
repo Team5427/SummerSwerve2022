@@ -4,18 +4,20 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.CANEncoder;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.SwerveModule;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,9 +52,19 @@ public class RobotContainer {
   private static CANCoder backLeftAbsEnc;
   private static CANCoder backRightAbsEnc;
 
+  private static SwerveModule frontLeft;
+  private static SwerveModule frontRight;
+  private static SwerveModule backLeft;
+  private static SwerveModule backRight;
+
+  private static SwerveDrive swerveDrive;
+
+  private static AHRS ahrs;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
+    //havent started reversals yet
     frontLeftSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
     frontRightSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
     backLeftSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
@@ -78,7 +90,19 @@ public class RobotContainer {
     backLeftAbsEnc = new CANCoder(0);
     backRightAbsEnc = new CANCoder(0);
 
-    
+    frontLeft = new SwerveModule(frontLeftSpeedMotor, frontLeftTurnMotor, frontLeftSpeedEncoder, frontLeftTurnEncoder, frontLeftAbsEnc);
+    frontRight = new SwerveModule(frontRightSpeedMotor, frontRightTurnMotor, frontRightSpeedEncoder, frontRightTurnEncoder, frontRightAbsEnc);
+    backLeft = new SwerveModule(backLeftSpeedMotor, backLeftTurnMotor, backLeftSpeedEncoder, backLeftTurnEncoder, backLeftAbsEnc);
+    backRight = new SwerveModule(backRightSpeedMotor, backRightTurnMotor, backRightSpeedEncoder, backRightTurnEncoder, backRightAbsEnc);
+
+    frontLeft.init();
+    frontRight.init();
+    backLeft.init();
+    backRight.init();
+
+    ahrs = new AHRS(SPI.Port.kMXP);
+
+    swerveDrive = new SwerveDrive(frontLeft, frontRight, backLeft, backRight, ahrs);
 
     // Configure the button bindings
     configureButtonBindings();
