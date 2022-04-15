@@ -11,11 +11,16 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.JoystickSwerve;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveModule;
 
@@ -26,7 +31,7 @@ import frc.robot.subsystems.SwerveModule;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+
   private static CANSparkMax frontLeftSpeedMotor;
   private static CANSparkMax frontRightSpeedMotor;
   private static CANSparkMax backLeftSpeedMotor;
@@ -61,19 +66,23 @@ public class RobotContainer {
 
   private static AHRS ahrs;
 
+  private static XboxController joy;
+  private static JoystickButton gyroResetBtn;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     //havent started reversals yet
-    frontLeftSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
-    frontRightSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
-    backLeftSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
-    backRightSpeedMotor = new CANSparkMax(0, MotorType.kBrushless);
+    frontLeftSpeedMotor = new CANSparkMax(Constants.FRONT_LEFT_SPEED_MOTOR, MotorType.kBrushless);
+    frontRightSpeedMotor = new CANSparkMax(Constants.FRONT_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
+    backLeftSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
+    backRightSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
+
     
-    frontLeftTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
-    frontRightTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
-    backLeftTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
-    backRightTurnMotor = new CANSparkMax(0, MotorType.kBrushless);
+    frontLeftTurnMotor = new CANSparkMax(Constants.FRONT_LEFT_TURN_MOTOR, MotorType.kBrushless);
+    frontRightTurnMotor = new CANSparkMax(Constants.FRONT_RIGHT_TURN_MOTOR, MotorType.kBrushless);
+    backLeftTurnMotor = new CANSparkMax(Constants.BACK_LEFT_TURN_MOTOR, MotorType.kBrushless);
+    backRightTurnMotor = new CANSparkMax(Constants.BACK_RIGHT_TURN_MOTOR, MotorType.kBrushless);
     
     frontLeftSpeedEncoder = frontLeftSpeedMotor.getEncoder();
     frontRightSpeedEncoder = frontRightSpeedMotor.getEncoder();
@@ -85,10 +94,10 @@ public class RobotContainer {
     backLeftTurnEncoder = backLeftTurnMotor.getEncoder();
     backRightTurnEncoder = backRightTurnMotor.getEncoder();
 
-    frontLeftAbsEnc = new CANCoder(0);
-    frontRightAbsEnc = new CANCoder(0);
-    backLeftAbsEnc = new CANCoder(0);
-    backRightAbsEnc = new CANCoder(0);
+    frontLeftAbsEnc = new CANCoder(Constants.FRONT_LEFT_CANCODER);
+    frontRightAbsEnc = new CANCoder(Constants.FRONT_RIGHT_CANCODER);
+    backLeftAbsEnc = new CANCoder(Constants.BACK_LEFT_CANCODER);
+    backRightAbsEnc = new CANCoder(Constants.BACK_RIGHT_CANCODER);
 
     frontLeft = new SwerveModule(frontLeftSpeedMotor, frontLeftTurnMotor, frontLeftSpeedEncoder, frontLeftTurnEncoder, frontLeftAbsEnc);
     frontRight = new SwerveModule(frontRightSpeedMotor, frontRightTurnMotor, frontRightSpeedEncoder, frontRightTurnEncoder, frontRightAbsEnc);
@@ -101,8 +110,10 @@ public class RobotContainer {
     backRight.init();
 
     ahrs = new AHRS(SPI.Port.kMXP);
+    joy = new XboxController(0);
 
     swerveDrive = new SwerveDrive(frontLeft, frontRight, backLeft, backRight, ahrs);
+    swerveDrive.setDefaultCommand(new JoystickSwerve());
 
     // Configure the button bindings
     configureButtonBindings();
@@ -114,7 +125,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -126,4 +139,8 @@ public class RobotContainer {
     // return m_autoCommand;
     return null;
   }
+
+  public static SwerveDrive getSwerve() {return swerveDrive;}
+  public static AHRS getAHRS() {return ahrs;}
+  public static XboxController getController() {return joy;}
 }

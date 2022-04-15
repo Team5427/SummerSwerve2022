@@ -36,32 +36,22 @@ public class SwerveModule extends SubsystemBase {
         turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_DEG_TO_RAD);
         turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
         speedEnc.setPosition(0);
+        absEnc.configFactoryDefault();
         absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         turnEnc.setPosition(Math.toRadians(absEnc.getAbsolutePosition()));
     }
 
-    public double getDrivePos() {
-        return speedEnc.getPosition();
-    }
-    
-    public double getDriveSpeed() {
-        return speedEnc.getVelocity();
-    }
-    
-    public double getTurnPosRad() {
-        return speedEnc.getPosition();
-    }
-    
-    public double getTurnVel() {
-        return speedEnc.getPosition();
-    }
+    public double getDrivePos() {return speedEnc.getPosition();}
+    public double getDriveSpeed() {return speedEnc.getVelocity();}
+    public double getTurnPosRad() {return turnEnc.getPosition();}
+    public double getTurnVel() {return turnEnc.getPosition();}
 
     public SwerveModuleState getModState() {
         return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getTurnPosRad()));
     }
 
     public void setModState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.02) {
+        if (Math.abs(state.speedMetersPerSecond) < 0.01) {
             stop();
             return;
         }
