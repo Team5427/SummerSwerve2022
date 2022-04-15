@@ -13,12 +13,12 @@ import frc.robot.Constants;
 
 public class SwerveModule extends SubsystemBase {
 
-    private static CANSparkMax speedMotor;
-    private static CANSparkMax turnMotor;
-    private static RelativeEncoder speedEnc;
-    private static RelativeEncoder turnEnc;
-    private static CANCoder absEnc;
-    private static PIDController turningPID;
+    private CANSparkMax speedMotor;
+    private CANSparkMax turnMotor;
+    private RelativeEncoder speedEnc;
+    private RelativeEncoder turnEnc;
+    private CANCoder absEnc;
+    private PIDController turningPID;
 
     public SwerveModule (CANSparkMax speedMotor, CANSparkMax turnMotor, RelativeEncoder speedEnc, RelativeEncoder turnEnc, CANCoder absEnc) {
         this.speedMotor = speedMotor;
