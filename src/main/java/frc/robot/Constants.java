@@ -20,19 +20,19 @@ public final class Constants {
     
     //Robot Ports
     public static final int FRONT_LEFT_SPEED_MOTOR = 0;
-    public static final int FRONT_RIGHT_SPEED_MOTOR = 0;
-    public static final int BACK_LEFT_SPEED_MOTOR = 0;
-    public static final int BACK_RIGHT_SPEED_MOTOR = 0;
+    public static final int FRONT_RIGHT_SPEED_MOTOR = 1;
+    public static final int BACK_LEFT_SPEED_MOTOR = 2;
+    public static final int BACK_RIGHT_SPEED_MOTOR = 3;
 
-    public static final int FRONT_LEFT_TURN_MOTOR = 0;
-    public static final int FRONT_RIGHT_TURN_MOTOR = 0;
-    public static final int BACK_LEFT_TURN_MOTOR = 0;
-    public static final int BACK_RIGHT_TURN_MOTOR = 0;
+    public static final int FRONT_LEFT_TURN_MOTOR = 4;
+    public static final int FRONT_RIGHT_TURN_MOTOR = 5;
+    public static final int BACK_LEFT_TURN_MOTOR = 6;
+    public static final int BACK_RIGHT_TURN_MOTOR = 7;
 
     public static final int FRONT_LEFT_CANCODER = 0;
-    public static final int FRONT_RIGHT_CANCODER = 0;
-    public static final int BACK_LEFT_CANCODER = 0;
-    public static final int BACK_RIGHT_CANCODER = 0;
+    public static final int FRONT_RIGHT_CANCODER = 1;
+    public static final int BACK_LEFT_CANCODER = 2;
+    public static final int BACK_RIGHT_CANCODER = 3;
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_INCHES = 1.5;

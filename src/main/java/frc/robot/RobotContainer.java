@@ -71,7 +71,7 @@ public class RobotContainer {
     //havent started reversals yet
     frontLeftSpeedMotor = new CANSparkMax(Constants.FRONT_LEFT_SPEED_MOTOR, MotorType.kBrushless);
     frontRightSpeedMotor = new CANSparkMax(Constants.FRONT_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
-    backLeftSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
+    backLeftSpeedMotor = new CANSparkMax(Constants.BACK_LEFT_SPEED_MOTOR, MotorType.kBrushless);
     backRightSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
 
     
