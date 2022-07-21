@@ -11,7 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class SwerveModule extends  SubsystemBase{
+public class SwerveModule extends SubsystemBase {
 
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
@@ -53,11 +53,11 @@ public class SwerveModule extends  SubsystemBase{
     public void setModState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.01) {
             stop();
-            return;
+        } else{
+            state = SwerveModuleState.optimize(state, getModState().angle);
+            speedMotor.set(state.speedMetersPerSecond / Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
+            turnMotor.set(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()));
         }
-        state = SwerveModuleState.optimize(state, getModState().angle);
-        speedMotor.set(state.speedMetersPerSecond / Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
-        turnMotor.set(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()));
     }
 
     public void stop() {

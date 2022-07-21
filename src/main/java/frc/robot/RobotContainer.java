@@ -9,6 +9,9 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -55,6 +58,7 @@ public class RobotContainer {
   private static SwerveModule backLeft;
   private static SwerveModule backRight;
 
+
   private static SwerveDrive swerveDrive;
 
   private static AHRS ahrs;
@@ -67,7 +71,7 @@ public class RobotContainer {
     //havent started reversals yet
     frontLeftSpeedMotor = new CANSparkMax(Constants.FRONT_LEFT_SPEED_MOTOR, MotorType.kBrushless);
     frontRightSpeedMotor = new CANSparkMax(Constants.FRONT_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
-    backLeftSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
+    backLeftSpeedMotor = new CANSparkMax(Constants.BACK_LEFT_SPEED_MOTOR, MotorType.kBrushless);
     backRightSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
 
     
@@ -106,6 +110,7 @@ public class RobotContainer {
 
     swerveDrive = new SwerveDrive(frontLeft, frontRight, backLeft, backRight, ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
+
 
     // Configure the button bindings
     configureButtonBindings();

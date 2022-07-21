@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,6 +28,7 @@ public class SwerveDrive extends SubsystemBase {
     private boolean isFieldRelative;
     private int shifter;
     private SwerveDriveOdometry odometer;
+    private Field2d field;
 
     public SwerveDrive (SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, AHRS gyro) {
         this.frontLeft = frontLeft;
@@ -40,6 +42,11 @@ public class SwerveDrive extends SubsystemBase {
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
         shifter = 3;
+
+        field = new Field2d();
+
+        SmartDashboard.putData(field);
+
         zeroHeading();
     }
 
@@ -116,7 +123,9 @@ public class SwerveDrive extends SubsystemBase {
         frontRight.setModState(desiredStates[1]);
         backLeft.setModState(desiredStates[2]);
         backLeft.setModState(desiredStates[3]);
+
     }
+
 
     public void upShift() {
         shifter++;
@@ -149,6 +158,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
 
+        field.setRobotPose(odometer.getPoseMeters());
     }
 
 
