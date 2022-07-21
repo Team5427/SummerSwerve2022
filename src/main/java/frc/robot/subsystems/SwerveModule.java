@@ -11,7 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class SwerveModule extends SubsystemBase {
+public class SwerveModule extends  SubsystemBase{
 
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
