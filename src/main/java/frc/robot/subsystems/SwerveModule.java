@@ -31,9 +31,9 @@ public class SwerveModule extends SubsystemBase {
     public void init() {
         turningPID = new PIDController(Constants.MODULE_KP_CONSTANT, 0, 0);
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
-        speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_DEG_TO_METER);
+        speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_METER);
         speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
-        turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_DEG_TO_RAD);
+        turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_RAD);
         turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
         speedEnc.setPosition(0);
         absEnc.configFactoryDefault();
@@ -44,7 +44,7 @@ public class SwerveModule extends SubsystemBase {
     public double getDrivePos() {return speedEnc.getPosition();}
     public double getDriveSpeed() {return speedEnc.getVelocity();}
     public double getTurnPosRad() {return turnEnc.getPosition();}
-    public double getTurnVel() {return turnEnc.getPosition();}
+    public double getTurnVel() {return turnEnc.getVelocity();}
 
     public SwerveModuleState getModState() {
         return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getTurnPosRad()));

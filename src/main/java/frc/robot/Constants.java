@@ -46,10 +46,10 @@ public final class Constants {
         new Translation2d(-DT_WHEELBASE / 2, DT_TRACKWIDTH / 2));
 
     //Swerve Speed Numbers
-    public static final double SWERVE_CONVERSION_FACTOR_DEG_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_INCHES) / 180;
-    public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = 6 * SWERVE_CONVERSION_FACTOR_DEG_TO_METER;
-    public static final double SWERVE_CONVERSION_FACTOR_DEG_TO_RAD = Math.PI/180;
-    public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = 6 * SWERVE_CONVERSION_FACTOR_DEG_TO_RAD;
+    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_INCHES);
+    public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
+    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI;
+    public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MODULE_KP_CONSTANT = 0.0001;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 3;
     public static final double CONTROLLER_DEADBAND = 0.05;
