@@ -198,8 +198,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearLeft.setDesiredState(swerveModuleStates[2]);
         m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-        SmartDashboard.putNumber("gyro deg", getGyroDeg(true));
-        // SmartDashboard.putString("coords", getPose().getTranslation().toString());
+        SmartDashboard.putNumber("gyro R2d", m_gyro.getRotation2d().getDegrees());
+        SmartDashboard.putString("coords", getPose().getTranslation().toString());
         // SmartDashboard.putNumber("target_angle_raw", getTargetAngle());
         // SmartDashboard.putNumber("target_angle_dynamic", getDynamicTargetAngle());
         // SmartDashboard.putNumber("quadrant", getQuadrant());
@@ -207,9 +207,9 @@ public class DriveSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("y speed", ySpeed);
         // SmartDashboard.putNumber("chassis speed", getChassisVectorSpeed());
         // SmartDashboard.putNumber("chassis angle", getChassisVectorAngle());
-        SmartDashboard.putNumber("par speed", getChassisParSpeed());
-        SmartDashboard.putNumber("targ_x", target_x);
-        SmartDashboard.putNumber("targ_y", target_y);
+        // SmartDashboard.putNumber("par speed", getChassisParSpeed());
+        // SmartDashboard.putNumber("targ_x", target_x);
+        // SmartDashboard.putNumber("targ_y", target_y);
         // SmartDashboard.putNumber("targ_new_angle_x",
         // moveTargetX(getChassisTanSpeed()));
         // SmartDashboard.putNumber("targ_new_angle_y",

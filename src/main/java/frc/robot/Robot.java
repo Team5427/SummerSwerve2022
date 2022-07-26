@@ -4,6 +4,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,12 +37,35 @@ public class Robot extends TimedRobot {
      * for any
      * initialization code.
      */
+
+    String trajectoryJSON = "paths/TestPath1.wpilib.json";
+    public static Trajectory trajectory = new Trajectory();
+
+    String trajectoryJSON2 = "paths/TestPath2.wpilib.json";
+    public static Trajectory trajectory2 = new Trajectory();
+
     @Override
     public void robotInit() {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
+
+        try {
+            Path trajectoryPath2 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON2);
+            trajectory2 = TrajectoryUtil.fromPathweaverJson(trajectoryPath2);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON2, ex.getStackTrace());
+        }
+
+        System.out.println(trajectory.toString());
 
     }
 
