@@ -20,7 +20,9 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.nio.file.FileSystem;
@@ -128,27 +130,16 @@ public class RobotContainer {
                 thetaController,
                 m_robotDrive::setModuleStates,
                 m_robotDrive);
+
                 
-
-        PratsSwerveAutonCommand pratsSwerveAutonCommand2 = new PratsSwerveAutonCommand(
-                Robot.trajectory2,
-                m_robotDrive::getPose, // Functional interface to feed supplier
-                DriveConstants.kDriveKinematics,
-
-                // Position controllers
-                new PIDController(AutoConstants.kPXController, 0, 0),
-                new PIDController(AutoConstants.kPYController, 0, 0),
-                thetaController,
-                m_robotDrive::setModuleStates,
-                m_robotDrive);
 
         // Reset odometry to the starting pose of the trajectory.
         m_robotDrive.resetOdometry(Robot.trajectory.getInitialPose());
 
-        m_robotDrive.showCurrentTrajectory(Robot.trajectory2);
+        // m_robotDrive.showCurrentTrajectory(Robot.trajectory);
 
         // Run path following command, then stop at the end.
-        return pratsSwerveAutonCommand.andThen(pratsSwerveAutonCommand2);
+        return pratsSwerveAutonCommand;
     }
 
     public static XboxController getJoy() {

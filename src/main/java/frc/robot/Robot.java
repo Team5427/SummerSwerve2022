@@ -38,11 +38,11 @@ public class Robot extends TimedRobot {
      * initialization code.
      */
 
-    String trajectoryJSON = "paths/TestPath1.wpilib.json";
+    String trajectoryJSON = "paths/output/froog.wpilib.json";
     public static Trajectory trajectory = new Trajectory();
 
-    String trajectoryJSON2 = "paths/TestPath2.wpilib.json";
-    public static Trajectory trajectory2 = new Trajectory();
+    // String trajectoryJSON2 = "paths/TestPath2.wpilib.json";
+    // public static Trajectory trajectory2 = new Trajectory();
 
     @Override
     public void robotInit() {
@@ -58,12 +58,12 @@ public class Robot extends TimedRobot {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
         }
 
-        try {
-            Path trajectoryPath2 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON2);
-            trajectory2 = TrajectoryUtil.fromPathweaverJson(trajectoryPath2);
-        } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON2, ex.getStackTrace());
-        }
+        // try {
+        //     Path trajectoryPath2 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON2);
+        //     trajectory2 = TrajectoryUtil.fromPathweaverJson(trajectoryPath2);
+        // } catch (IOException ex) {
+        //     DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON2, ex.getStackTrace());
+        // }
 
         System.out.println(trajectory.toString());
 

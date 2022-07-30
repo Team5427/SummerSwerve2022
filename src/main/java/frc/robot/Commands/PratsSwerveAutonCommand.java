@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -103,6 +104,9 @@ public class PratsSwerveAutonCommand extends CommandBase {
         m_controller.calculate(m_pose.get(), desiredState, desiredState.poseMeters.getRotation());
     var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
+    SmartDashboard.putNumber("relative curTime", curTime);
+    SmartDashboard.putNumber("cur Rotation", curTime/12 * 360);
+
     m_outputModuleStates.accept(targetModuleStates);
   }
 
@@ -114,5 +118,10 @@ public class PratsSwerveAutonCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return m_timer.hasElapsed(m_trajectory.getTotalTimeSeconds());
+  }
+
+
+  public static double adaptive360ReturnsDeg(double t) {
+    return t * 360/6;
   }
 }
