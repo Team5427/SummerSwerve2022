@@ -104,8 +104,7 @@ public class PratsSwerveAutonCommand extends CommandBase {
         m_controller.calculate(m_pose.get(), desiredState, desiredState.poseMeters.getRotation());
     var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
-    SmartDashboard.putNumber("relative curTime", curTime);
-    SmartDashboard.putNumber("cur Rotation", curTime/12 * 360);
+    System.out.println(desiredState.poseMeters);
 
     m_outputModuleStates.accept(targetModuleStates);
   }

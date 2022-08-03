@@ -131,15 +131,27 @@ public class RobotContainer {
                 m_robotDrive::setModuleStates,
                 m_robotDrive);
 
-                
+        SwerveControllerCommand boomerCMD = new SwerveControllerCommand(
+                Robot.trajectory,
+                m_robotDrive::getPose, // Functional interface to feed supplier
+                DriveConstants.kDriveKinematics,
+
+                // Position controllers
+                new PIDController(AutoConstants.kPXController, 0, 0),
+                new PIDController(AutoConstants.kPYController, 0, 0),
+                thetaController,
+                m_robotDrive::setModuleStates,
+                m_robotDrive);
+
+        var returnCommand = boomerCMD; 
 
         // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(new Pose2d(0.1, 0.1, new Rotation2d(1, 1)));
+        m_robotDrive.resetOdometry(Robot.trajectory.getInitialPose());
 
-        // m_robotDrive.showCurrentTrajectory(Robot.trajectory);
+        m_robotDrive.showCurrentTrajectory(Robot.trajectory);
 
         // Run path following command, then stop at the end.
-        return null;
+        return pratsSwerveAutonCommand;
     }
 
     public static XboxController getJoy() {
