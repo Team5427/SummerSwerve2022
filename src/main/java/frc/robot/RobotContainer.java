@@ -134,12 +134,12 @@ public class RobotContainer {
                 
 
         // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(Robot.trajectory.getInitialPose());
+        m_robotDrive.resetOdometry(new Pose2d(0.1, 0.1, new Rotation2d(1, 1)));
 
         // m_robotDrive.showCurrentTrajectory(Robot.trajectory);
 
         // Run path following command, then stop at the end.
-        return pratsSwerveAutonCommand;
+        return null;
     }
 
     public static XboxController getJoy() {
