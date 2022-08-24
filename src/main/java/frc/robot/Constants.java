@@ -46,9 +46,11 @@ public final class Constants {
         new Translation2d(-DT_WHEELBASE / 2, DT_TRACKWIDTH / 2));
 
     //Swerve Speed Numbers
-    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_INCHES);
+    public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (25.0 / 19.0) * (15.0 / 45.0));
+    public static final double kTurningMotorGearRatio = ((15.0 / 32.0) * (10.0 / 60.0));
+    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_INCHES * kDriveMotorGearRatio);
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
-    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI;
+    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MODULE_KP_CONSTANT = 0.0001;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 3;
