@@ -55,7 +55,7 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MODULE_KP_CONSTANT = 0.0001; //FIXME
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
-    public static final double CONTROLLER_DEADBAND = 0.04;
+    public static final double CONTROLLER_DEADBAND = 0.05;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 3;
