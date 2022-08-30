@@ -14,12 +14,12 @@ public class JoystickSwerve extends CommandBase {
 
     public JoystickSwerve () {
         addRequirements(RobotContainer.getSwerve());
+        joy = RobotContainer.getController();
+        swerve = RobotContainer.getSwerve();
     }
 
     @Override
     public void initialize() {
-        joy = RobotContainer.getController();
-        swerve = RobotContainer.getSwerve();
 
     }
 

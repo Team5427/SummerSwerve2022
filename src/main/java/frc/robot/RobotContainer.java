@@ -10,13 +10,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.JoystickSwerve;
+import frc.robot.commands.Trajectory.AutonController;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveModule;
 
@@ -58,6 +57,7 @@ public class RobotContainer {
   private static SwerveModule backLeft;
   private static SwerveModule backRight;
 
+  private static AutonController autonController;
 
   private static SwerveDrive swerveDrive;
 
@@ -111,8 +111,6 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive(frontLeft, frontRight, backLeft, backRight, ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
-
-    // Configure the button bindings
     configureButtonBindings();
   }
 
@@ -134,7 +132,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return null;
+    autonController = new AutonController();
+    return autonController.getAutonCommand();
   }
 
   public static SwerveDrive getSwerve() {return swerveDrive;}
