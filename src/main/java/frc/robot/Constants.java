@@ -35,8 +35,13 @@ public final class Constants {
     public static final int BACK_LEFT_CANCODER = 2;
     public static final int BACK_RIGHT_CANCODER = 3;
 
+    public static final double FRONT_LEFT_OFFSET = 0.0;
+    public static final double FRONT_RIGHT_OFFSET = 0.0;
+    public static final double BACK_LEFT_OFFSET = 0.0;
+    public static final double BACK_RIGHT_OFFSET = 0.0;
+
     //Robot Physical Dimensions
-    public static final double DT_WHEEL_DIAMETER_INCHES = 1.5;
+    public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
     public static final double DT_TRACKWIDTH = Units.inchesToMeters(22.5);
     public static final double DT_WHEELBASE = Units.inchesToMeters(24.5);
 
@@ -49,17 +54,18 @@ public final class Constants {
     //Swerve Speed Numbers
     public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0));
     public static final double kTurningMotorGearRatio = ((15.0 / 32.0) * (10.0 / 60.0));
-    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_INCHES * kDriveMotorGearRatio);
+    public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_METERS * kDriveMotorGearRatio);
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
-    public static final double MODULE_KP_CONSTANT = 0.0001; //FIXME
+    public static final double MODULE_KP_CONSTANT = 0.5; //FIXME
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
     public static final double CONTROLLER_DEADBAND = 0.05;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 3;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = 2 * Math.PI;
+    public static final double MAX_NEO_SPEED_RPM = 5676;
 
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
@@ -70,4 +76,18 @@ public final class Constants {
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
+
+    //CONTROLLER CONSTANTS MODULES
+    public static final double TURNING_PID_P = 0.5;
+    public static final double TURNING_PID_D = 0.5;
+    public static final double TURNING_FF_S = 0.5;
+    public static final double TURNING_FF_V = 0.5;
+    public static final double TURNING_FF_A = 0.5;
+    public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 4;
+
+    public static final double SPEED_PID_P = 0.5;
+    public static final double SPEED_FF_S = 0.5;
+    public static final double SPEED_FF_V = 0.5;
+    public static final double SPEED_FF_A = 0.5;
 }

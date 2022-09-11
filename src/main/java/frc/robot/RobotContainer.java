@@ -95,10 +95,10 @@ public class RobotContainer {
     backLeftAbsEnc = new CANCoder(Constants.BACK_LEFT_CANCODER);
     backRightAbsEnc = new CANCoder(Constants.BACK_RIGHT_CANCODER);
 
-    frontLeft = new SwerveModule(frontLeftSpeedMotor, frontLeftTurnMotor, frontLeftSpeedEncoder, frontLeftTurnEncoder, frontLeftAbsEnc);
-    frontRight = new SwerveModule(frontRightSpeedMotor, frontRightTurnMotor, frontRightSpeedEncoder, frontRightTurnEncoder, frontRightAbsEnc);
-    backLeft = new SwerveModule(backLeftSpeedMotor, backLeftTurnMotor, backLeftSpeedEncoder, backLeftTurnEncoder, backLeftAbsEnc);
-    backRight = new SwerveModule(backRightSpeedMotor, backRightTurnMotor, backRightSpeedEncoder, backRightTurnEncoder, backRightAbsEnc);
+    frontLeft = new SwerveModule(frontLeftSpeedMotor, frontLeftTurnMotor, frontLeftSpeedEncoder, frontLeftTurnEncoder, frontLeftAbsEnc, Constants.FRONT_LEFT_OFFSET);
+    frontRight = new SwerveModule(frontRightSpeedMotor, frontRightTurnMotor, frontRightSpeedEncoder, frontRightTurnEncoder, frontRightAbsEnc, Constants.FRONT_RIGHT_OFFSET);
+    backLeft = new SwerveModule(backLeftSpeedMotor, backLeftTurnMotor, backLeftSpeedEncoder, backLeftTurnEncoder, backLeftAbsEnc, Constants.BACK_LEFT_OFFSET);
+    backRight = new SwerveModule(backRightSpeedMotor, backRightTurnMotor, backRightSpeedEncoder, backRightTurnEncoder, backRightAbsEnc, Constants.BACK_RIGHT_OFFSET);
 
     frontLeft.init();
     frontRight.init();
