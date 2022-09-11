@@ -41,6 +41,22 @@ public final class Constants {
     public static final double FRONT_RIGHT_OFFSET = 0.0;
     public static final double BACK_LEFT_OFFSET = 0.0;
     public static final double BACK_RIGHT_OFFSET = 0.0;
+    
+    //Inversions FIXME all of these
+    public static final boolean FRONT_LEFT_TURNING_INVERT = true;
+    public static final boolean FRONT_RIGHT_TURNING_INVERT = true;
+    public static final boolean BACK_LEFT_TURNING_INVERT = true;
+    public static final boolean BACK_RIGHT_TURNING_INVERT = true;
+
+    public static final boolean FRONT_LEFT_DRIVE_INVERT = true;
+    public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
+    public static final boolean BACK_LEFT_DRIVE_INVERT = false;
+    public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
+
+    public static final boolean FRONT_LEFT_CANCODER_INVERT = false;
+    public static final boolean FRONT_RIGHT_CANCODER_INVERT = false;
+    public static final boolean BACK_LEFT_CANCODER_INVERT = false;
+    public static final boolean BACK_RIGHT_CANCODER_INVERT = false;
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);

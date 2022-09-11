@@ -21,6 +21,9 @@ public class SwerveModule extends SubsystemBase {
     private int speedMotorID;
     private int turnMotorID;
     private int absEncID;
+    private boolean speedInv;
+    private boolean turnInv;
+    private boolean encInv; //Dont know if possible to invert cancoder
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
     private RelativeEncoder speedEnc;
@@ -36,6 +39,8 @@ public class SwerveModule extends SubsystemBase {
         determineIDs(type);
         this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
         this.turnMotor = new CANSparkMax(turnMotorID, MotorType.kBrushless);
+        this.speedMotor.setInverted(speedInv);
+        this.turnMotor.setInverted(turnInv);
         this.speedEnc = speedMotor.getEncoder();
         this.turnEnc = turnMotor.getEncoder();
         this.absEnc = new CANCoder(absEncID);
@@ -57,7 +62,7 @@ public class SwerveModule extends SubsystemBase {
         turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
         speedEnc.setPosition(0);
         absEnc.configFactoryDefault();
-        absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         turnEnc.setPosition(Math.toRadians(absEnc.getAbsolutePosition()) - encoderOffset);
     }
 
@@ -92,21 +97,33 @@ public class SwerveModule extends SubsystemBase {
                 turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;
                 absEncID = Constants.FRONT_LEFT_CANCODER;
                 encoderOffset = Constants.FRONT_LEFT_OFFSET;
+                speedInv = Constants.FRONT_LEFT_DRIVE_INVERT;
+                turnInv = Constants.FRONT_LEFT_TURNING_INVERT;
+                encInv = Constants.FRONT_LEFT_CANCODER_INVERT;
             case FRONT_RIGHT:
                 speedMotorID = Constants.FRONT_RIGHT_SPEED_MOTOR;
                 turnMotorID = Constants.FRONT_RIGHT_TURN_MOTOR;
                 absEncID = Constants.FRONT_RIGHT_CANCODER;
                 encoderOffset = Constants.FRONT_RIGHT_OFFSET;
+                speedInv = Constants.FRONT_RIGHT_DRIVE_INVERT;
+                turnInv = Constants.FRONT_RIGHT_TURNING_INVERT;
+                encInv = Constants.FRONT_RIGHT_CANCODER_INVERT;
             case BACK_LEFT:
                 speedMotorID = Constants.BACK_LEFT_SPEED_MOTOR;
                 turnMotorID = Constants.BACK_LEFT_TURN_MOTOR;
                 absEncID = Constants.BACK_LEFT_CANCODER;
                 encoderOffset = Constants.BACK_LEFT_OFFSET;
+                speedInv = Constants.BACK_LEFT_DRIVE_INVERT;
+                turnInv = Constants.BACK_LEFT_TURNING_INVERT;
+                encInv = Constants.BACK_LEFT_CANCODER_INVERT;
             case BACK_RIGHT:
                 speedMotorID = Constants.BACK_RIGHT_SPEED_MOTOR;
                 turnMotorID = Constants.BACK_RIGHT_TURN_MOTOR;
                 absEncID = Constants.BACK_RIGHT_CANCODER;
                 encoderOffset = Constants.BACK_RIGHT_OFFSET;
+                speedInv = Constants.BACK_RIGHT_DRIVE_INVERT;
+                turnInv = Constants.BACK_RIGHT_TURNING_INVERT;
+                encInv = Constants.BACK_RIGHT_CANCODER_INVERT;
         }
     }
 }
