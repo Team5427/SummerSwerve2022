@@ -4,6 +4,8 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,6 +18,9 @@ import frc.robot.Constants;
 
 public class SwerveModule extends SubsystemBase {
 
+    private int speedMotorID;
+    private int turnMotorID;
+    private int absEncID;
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
     private RelativeEncoder speedEnc;
@@ -27,16 +32,19 @@ public class SwerveModule extends SubsystemBase {
     private SimpleMotorFeedforward speedFF;
     private double encoderOffset;
 
-    public SwerveModule (CANSparkMax speedMotor, CANSparkMax turnMotor, RelativeEncoder speedEnc, RelativeEncoder turnEnc, CANCoder absEnc, double encoderOffset) {
-        this.speedMotor = speedMotor;
-        this.turnMotor = turnMotor;
-        this.speedEnc = speedEnc;
-        this.turnEnc = turnEnc;
-        this.absEnc = absEnc;
-        this.encoderOffset = encoderOffset;
+    public SwerveModule (Constants.SwerveModuleType type) {
+        determineIDs(type);
+        this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
+        this.turnMotor = new CANSparkMax(turnMotorID, MotorType.kBrushless);
+        this.speedEnc = speedMotor.getEncoder();
+        this.turnEnc = turnMotor.getEncoder();
+        this.absEnc = new CANCoder(absEncID);
+        init();
     }
 
     public void init() {
+        speedMotor.setIdleMode(IdleMode.kCoast);
+        turnMotor.setIdleMode(IdleMode.kCoast);
         turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -75,5 +83,30 @@ public class SwerveModule extends SubsystemBase {
     public void stop() {
         speedMotor.set(0);
         turnMotor.set(0);
+    }
+
+    private void determineIDs(Constants.SwerveModuleType type) {
+        switch(type) {
+            case FRONT_LEFT:
+                speedMotorID = Constants.FRONT_LEFT_SPEED_MOTOR;
+                turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;
+                absEncID = Constants.FRONT_LEFT_CANCODER;
+                encoderOffset = Constants.FRONT_LEFT_OFFSET;
+            case FRONT_RIGHT:
+                speedMotorID = Constants.FRONT_RIGHT_SPEED_MOTOR;
+                turnMotorID = Constants.FRONT_RIGHT_TURN_MOTOR;
+                absEncID = Constants.FRONT_RIGHT_CANCODER;
+                encoderOffset = Constants.FRONT_RIGHT_OFFSET;
+            case BACK_LEFT:
+                speedMotorID = Constants.BACK_LEFT_SPEED_MOTOR;
+                turnMotorID = Constants.BACK_LEFT_TURN_MOTOR;
+                absEncID = Constants.BACK_LEFT_CANCODER;
+                encoderOffset = Constants.BACK_LEFT_OFFSET;
+            case BACK_RIGHT:
+                speedMotorID = Constants.BACK_RIGHT_SPEED_MOTOR;
+                turnMotorID = Constants.BACK_RIGHT_TURN_MOTOR;
+                absEncID = Constants.BACK_RIGHT_CANCODER;
+                encoderOffset = Constants.BACK_RIGHT_OFFSET;
+        }
     }
 }

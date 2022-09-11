@@ -29,11 +29,11 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveDriveOdometry odometer;
     private Field2d field;
 
-    public SwerveDrive (SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight, AHRS gyro) {
-        this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
-        this.backLeft = backLeft;
-        this.backRight = backRight;
+    public SwerveDrive (AHRS gyro) {
+        this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
+        this.frontRight = new SwerveModule(Constants.SwerveModuleType.FRONT_RIGHT);
+        this.backLeft = new SwerveModule(Constants.SwerveModuleType.BACK_LEFT);
+        this.backRight = new SwerveModule(Constants.SwerveModuleType.BACK_RIGHT);
         this.gyro = gyro;
         isFieldRelative = false;
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
@@ -49,13 +49,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void zeroHeading() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                gyro.reset();
-            } catch (Exception e) {
-            }
-        }).start();
+        gyro.reset();
     }
 
     public double getHeading() {
@@ -74,15 +68,15 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
-        xSpeed = controller.getLeftX();
+        xSpeed = controller.getLeftX(); //assignment
         ySpeed = controller.getLeftY();
         x2Speed = controller.getRightX();
 
-        xSpeed = Math.abs(xSpeed) > Constants.CONTROLLER_DEADBAND ? xSpeed : 0;
+        xSpeed = Math.abs(xSpeed) > Constants.CONTROLLER_DEADBAND ? xSpeed : 0; //apply deadband
         ySpeed = Math.abs(ySpeed) > Constants.CONTROLLER_DEADBAND ? ySpeed : 0;
         x2Speed = Math.abs(x2Speed) > Constants.CONTROLLER_DEADBAND ? x2Speed : 0;
 
-        xSpeed = xRateLimiter.calculate(xSpeed) * Constants.MAX_SPEED_TELEOP_M_PER_S;
+        xSpeed = xRateLimiter.calculate(xSpeed) * Constants.MAX_SPEED_TELEOP_M_PER_S; //apply slew + scale to m/s and rad/s
         ySpeed = yRateLimiter.calculate(ySpeed) * Constants.MAX_SPEED_TELEOP_M_PER_S;
         x2Speed = xRateLimiter2.calculate(x2Speed) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
 
@@ -134,7 +128,10 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (RobotContainer.getController().getBButton()) {zeroHeading();}
+        if (RobotContainer.getController().getBButton()) {
+            zeroHeading();
+            resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+        }
 
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
 

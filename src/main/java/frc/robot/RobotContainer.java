@@ -27,88 +27,18 @@ import frc.robot.subsystems.SwerveModule;
  */
 public class RobotContainer {
 
-  private static CANSparkMax frontLeftSpeedMotor;
-  private static CANSparkMax frontRightSpeedMotor;
-  private static CANSparkMax backLeftSpeedMotor;
-  private static CANSparkMax backRightSpeedMotor;
-
-  private static CANSparkMax frontLeftTurnMotor;
-  private static CANSparkMax frontRightTurnMotor;
-  private static CANSparkMax backLeftTurnMotor;
-  private static CANSparkMax backRightTurnMotor;
-
-  private static RelativeEncoder frontLeftSpeedEncoder;
-  private static RelativeEncoder frontRightSpeedEncoder;
-  private static RelativeEncoder backLeftSpeedEncoder;
-  private static RelativeEncoder backRightSpeedEncoder;
-
-  private static RelativeEncoder frontLeftTurnEncoder;
-  private static RelativeEncoder frontRightTurnEncoder;
-  private static RelativeEncoder backLeftTurnEncoder;
-  private static RelativeEncoder backRightTurnEncoder;
-
-  private static CANCoder frontLeftAbsEnc;
-  private static CANCoder frontRightAbsEnc;
-  private static CANCoder backLeftAbsEnc;
-  private static CANCoder backRightAbsEnc;
-
-  private static SwerveModule frontLeft;
-  private static SwerveModule frontRight;
-  private static SwerveModule backLeft;
-  private static SwerveModule backRight;
-
   private static AutonController autonController;
-
   private static SwerveDrive swerveDrive;
-
   private static AHRS ahrs;
-
   private static XboxController joy;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    //havent started reversals yet
-    frontLeftSpeedMotor = new CANSparkMax(Constants.FRONT_LEFT_SPEED_MOTOR, MotorType.kBrushless);
-    frontRightSpeedMotor = new CANSparkMax(Constants.FRONT_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
-    backLeftSpeedMotor = new CANSparkMax(Constants.BACK_LEFT_SPEED_MOTOR, MotorType.kBrushless);
-    backRightSpeedMotor = new CANSparkMax(Constants.BACK_RIGHT_SPEED_MOTOR, MotorType.kBrushless);
-
-    
-    frontLeftTurnMotor = new CANSparkMax(Constants.FRONT_LEFT_TURN_MOTOR, MotorType.kBrushless);
-    frontRightTurnMotor = new CANSparkMax(Constants.FRONT_RIGHT_TURN_MOTOR, MotorType.kBrushless);
-    backLeftTurnMotor = new CANSparkMax(Constants.BACK_LEFT_TURN_MOTOR, MotorType.kBrushless);
-    backRightTurnMotor = new CANSparkMax(Constants.BACK_RIGHT_TURN_MOTOR, MotorType.kBrushless);
-    
-    frontLeftSpeedEncoder = frontLeftSpeedMotor.getEncoder();
-    frontRightSpeedEncoder = frontRightSpeedMotor.getEncoder();
-    backLeftSpeedEncoder = backLeftSpeedMotor.getEncoder();
-    backRightSpeedEncoder = backRightSpeedMotor.getEncoder();
-
-    frontLeftTurnEncoder = frontLeftTurnMotor.getEncoder();
-    frontRightTurnEncoder = frontRightTurnMotor.getEncoder();
-    backLeftTurnEncoder = backLeftTurnMotor.getEncoder();
-    backRightTurnEncoder = backRightTurnMotor.getEncoder();
-
-    frontLeftAbsEnc = new CANCoder(Constants.FRONT_LEFT_CANCODER);
-    frontRightAbsEnc = new CANCoder(Constants.FRONT_RIGHT_CANCODER);
-    backLeftAbsEnc = new CANCoder(Constants.BACK_LEFT_CANCODER);
-    backRightAbsEnc = new CANCoder(Constants.BACK_RIGHT_CANCODER);
-
-    frontLeft = new SwerveModule(frontLeftSpeedMotor, frontLeftTurnMotor, frontLeftSpeedEncoder, frontLeftTurnEncoder, frontLeftAbsEnc, Constants.FRONT_LEFT_OFFSET);
-    frontRight = new SwerveModule(frontRightSpeedMotor, frontRightTurnMotor, frontRightSpeedEncoder, frontRightTurnEncoder, frontRightAbsEnc, Constants.FRONT_RIGHT_OFFSET);
-    backLeft = new SwerveModule(backLeftSpeedMotor, backLeftTurnMotor, backLeftSpeedEncoder, backLeftTurnEncoder, backLeftAbsEnc, Constants.BACK_LEFT_OFFSET);
-    backRight = new SwerveModule(backRightSpeedMotor, backRightTurnMotor, backRightSpeedEncoder, backRightTurnEncoder, backRightAbsEnc, Constants.BACK_RIGHT_OFFSET);
-
-    frontLeft.init();
-    frontRight.init();
-    backLeft.init();
-    backRight.init();
-
     ahrs = new AHRS(SPI.Port.kMXP);
     joy = new XboxController(0);
 
-    swerveDrive = new SwerveDrive(frontLeft, frontRight, backLeft, backRight, ahrs);
+    swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
     configureButtonBindings();
@@ -133,7 +63,7 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
     autonController = new AutonController();
-    return autonController.getAutonCommand();
+    return autonController.getAutonCommand().andThen(() -> getSwerve().stopMods());
   }
 
   public static SwerveDrive getSwerve() {return swerveDrive;}

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.xml.namespace.QName;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -42,8 +44,8 @@ public final class Constants {
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
-    public static final double DT_TRACKWIDTH = Units.inchesToMeters(22.5);
-    public static final double DT_WHEELBASE = Units.inchesToMeters(24.5);
+    public static final double DT_TRACKWIDTH = Units.inchesToMeters(22.5); //FIXME
+    public static final double DT_WHEELBASE = Units.inchesToMeters(24.5); //FIXME
 
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
         new Translation2d(DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),
@@ -58,14 +60,13 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
-    public static final double MODULE_KP_CONSTANT = 0.5; //FIXME
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
     public static final double CONTROLLER_DEADBAND = 0.05;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 3;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = 2 * Math.PI;
-    public static final double MAX_NEO_SPEED_RPM = 5676;
+    public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
@@ -90,4 +91,11 @@ public final class Constants {
     public static final double SPEED_FF_S = 0.5; //FIXME
     public static final double SPEED_FF_V = 0.5; //FIXME
     public static final double SPEED_FF_A = 0.5; //FIXME
+
+    public static enum SwerveModuleType {
+        FRONT_LEFT,
+        FRONT_RIGHT,
+        BACK_LEFT,
+        BACK_RIGHT
+    }
 }
