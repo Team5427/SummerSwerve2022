@@ -23,6 +23,8 @@ public class SwerveModule extends SubsystemBase {
     private CANCoder absEnc;
     private ProfiledPIDController turningPID;
     private SimpleMotorFeedforward turningFF;
+    private PIDController speedPID;
+    private SimpleMotorFeedforward speedFF;
     private double encoderOffset;
 
     public SwerveModule (CANSparkMax speedMotor, CANSparkMax turnMotor, RelativeEncoder speedEnc, RelativeEncoder turnEnc, CANCoder absEnc, double encoderOffset) {
@@ -39,6 +41,8 @@ public class SwerveModule extends SubsystemBase {
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
         turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
+        speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
+        speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);
         speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_METER);
         speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
         turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_RAD);
@@ -63,7 +67,7 @@ public class SwerveModule extends SubsystemBase {
             stop();
         } else{
             state = SwerveModuleState.optimize(state, getModState().angle);
-            speedMotor.set(state.speedMetersPerSecond / Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
+            speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
             turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
         }
     }

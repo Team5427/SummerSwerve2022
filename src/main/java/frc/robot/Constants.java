@@ -78,16 +78,16 @@ public final class Constants {
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
 
     //CONTROLLER CONSTANTS MODULES
-    public static final double TURNING_PID_P = 0.5;
-    public static final double TURNING_PID_D = 0.5;
-    public static final double TURNING_FF_S = 0.5;
-    public static final double TURNING_FF_V = 0.5;
-    public static final double TURNING_FF_A = 0.5;
+    public static final double TURNING_PID_P = 1.9316;
+    public static final double TURNING_PID_D = 0.029483;
+    public static final double TURNING_FF_S = 0.15325;
+    public static final double TURNING_FF_V = 0.019597;
+    public static final double TURNING_FF_A = 0.00044001;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
     public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 4;
 
-    public static final double SPEED_PID_P = 0.5;
-    public static final double SPEED_FF_S = 0.5;
-    public static final double SPEED_FF_V = 0.5;
-    public static final double SPEED_FF_A = 0.5;
+    public static final double SPEED_PID_P = 0.5; //FIXME need to do sysid vvvvvv
+    public static final double SPEED_FF_S = 0.5; //FIXME
+    public static final double SPEED_FF_V = 0.5; //FIXME
+    public static final double SPEED_FF_A = 0.5; //FIXME
 }
