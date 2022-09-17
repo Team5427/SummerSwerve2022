@@ -66,7 +66,7 @@ public class SwerveModule extends SubsystemBase {
         this.speedEnc.setPosition(0);
         this.absEnc.configFactoryDefault();
         this.absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-        this.turnEnc.setPosition(Math.toRadians(absEnc.getAbsolutePosition()) - encoderOffset);
+        this.turnEnc.setPosition(getAbsEncRad());
         // setModState(new SwerveModuleState(0, new Rotation2d(0)));
     }
 
@@ -75,7 +75,12 @@ public class SwerveModule extends SubsystemBase {
     public double getDriveSpeed() {return this.speedEnc.getVelocity();}
     public double getTurnPosRad() {return this.turnEnc.getPosition();}
     public double getTurnVel() {return this.turnEnc.getVelocity();}
-    public double getAbsEncRad() {return Math.toRadians(this.absEnc.getAbsolutePosition());}
+    public double getAbsEncRad() {
+        double x = Math.toRadians(absEnc.getAbsolutePosition());
+        x -= encoderOffset;
+        x = encInv ? x * -1: x;
+        return x;
+    }
 
     public SwerveModuleState getModState() {
         return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getTurnPosRad()));
