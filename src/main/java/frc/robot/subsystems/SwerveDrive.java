@@ -67,6 +67,7 @@ public class SwerveDrive extends SubsystemBase {
         backRight.stop();
     }
 
+
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
         xSpeed = controller.getLeftX(); //assignment
         ySpeed = controller.getLeftY();
@@ -84,11 +85,14 @@ public class SwerveDrive extends SubsystemBase {
             isFieldRelative = !isFieldRelative;
         }
         
-        if (isFieldRelative) {
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
-        } else if (!isFieldRelative) {
-            chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
-        }
+        // if (isFieldRelative) {
+        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
+        // } else if (!isFieldRelative) {
+        //     chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        // }
+
+        chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
         //DO NOT FLIP.
@@ -114,7 +118,7 @@ public class SwerveDrive extends SubsystemBase {
         frontLeft.setModState(desiredStates[0]);
         frontRight.setModState(desiredStates[1]);
         backLeft.setModState(desiredStates[2]);
-        backLeft.setModState(desiredStates[3]);
+        backRight.setModState(desiredStates[3]);
 
     }
 
@@ -134,6 +138,10 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
+        SmartDashboard.putNumber("setpoint state: front left", frontLeft.getAbsEncRad());
+        SmartDashboard.putNumber("setpoint state: front right", frontRight.getAbsEncRad());
+        SmartDashboard.putNumber("setpoint state: back left", backLeft.getAbsEncRad());
+        SmartDashboard.putNumber("setpoint state: back right", backRight.getAbsEncRad());
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());

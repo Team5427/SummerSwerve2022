@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import javax.xml.namespace.QName;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -22,34 +20,34 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     
     //Robot Ports
-    public static final int FRONT_LEFT_SPEED_MOTOR = 0;
-    public static final int FRONT_RIGHT_SPEED_MOTOR = 1;
-    public static final int BACK_LEFT_SPEED_MOTOR = 2;
-    public static final int BACK_RIGHT_SPEED_MOTOR = 3;
+    public static final int FRONT_LEFT_SPEED_MOTOR = 8;
+    public static final int FRONT_RIGHT_SPEED_MOTOR = 3;
+    public static final int BACK_LEFT_SPEED_MOTOR = 6;
+    public static final int BACK_RIGHT_SPEED_MOTOR = 2;
 
-    public static final int FRONT_LEFT_TURN_MOTOR = 4;
-    public static final int FRONT_RIGHT_TURN_MOTOR = 5;
-    public static final int BACK_LEFT_TURN_MOTOR = 6;
-    public static final int BACK_RIGHT_TURN_MOTOR = 7;
+    public static final int FRONT_LEFT_TURN_MOTOR = 9;
+    public static final int FRONT_RIGHT_TURN_MOTOR = 7;
+    public static final int BACK_LEFT_TURN_MOTOR = 5;
+    public static final int BACK_RIGHT_TURN_MOTOR = 10;
 
-    public static final int FRONT_LEFT_CANCODER = 0;
-    public static final int FRONT_RIGHT_CANCODER = 1;
-    public static final int BACK_LEFT_CANCODER = 2;
-    public static final int BACK_RIGHT_CANCODER = 3;
+    public static final int FRONT_LEFT_CANCODER = 12;
+    public static final int FRONT_RIGHT_CANCODER = 13;
+    public static final int BACK_LEFT_CANCODER = 14;
+    public static final int BACK_RIGHT_CANCODER = 11;
 
-    public static final double FRONT_LEFT_OFFSET = 0.0;
-    public static final double FRONT_RIGHT_OFFSET = 0.0;
-    public static final double BACK_LEFT_OFFSET = 0.0;
-    public static final double BACK_RIGHT_OFFSET = 0.0;
+    public static final double FRONT_LEFT_OFFSET = 2.25 + Math.PI/2;
+    public static final double FRONT_RIGHT_OFFSET = 3.82 + Math.PI/2;
+    public static final double BACK_LEFT_OFFSET = 2.99 + Math.PI/2;
+    public static final double BACK_RIGHT_OFFSET = 0.67 + Math.PI/2;
     
     //Inversions FIXME all of these
-    public static final boolean FRONT_LEFT_TURNING_INVERT = true;
-    public static final boolean FRONT_RIGHT_TURNING_INVERT = true;
-    public static final boolean BACK_LEFT_TURNING_INVERT = true;
-    public static final boolean BACK_RIGHT_TURNING_INVERT = true;
+    public static final boolean FRONT_LEFT_TURNING_INVERT = false;
+    public static final boolean FRONT_RIGHT_TURNING_INVERT = false;
+    public static final boolean BACK_LEFT_TURNING_INVERT = false;
+    public static final boolean BACK_RIGHT_TURNING_INVERT = false;
 
-    public static final boolean FRONT_LEFT_DRIVE_INVERT = true;
-    public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
+    public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
+    public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
     public static final boolean BACK_LEFT_DRIVE_INVERT = false;
     public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
 
@@ -78,8 +76,8 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
     public static final double CONTROLLER_DEADBAND = 0.05;
-    public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
-    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 4;
+    public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 3;
+    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 2;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 3;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = 2 * Math.PI;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
@@ -95,13 +93,13 @@ public final class Constants {
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
 
     //CONTROLLER CONSTANTS MODULES
-    public static final double TURNING_PID_P = 1.9316;
+    public static final double TURNING_PID_P = 3;
     public static final double TURNING_PID_D = 0.029483;
     public static final double TURNING_FF_S = 0.15325;
     public static final double TURNING_FF_V = 0.019597;
     public static final double TURNING_FF_A = 0.00044001;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 4;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 2;
 
     public static final double SPEED_PID_P = 0.5; //FIXME need to do sysid vvvvvv
     public static final double SPEED_FF_S = 0.5; //FIXME

@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,6 +35,7 @@ public class SwerveModule extends SubsystemBase {
     private PIDController speedPID;
     private SimpleMotorFeedforward speedFF;
     private double encoderOffset;
+    private Constants.SwerveModuleType m_type;
 
     public SwerveModule (Constants.SwerveModuleType type) {
         determineIDs(type);
@@ -44,86 +46,88 @@ public class SwerveModule extends SubsystemBase {
         this.speedEnc = speedMotor.getEncoder();
         this.turnEnc = turnMotor.getEncoder();
         this.absEnc = new CANCoder(absEncID);
+        this.m_type = type;
         init();
     }
 
     public void init() {
-        speedMotor.setIdleMode(IdleMode.kCoast);
-        turnMotor.setIdleMode(IdleMode.kCoast);
-        turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
+        this.speedMotor.setIdleMode(IdleMode.kCoast);
+        this.turnMotor.setIdleMode(IdleMode.kCoast);
+        this.turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
-        turningPID.enableContinuousInput(-Math.PI, Math.PI);
-        turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
-        speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
-        speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);
-        speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_METER);
-        speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
-        turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_RAD);
-        turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
-        speedEnc.setPosition(0);
-        absEnc.configFactoryDefault();
-        absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        turnEnc.setPosition(Math.toRadians(absEnc.getAbsolutePosition()) - encoderOffset);
+        this.turningPID.enableContinuousInput(-Math.PI, Math.PI);
+        this.turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
+        this.speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
+        this.speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);
+        this.speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_METER);
+        this.speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
+        this.turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_RAD);
+        this.turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
+        this.speedEnc.setPosition(0);
+        this.absEnc.configFactoryDefault();
+        this.absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        this.turnEnc.setPosition(Math.toRadians(absEnc.getAbsolutePosition()) - encoderOffset);
+        // setModState(new SwerveModuleState(0, new Rotation2d(0)));
     }
 
-    public double getDrivePos() {return speedEnc.getPosition();}
-    public double getDriveSpeed() {return speedEnc.getVelocity();}
-    public double getTurnPosRad() {return turnEnc.getPosition();}
-    public double getTurnVel() {return turnEnc.getVelocity();}
+
+    public double getDrivePos() {return this.speedEnc.getPosition();}
+    public double getDriveSpeed() {return this.speedEnc.getVelocity();}
+    public double getTurnPosRad() {return this.turnEnc.getPosition();}
+    public double getTurnVel() {return this.turnEnc.getVelocity();}
+    public double getAbsEncRad() {return Math.toRadians(this.absEnc.getAbsolutePosition());}
 
     public SwerveModuleState getModState() {
         return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getTurnPosRad()));
     }
 
     public void setModState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.01) {
-            stop();
-        } else{
+
             state = SwerveModuleState.optimize(state, getModState().angle);
-            speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
-            turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
-        }
+            // speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
+            this.speedMotor.set(state.speedMetersPerSecond/Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
+            this.turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
     }
 
     public void stop() {
-        speedMotor.set(0);
-        turnMotor.set(0);
+        this.speedMotor.set(0);
+        this.turnMotor.set(0);
     }
 
     private void determineIDs(Constants.SwerveModuleType type) {
-        switch(type) {
-            case FRONT_LEFT:
-                speedMotorID = Constants.FRONT_LEFT_SPEED_MOTOR;
-                turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;
-                absEncID = Constants.FRONT_LEFT_CANCODER;
-                encoderOffset = Constants.FRONT_LEFT_OFFSET;
-                speedInv = Constants.FRONT_LEFT_DRIVE_INVERT;
-                turnInv = Constants.FRONT_LEFT_TURNING_INVERT;
-                encInv = Constants.FRONT_LEFT_CANCODER_INVERT;
-            case FRONT_RIGHT:
-                speedMotorID = Constants.FRONT_RIGHT_SPEED_MOTOR;
-                turnMotorID = Constants.FRONT_RIGHT_TURN_MOTOR;
-                absEncID = Constants.FRONT_RIGHT_CANCODER;
-                encoderOffset = Constants.FRONT_RIGHT_OFFSET;
-                speedInv = Constants.FRONT_RIGHT_DRIVE_INVERT;
-                turnInv = Constants.FRONT_RIGHT_TURNING_INVERT;
-                encInv = Constants.FRONT_RIGHT_CANCODER_INVERT;
-            case BACK_LEFT:
-                speedMotorID = Constants.BACK_LEFT_SPEED_MOTOR;
-                turnMotorID = Constants.BACK_LEFT_TURN_MOTOR;
-                absEncID = Constants.BACK_LEFT_CANCODER;
-                encoderOffset = Constants.BACK_LEFT_OFFSET;
-                speedInv = Constants.BACK_LEFT_DRIVE_INVERT;
-                turnInv = Constants.BACK_LEFT_TURNING_INVERT;
-                encInv = Constants.BACK_LEFT_CANCODER_INVERT;
-            case BACK_RIGHT:
-                speedMotorID = Constants.BACK_RIGHT_SPEED_MOTOR;
-                turnMotorID = Constants.BACK_RIGHT_TURN_MOTOR;
-                absEncID = Constants.BACK_RIGHT_CANCODER;
-                encoderOffset = Constants.BACK_RIGHT_OFFSET;
-                speedInv = Constants.BACK_RIGHT_DRIVE_INVERT;
-                turnInv = Constants.BACK_RIGHT_TURNING_INVERT;
-                encInv = Constants.BACK_RIGHT_CANCODER_INVERT;
+        System.out.println(type.name());
+        if (type.equals(Constants.SwerveModuleType.FRONT_LEFT)) {
+            this.speedMotorID = Constants.FRONT_LEFT_SPEED_MOTOR;
+            this.turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;
+            this.absEncID = Constants.FRONT_LEFT_CANCODER;
+            this.encoderOffset = Constants.FRONT_LEFT_OFFSET;
+            this.speedInv = Constants.FRONT_LEFT_DRIVE_INVERT;
+            this.turnInv = Constants.FRONT_LEFT_TURNING_INVERT;
+            this.encInv = Constants.FRONT_LEFT_CANCODER_INVERT;
+        } else if (type.equals(Constants.SwerveModuleType.FRONT_RIGHT)) {
+            this.speedMotorID = Constants.FRONT_RIGHT_SPEED_MOTOR;
+            this.turnMotorID = Constants.FRONT_RIGHT_TURN_MOTOR;
+            this.absEncID = Constants.FRONT_RIGHT_CANCODER;
+            this.encoderOffset = Constants.FRONT_RIGHT_OFFSET;
+            this.speedInv = Constants.FRONT_RIGHT_DRIVE_INVERT;
+            this.turnInv = Constants.FRONT_RIGHT_TURNING_INVERT;
+            this.encInv = Constants.FRONT_RIGHT_CANCODER_INVERT;
+        } else if (type.equals(Constants.SwerveModuleType.BACK_LEFT)) {
+            this.speedMotorID = Constants.BACK_LEFT_SPEED_MOTOR;
+            this.turnMotorID = Constants.BACK_LEFT_TURN_MOTOR;
+            this.absEncID = Constants.BACK_LEFT_CANCODER;
+            this.encoderOffset = Constants.BACK_LEFT_OFFSET;
+            this.speedInv = Constants.BACK_LEFT_DRIVE_INVERT;
+            this.turnInv = Constants.BACK_LEFT_TURNING_INVERT;
+            this.encInv = Constants.BACK_LEFT_CANCODER_INVERT;
+        } else if (type.equals(Constants.SwerveModuleType.BACK_RIGHT)) {
+            this.speedMotorID = Constants.BACK_RIGHT_SPEED_MOTOR;
+            this.turnMotorID = Constants.BACK_RIGHT_TURN_MOTOR;
+            this.absEncID = Constants.BACK_RIGHT_CANCODER;
+            this.encoderOffset = Constants.BACK_RIGHT_OFFSET;
+            this.speedInv = Constants.BACK_RIGHT_DRIVE_INVERT;
+            this.turnInv = Constants.BACK_RIGHT_TURNING_INVERT;
+            this.encInv = Constants.BACK_RIGHT_CANCODER_INVERT;
         }
     }
 }
