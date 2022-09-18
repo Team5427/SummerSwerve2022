@@ -24,7 +24,7 @@ public class SwerveModule extends SubsystemBase {
     private int absEncID;
     private boolean speedInv;
     private boolean turnInv;
-    private boolean encInv; //Dont know if possible to invert cancoder
+    private boolean encInv;
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
     private RelativeEncoder speedEnc;
@@ -75,23 +75,28 @@ public class SwerveModule extends SubsystemBase {
     public double getDriveSpeed() {return this.speedEnc.getVelocity();}
     public double getTurnPosRad() {return this.turnEnc.getPosition();}
     public double getTurnVel() {return this.turnEnc.getVelocity();}
+    public double getAbsEncRaw() {return Math.toRadians(this.absEnc.getAbsolutePosition());}
     public double getAbsEncRad() {
-        double x = Math.toRadians(absEnc.getAbsolutePosition());
+        double x = getAbsEncRaw();
         x -= encoderOffset;
-        x = encInv ? x * -1: x;
+        x = encInv ? (x * -1) + 2* Math.PI: x;
         return x;
     }
+
 
     public SwerveModuleState getModState() {
         return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getTurnPosRad()));
     }
 
     public void setModState(SwerveModuleState state) {
-
+        if (Math.abs(state.speedMetersPerSecond) <= 0.025) {
+            stop();
+        } else {
             state = SwerveModuleState.optimize(state, getModState().angle);
             // speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
             this.speedMotor.set(state.speedMetersPerSecond/Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
             this.turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
+        }
     }
 
     public void stop() {
@@ -100,7 +105,6 @@ public class SwerveModule extends SubsystemBase {
     }
 
     private void determineIDs(Constants.SwerveModuleType type) {
-        System.out.println(type.name());
         if (type.equals(Constants.SwerveModuleType.FRONT_LEFT)) {
             this.speedMotorID = Constants.FRONT_LEFT_SPEED_MOTOR;
             this.turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;

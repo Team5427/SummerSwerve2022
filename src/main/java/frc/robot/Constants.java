@@ -35,26 +35,26 @@ public final class Constants {
     public static final int BACK_LEFT_CANCODER = 14;
     public static final int BACK_RIGHT_CANCODER = 11;
 
-    public static final double FRONT_LEFT_OFFSET = 2.25 + Math.PI/2;
-    public static final double FRONT_RIGHT_OFFSET = 3.82 + Math.PI/2;
-    public static final double BACK_LEFT_OFFSET = 2.99 + Math.PI/2;
-    public static final double BACK_RIGHT_OFFSET = 0.67 + Math.PI/2;
+    public static final double FRONT_LEFT_OFFSET = 2.27;
+    public static final double FRONT_RIGHT_OFFSET = 0.68;
+    public static final double BACK_LEFT_OFFSET = 3.02;
+    public static final double BACK_RIGHT_OFFSET = 0.76;
     
     //Inversions FIXME all of these
-    public static final boolean FRONT_LEFT_TURNING_INVERT = false;
-    public static final boolean FRONT_RIGHT_TURNING_INVERT = false;
-    public static final boolean BACK_LEFT_TURNING_INVERT = false;
-    public static final boolean BACK_RIGHT_TURNING_INVERT = false;
+    public static final boolean FRONT_LEFT_TURNING_INVERT = true;
+    public static final boolean FRONT_RIGHT_TURNING_INVERT = true;
+    public static final boolean BACK_LEFT_TURNING_INVERT = true;
+    public static final boolean BACK_RIGHT_TURNING_INVERT = true;
 
     public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
     public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
     public static final boolean BACK_LEFT_DRIVE_INVERT = false;
     public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
 
-    public static final boolean FRONT_LEFT_CANCODER_INVERT = false;
-    public static final boolean FRONT_RIGHT_CANCODER_INVERT = false;
-    public static final boolean BACK_LEFT_CANCODER_INVERT = false;
-    public static final boolean BACK_RIGHT_CANCODER_INVERT = false;
+    public static final boolean FRONT_LEFT_CANCODER_INVERT = true;
+    public static final boolean FRONT_RIGHT_CANCODER_INVERT = true;
+    public static final boolean BACK_LEFT_CANCODER_INVERT = true;
+    public static final boolean BACK_RIGHT_CANCODER_INVERT = true;
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);

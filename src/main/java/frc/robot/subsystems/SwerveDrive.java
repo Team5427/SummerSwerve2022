@@ -50,6 +50,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public void zeroHeading() {
         gyro.reset();
+        gyro.getQuaternionX();
     }
 
     public double getHeading() {
@@ -86,7 +87,7 @@ public class SwerveDrive extends SubsystemBase {
         }
         
         // if (isFieldRelative) {
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
+            // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
         // } else if (!isFieldRelative) {
         //     chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         // }
@@ -138,10 +139,10 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
-        SmartDashboard.putNumber("setpoint state: front left", frontLeft.getAbsEncRad());
-        SmartDashboard.putNumber("setpoint state: front right", frontRight.getAbsEncRad());
-        SmartDashboard.putNumber("setpoint state: back left", backLeft.getAbsEncRad());
-        SmartDashboard.putNumber("setpoint state: back right", backRight.getAbsEncRad());
+        SmartDashboard.putNumber("setpoint state: front left", frontLeft.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state: front right", frontRight.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state: back left", backLeft.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state: back right", backRight.getAbsEncRaw());
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
