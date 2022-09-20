@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
@@ -17,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.JoystickSwerve;
 import frc.robot.commands.Trajectory.AutonController;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.SwerveModule;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

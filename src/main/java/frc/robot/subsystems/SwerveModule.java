@@ -13,7 +13,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -67,7 +66,6 @@ public class SwerveModule extends SubsystemBase {
         this.absEnc.configFactoryDefault();
         this.absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         this.turnEnc.setPosition(getAbsEncRad());
-        // setModState(new SwerveModuleState(0, new Rotation2d(0)));
     }
 
 
