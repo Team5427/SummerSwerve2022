@@ -102,39 +102,40 @@ public class SwerveModule extends SubsystemBase {
         this.turnMotor.set(0);
     }
 
-    private void determineIDs(Constants.SwerveModuleType type) {
-        if (type.equals(Constants.SwerveModuleType.FRONT_LEFT)) {
-            this.speedMotorID = Constants.FRONT_LEFT_SPEED_MOTOR;
-            this.turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;
-            this.absEncID = Constants.FRONT_LEFT_CANCODER;
-            this.encoderOffset = Constants.FRONT_LEFT_OFFSET;
-            this.speedInv = Constants.FRONT_LEFT_DRIVE_INVERT;
-            this.turnInv = Constants.FRONT_LEFT_TURNING_INVERT;
-            this.encInv = Constants.FRONT_LEFT_CANCODER_INVERT;
-        } else if (type.equals(Constants.SwerveModuleType.FRONT_RIGHT)) {
-            this.speedMotorID = Constants.FRONT_RIGHT_SPEED_MOTOR;
-            this.turnMotorID = Constants.FRONT_RIGHT_TURN_MOTOR;
-            this.absEncID = Constants.FRONT_RIGHT_CANCODER;
-            this.encoderOffset = Constants.FRONT_RIGHT_OFFSET;
-            this.speedInv = Constants.FRONT_RIGHT_DRIVE_INVERT;
-            this.turnInv = Constants.FRONT_RIGHT_TURNING_INVERT;
-            this.encInv = Constants.FRONT_RIGHT_CANCODER_INVERT;
-        } else if (type.equals(Constants.SwerveModuleType.BACK_LEFT)) {
-            this.speedMotorID = Constants.BACK_LEFT_SPEED_MOTOR;
-            this.turnMotorID = Constants.BACK_LEFT_TURN_MOTOR;
-            this.absEncID = Constants.BACK_LEFT_CANCODER;
-            this.encoderOffset = Constants.BACK_LEFT_OFFSET;
-            this.speedInv = Constants.BACK_LEFT_DRIVE_INVERT;
-            this.turnInv = Constants.BACK_LEFT_TURNING_INVERT;
-            this.encInv = Constants.BACK_LEFT_CANCODER_INVERT;
-        } else if (type.equals(Constants.SwerveModuleType.BACK_RIGHT)) {
-            this.speedMotorID = Constants.BACK_RIGHT_SPEED_MOTOR;
-            this.turnMotorID = Constants.BACK_RIGHT_TURN_MOTOR;
-            this.absEncID = Constants.BACK_RIGHT_CANCODER;
-            this.encoderOffset = Constants.BACK_RIGHT_OFFSET;
-            this.speedInv = Constants.BACK_RIGHT_DRIVE_INVERT;
-            this.turnInv = Constants.BACK_RIGHT_TURNING_INVERT;
-            this.encInv = Constants.BACK_RIGHT_CANCODER_INVERT;
+    private void determineIDs(Constants.SwerveModuleType type_m) {
+        switch(type_m) {
+            case FRONT_LEFT:
+                speedMotorID = Constants.FRONT_LEFT_SPEED_MOTOR;
+                turnMotorID = Constants.FRONT_LEFT_TURN_MOTOR;
+                absEncID = Constants.FRONT_LEFT_CANCODER;
+                encoderOffset = Constants.FRONT_LEFT_OFFSET;
+                speedInv = Constants.FRONT_LEFT_DRIVE_INVERT;
+                turnInv = Constants.FRONT_LEFT_TURNING_INVERT;
+                encInv = Constants.FRONT_LEFT_CANCODER_INVERT;
+            case FRONT_RIGHT:
+                speedMotorID = Constants.FRONT_RIGHT_SPEED_MOTOR;
+                turnMotorID = Constants.FRONT_RIGHT_TURN_MOTOR;
+                absEncID = Constants.FRONT_RIGHT_CANCODER;
+                encoderOffset = Constants.FRONT_RIGHT_OFFSET;
+                speedInv = Constants.FRONT_RIGHT_DRIVE_INVERT;
+                turnInv = Constants.FRONT_RIGHT_TURNING_INVERT;
+                encInv = Constants.FRONT_RIGHT_CANCODER_INVERT;
+            case BACK_LEFT:
+                speedMotorID = Constants.BACK_LEFT_SPEED_MOTOR;
+                turnMotorID = Constants.BACK_LEFT_TURN_MOTOR;
+                absEncID = Constants.BACK_LEFT_CANCODER;
+                encoderOffset = Constants.BACK_LEFT_OFFSET;
+                speedInv = Constants.BACK_LEFT_DRIVE_INVERT;
+                turnInv = Constants.BACK_LEFT_TURNING_INVERT;
+                encInv = Constants.BACK_LEFT_CANCODER_INVERT;
+            case BACK_RIGHT:
+                speedMotorID = Constants.BACK_RIGHT_SPEED_MOTOR;
+                turnMotorID = Constants.BACK_RIGHT_TURN_MOTOR;
+                absEncID = Constants.BACK_RIGHT_CANCODER;
+                encoderOffset = Constants.BACK_RIGHT_OFFSET;
+                speedInv = Constants.BACK_RIGHT_DRIVE_INVERT;
+                turnInv = Constants.BACK_RIGHT_TURNING_INVERT;
+                encInv = Constants.BACK_RIGHT_CANCODER_INVERT;
         }
     }
 }
