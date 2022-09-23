@@ -71,7 +71,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
         xSpeed = controller.getLeftX(); //assignment
-        ySpeed = controller.getLeftY();
+        ySpeed = -controller.getLeftY();
         x2Speed = controller.getRightX();
 
         xSpeed = Math.abs(xSpeed) > Constants.CONTROLLER_DEADBAND ? xSpeed : 0; //apply deadband
@@ -139,10 +139,12 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
-        SmartDashboard.putNumber("setpoint state: front left", frontLeft.getAbsEncRaw());
-        SmartDashboard.putNumber("setpoint state: front right", frontRight.getAbsEncRaw());
-        SmartDashboard.putNumber("setpoint state: back left", backLeft.getAbsEncRaw());
-        SmartDashboard.putNumber("setpoint state: back right", backRight.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state: front left", frontLeft.getAbsEncRad());
+
+        SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
+
+        SmartDashboard.putNumber("setpoint state neo: front left", frontLeft.getTurnPosRad());
+
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());

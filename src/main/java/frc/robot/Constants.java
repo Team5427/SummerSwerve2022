@@ -35,10 +35,10 @@ public final class Constants {
     public static final int BACK_LEFT_CANCODER = 14;
     public static final int BACK_RIGHT_CANCODER = 11;
 
-    public static final double FRONT_LEFT_OFFSET = 2.27;
-    public static final double FRONT_RIGHT_OFFSET = 0.68;
-    public static final double BACK_LEFT_OFFSET = 3.02;
-    public static final double BACK_RIGHT_OFFSET = 0.76;
+    public static final double FRONT_LEFT_OFFSET = 2.261;
+    public static final double FRONT_RIGHT_OFFSET = 0.645;
+    public static final double BACK_LEFT_OFFSET = 3.042;
+    public static final double BACK_RIGHT_OFFSET = 3.9;
     
     //Inversions FIXME all of these
     public static final boolean FRONT_LEFT_TURNING_INVERT = true;
@@ -48,7 +48,7 @@ public final class Constants {
 
     public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
     public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
-    public static final boolean BACK_LEFT_DRIVE_INVERT = false;
+    public static final boolean BACK_LEFT_DRIVE_INVERT = true;
     public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
 
     public static final boolean FRONT_LEFT_CANCODER_INVERT = true;
@@ -77,7 +77,7 @@ public final class Constants {
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
     public static final double CONTROLLER_DEADBAND = 0.05;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 2;
+    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 3;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = 2 * Math.PI;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
@@ -99,7 +99,7 @@ public final class Constants {
     public static final double TURNING_FF_V = 0.019597;
     public static final double TURNING_FF_A = 0.00044001;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 2;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 3;
 
     public static final double SPEED_PID_P = 0.5; //FIXME need to do sysid vvvvvv
     public static final double SPEED_FF_S = 0.5; //FIXME
