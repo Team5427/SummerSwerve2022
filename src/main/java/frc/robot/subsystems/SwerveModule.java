@@ -34,10 +34,13 @@ public class SwerveModule extends SubsystemBase {
     private PIDController speedPID;
     private SimpleMotorFeedforward speedFF;
     private double encoderOffset;
-    private Constants.SwerveModuleType m_type;
 
     public SwerveModule (Constants.SwerveModuleType type) {
         determineIDs(type);
+        init();
+    }
+
+    public void init() {
         speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
         turnMotor = new CANSparkMax(turnMotorID, MotorType.kBrushless);
         speedMotor.restoreFactoryDefaults();
@@ -47,13 +50,8 @@ public class SwerveModule extends SubsystemBase {
         speedEnc = speedMotor.getEncoder();
         turnEnc = turnMotor.getEncoder();
         absEnc = new CANCoder(absEncID);
-        m_type = type;
-        init();
-    }
-
-    public void init() {
         speedMotor.setIdleMode(IdleMode.kCoast);
-        turnMotor.setIdleMode(IdleMode.kCoast);
+        turnMotor.setIdleMode(IdleMode.kBrake);
         turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -70,7 +68,13 @@ public class SwerveModule extends SubsystemBase {
         turnEnc.setPosition(getAbsEncRad());
     }
 
-
+    public CANSparkMax getDriveSpark() {return speedMotor;}
+    public CANSparkMax getTurnSpark() {return turnMotor;}
+    public PIDController getDrivePID() {return speedPID;}
+    public SimpleMotorFeedforward getDriveFF() {return speedFF;}
+    public ProfiledPIDController getTurnPID() {return turningPID;}
+    public SimpleMotorFeedforward getTurnFF() {return turningFF;}
+    public CANCoder getAbsEnc() {return absEnc;}
     public double getDrivePos() {return speedEnc.getPosition();}
     public double getDriveSpeed() {return speedEnc.getVelocity();}
     public double getTurnPosRad() {return turnEnc.getPosition();}
@@ -100,8 +104,8 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void stop() {
-        speedMotor.set(0);
-        turnMotor.set(0);
+        speedMotor.stopMotor();
+        turnMotor.stopMotor();
     }
 
     private void determineIDs(Constants.SwerveModuleType type) {

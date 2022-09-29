@@ -58,8 +58,8 @@ public final class Constants {
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
-    public static final double DT_TRACKWIDTH = Units.inchesToMeters(17.5625); //FIXME
-    public static final double DT_WHEELBASE = Units.inchesToMeters(19.5); //FIXME
+    public static final double DT_TRACKWIDTH = Units.inchesToMeters(17.5625); //Its called jank swerve for a reason
+    public static final double DT_WHEELBASE = Units.inchesToMeters(19.5); 
 
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
         new Translation2d(DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),

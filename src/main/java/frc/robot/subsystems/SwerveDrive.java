@@ -50,7 +50,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public void zeroHeading() {
         gyro.reset();
-        gyro.getQuaternionX();
     }
 
     public double getHeading() {
@@ -67,7 +66,6 @@ public class SwerveDrive extends SubsystemBase {
         backLeft.stop();
         backRight.stop();
     }
-
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
         xSpeed = controller.getLeftX(); //assignment
@@ -172,6 +170,13 @@ public class SwerveDrive extends SubsystemBase {
         field.setRobotPose(odometer.getPoseMeters());
     }
 
+    public SwerveModule[] getModules() {
+        SwerveModule[] a = {frontLeft, frontRight, backLeft, backRight};
+        return a;
+    }
 
+    public boolean getFieldRelative() {
+        return isFieldRelative;
+    }
 
 }
