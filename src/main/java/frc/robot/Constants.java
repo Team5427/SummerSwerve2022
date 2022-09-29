@@ -35,10 +35,10 @@ public final class Constants {
     public static final int BACK_LEFT_CANCODER = 14;
     public static final int BACK_RIGHT_CANCODER = 11;
 
-    public static final double FRONT_LEFT_OFFSET = 2.261;
-    public static final double FRONT_RIGHT_OFFSET = 0.645;
-    public static final double BACK_LEFT_OFFSET = 3.042;
-    public static final double BACK_RIGHT_OFFSET = 3.9;
+    public static final double FRONT_LEFT_OFFSET = 2.25;
+    public static final double FRONT_RIGHT_OFFSET = 0.64;
+    public static final double BACK_LEFT_OFFSET = 2.97;
+    public static final double BACK_RIGHT_OFFSET = 0.754;
     
     //Inversions FIXME all of these
     public static final boolean FRONT_LEFT_TURNING_INVERT = true;
@@ -49,7 +49,7 @@ public final class Constants {
     public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
     public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
     public static final boolean BACK_LEFT_DRIVE_INVERT = true;
-    public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
+    public static final boolean BACK_RIGHT_DRIVE_INVERT = true;
 
     public static final boolean FRONT_LEFT_CANCODER_INVERT = true;
     public static final boolean FRONT_RIGHT_CANCODER_INVERT = true;
@@ -58,8 +58,8 @@ public final class Constants {
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
-    public static final double DT_TRACKWIDTH = Units.inchesToMeters(22.5); //FIXME
-    public static final double DT_WHEELBASE = Units.inchesToMeters(24.5); //FIXME
+    public static final double DT_TRACKWIDTH = Units.inchesToMeters(17.5625); //FIXME
+    public static final double DT_WHEELBASE = Units.inchesToMeters(19.5); //FIXME
 
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
         new Translation2d(DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),
@@ -75,7 +75,7 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
-    public static final double CONTROLLER_DEADBAND = 0.05;
+    public static final double CONTROLLER_DEADBAND = 0.15;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 3;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 3;

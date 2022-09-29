@@ -114,6 +114,22 @@ public class SwerveDrive extends SubsystemBase {
         setModules(driveStates);
     }
 
+    public void rawTest(XboxController joy, int i) {
+        if (i == 0) {
+            frontLeft.rawSetSpeed();
+            frontLeft.rawSetSteer();
+        } else if (i == 1) {
+            frontRight.rawSetSpeed();
+            frontRight.rawSetSteer();
+        } else if (i == 2) {
+            backLeft.rawSetSpeed();
+            backLeft.rawSetSteer();
+        } else if (i == 3) {
+            backRight.rawSetSpeed();
+            backRight.rawSetSteer();
+        }
+    }
+
     public void setModules(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
         frontLeft.setModState(desiredStates[0]);
@@ -139,11 +155,15 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
-        SmartDashboard.putNumber("setpoint state: front left", frontLeft.getAbsEncRad());
 
         SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: front Right", frontRight.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
 
-        SmartDashboard.putNumber("setpoint state neo: front left", frontLeft.getTurnPosRad());
+        SmartDashboard.putNumber("neo val", frontRight.getTurnPosRad());
+        SmartDashboard.putNumber("neo val left", frontLeft.getTurnPosRad());
+
 
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
