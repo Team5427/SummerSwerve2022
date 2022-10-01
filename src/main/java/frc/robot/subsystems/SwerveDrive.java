@@ -83,15 +83,21 @@ public class SwerveDrive extends SubsystemBase {
         if (controller.getAButtonPressed()) {
             isFieldRelative = !isFieldRelative;
         }
+
+        if (controller.getBButtonPressed()) {
+            zeroHeading();
+        }
         
         // if (isFieldRelative) {
-            // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
+        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
         // } else if (!isFieldRelative) {
         //     chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         // }
 
-        // chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
+        SmartDashboard.putBoolean("FieldOP", isFieldRelative);
+
+        chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
         
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
@@ -160,8 +166,17 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
         SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
 
-        SmartDashboard.putNumber("neo val", frontRight.getTurnPosRad());
-        SmartDashboard.putNumber("neo val left", frontLeft.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: front left", frontLeft.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: front Right", frontRight.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: back left", backLeft.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: back Right", backRight.getTurnPosRad());
+
+        // SmartDashboard.putNumber("neo val", frontRight.getTurnPosRad());
+        // SmartDashboard.putNumber("neo val left", frontLeft.getTurnPosRad());
+        SmartDashboard.putNumber("front left speed", frontLeft.getDriveSpeed());
+        SmartDashboard.putNumber("front right speed", frontRight.getDriveSpeed());
+        SmartDashboard.putNumber("back left speed", backLeft.getDriveSpeed());
+        SmartDashboard.putNumber("back right speed", backRight.getDriveSpeed());
 
 
 
