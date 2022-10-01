@@ -1,0 +1,13 @@
+{
+  "lengthUnit": "Foot",
+  "exportUnit": "Always Meters",
+  "maxVelocity": 14.5,
+  "maxAcceleration": 14.0,
+  "trackWidth": 1.43,
+  "wheelBase": 1.625,
+  "bumperWidth": 2.0,
+  "bumperLength": 2.0,
+  "gameName": "Rapid React",
+  "outputDir": "../src/main/deploy",
+  "commandDir": "../src/main/java/frc/robot/commands/TalonCommands"
+}

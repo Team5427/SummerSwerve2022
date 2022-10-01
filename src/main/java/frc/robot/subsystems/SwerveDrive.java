@@ -90,7 +90,8 @@ public class SwerveDrive extends SubsystemBase {
         //     chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         // }
 
-        chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        // chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
         
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.

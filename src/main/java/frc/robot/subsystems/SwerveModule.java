@@ -93,12 +93,12 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public void setModState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) <= 0.025) {
+        if (Math.abs(state.speedMetersPerSecond) <= 0.02) {
             stop();
         } else {
             state = SwerveModuleState.optimize(state, getModState().angle);
-            // speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
-            speedMotor.set(state.speedMetersPerSecond/Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
+            speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
+            // speedMotor.set(state.speedMetersPerSecond/Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
             turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
         }
     }
