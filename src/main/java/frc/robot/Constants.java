@@ -67,6 +67,7 @@ public final class Constants {
         new Translation2d(-DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),
         new Translation2d(-DT_WHEELBASE / 2, DT_TRACKWIDTH / 2));
 
+
     //Swerve Speed Numbers
     public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0));
     public static final double kTurningMotorGearRatio = ((15.0 / 32.0) * (10.0 / 60.0));
@@ -99,7 +100,7 @@ public final class Constants {
     public static final double TURNING_FF_V = 0.019597;
     public static final double TURNING_FF_A = 0.00044001;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 3;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 2;
 
     public static final double SPEED_PID_P = 2.94; //FIXME need to do sysid vvvvvv
     public static final double SPEED_FF_S = 0.097718; //FIXME

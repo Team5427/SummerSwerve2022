@@ -26,15 +26,16 @@ public class SwerveDrive extends SubsystemBase {
     private SlewRateLimiter xRateLimiter, yRateLimiter, xRateLimiter2;
     private ChassisSpeeds chassisSpeeds;
     private boolean isFieldRelative;
+    private boolean startup = false;
     private SwerveDriveOdometry odometer;
     private Field2d field;
 
-    public SwerveDrive (AHRS gyro) {
+    public SwerveDrive (AHRS m_gyro) {
         this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
         this.frontRight = new SwerveModule(Constants.SwerveModuleType.FRONT_RIGHT);
         this.backLeft = new SwerveModule(Constants.SwerveModuleType.BACK_LEFT);
         this.backRight = new SwerveModule(Constants.SwerveModuleType.BACK_RIGHT);
-        this.gyro = gyro;
+        this.gyro = m_gyro;
         isFieldRelative = false;
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         yRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
@@ -42,18 +43,17 @@ public class SwerveDrive extends SubsystemBase {
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
 
         field = new Field2d();
-
         SmartDashboard.putData(field);
 
-        zeroHeading();
+        gyro.calibrate();
     }
 
     public void zeroHeading() {
-        gyro.reset();
+        gyro.zeroYaw();
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        return gyro.getFusedHeading();
     }
 
     public Rotation2d getRotation2d() {
@@ -68,7 +68,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
-        xSpeed = controller.getLeftX(); //assignment
+        xSpeed = controller.getLeftX();
         ySpeed = -controller.getLeftY();
         x2Speed = controller.getRightX();
 
@@ -88,15 +88,15 @@ public class SwerveDrive extends SubsystemBase {
             zeroHeading();
         }
         
-        // if (isFieldRelative) {
-        //     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
-        // } else if (!isFieldRelative) {
-        //     chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
-        // }
+        if (isFieldRelative) {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
+        } else if (!isFieldRelative) {
+            chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        }
 
         SmartDashboard.putBoolean("FieldOP", isFieldRelative);
 
-        chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+        // chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
         
         
@@ -159,6 +159,11 @@ public class SwerveDrive extends SubsystemBase {
             resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
         }
 
+        if (!gyro.isCalibrating() && !startup) {
+            zeroHeading();
+            startup = true;
+        }
+
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
 
         SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
@@ -187,8 +192,8 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public SwerveModule[] getModules() {
-        SwerveModule[] a = {frontLeft, frontRight, backLeft, backRight};
-        return a;
+        SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
+        return modules;
     }
 
     public boolean getFieldRelative() {
