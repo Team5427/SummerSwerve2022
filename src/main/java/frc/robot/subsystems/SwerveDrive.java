@@ -70,7 +70,7 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
         xSpeed = controller.getLeftX();
         ySpeed = -controller.getLeftY();
-        x2Speed = controller.getRightX();
+        x2Speed = Math.pow(controller.getRightX() , 2);
 
         xSpeed = Math.abs(xSpeed) > Constants.CONTROLLER_DEADBAND ? xSpeed : 0; //apply deadband
         ySpeed = Math.abs(ySpeed) > Constants.CONTROLLER_DEADBAND ? ySpeed : 0;

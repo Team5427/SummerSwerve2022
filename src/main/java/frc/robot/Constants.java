@@ -40,7 +40,7 @@ public final class Constants {
     public static final double BACK_LEFT_OFFSET = 2.97;
     public static final double BACK_RIGHT_OFFSET = 0.754;
     
-    //Inversions FIXME all of these
+    //Inversions
     public static final boolean FRONT_LEFT_TURNING_INVERT = true;
     public static final boolean FRONT_RIGHT_TURNING_INVERT = true;
     public static final boolean BACK_LEFT_TURNING_INVERT = true;
@@ -78,9 +78,9 @@ public final class Constants {
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
     public static final double CONTROLLER_DEADBAND = 0.1;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_SPEED_TELEOP_M_PER_S = 4.2;
-    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = 3 * Math.PI;
+    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 2;
+    public static final double MAX_SPEED_TELEOP_M_PER_S = 4.3;
+    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
     //AUTON STUFF
@@ -102,10 +102,10 @@ public final class Constants {
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
     public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 2;
 
-    public static final double SPEED_PID_P = 2.94; //FIXME need to do sysid vvvvvv
-    public static final double SPEED_FF_S = 0.097718; //FIXME
-    public static final double SPEED_FF_V = 2.5872; //FIXME
-    public static final double SPEED_FF_A = 0.22077; //FIXME
+    public static final double SPEED_PID_P = 2.94;
+    public static final double SPEED_FF_S = 0.097718;
+    public static final double SPEED_FF_V = 2.5872;
+    public static final double SPEED_FF_A = 0.22077;
 
     public static enum SwerveModuleType {
         FRONT_LEFT,
