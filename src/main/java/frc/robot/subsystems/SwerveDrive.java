@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -9,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +28,6 @@ public class SwerveDrive extends SubsystemBase {
     private SlewRateLimiter xRateLimiter, yRateLimiter, xRateLimiter2;
     private ChassisSpeeds chassisSpeeds;
     private boolean isFieldRelative;
-    private boolean startup = false;
     private SwerveDriveOdometry odometer;
     private Field2d field;
 
@@ -45,7 +46,7 @@ public class SwerveDrive extends SubsystemBase {
         field = new Field2d();
         SmartDashboard.putData(field);
 
-        gyro.calibrate();
+        zeroHeading();
     }
 
     public void zeroHeading() {
@@ -53,7 +54,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getHeading() {
-        return gyro.getFusedHeading();
+        return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -159,11 +160,6 @@ public class SwerveDrive extends SubsystemBase {
             resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
         }
 
-        if (!gyro.isCalibrating() && !startup) {
-            zeroHeading();
-            startup = true;
-        }
-
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
 
         SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
@@ -187,6 +183,7 @@ public class SwerveDrive extends SubsystemBase {
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        SmartDashboard.putBoolean("GyroCalibrating", gyro.isCalibrating());
 
         field.setRobotPose(odometer.getPoseMeters());
     }
