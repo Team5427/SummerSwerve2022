@@ -149,13 +149,4 @@ public class SwerveModule extends SubsystemBase {
                 break;
         }
     }
-    
-
-    public void rawSetSpeed() {
-        speedMotor.set(0.5);
-    }
-
-    public void rawSetSteer() {
-        turnMotor.set(0.5);
-    }
 }

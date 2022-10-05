@@ -82,7 +82,7 @@ public class SwerveDrive extends SubsystemBase {
         x2Speed = xRateLimiter2.calculate(x2Speed) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
 
         if (controller.getAButtonPressed()) {
-            isFieldRelative = !isFieldRelative;
+            // isFieldRelative = !isFieldRelative;
         }
 
         if (controller.getBButtonPressed()) {
@@ -96,10 +96,9 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         SmartDashboard.putBoolean("FieldOP", isFieldRelative);
-
-        // chassisSpeeds = new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
-        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
-        
+        SmartDashboard.putNumber("xSpeed", xSpeed);
+        SmartDashboard.putNumber("ySpeed", ySpeed);
+        SmartDashboard.putNumber("x2Speed", x2Speed);        
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
         //DO NOT FLIP.
@@ -114,26 +113,6 @@ public class SwerveDrive extends SubsystemBase {
         SwerveModuleState[] states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
         return states;
-    }
-
-    public void moveSwerve(SwerveModuleState[] driveStates) {
-        setModules(driveStates);
-    }
-
-    public void rawTest(XboxController joy, int i) {
-        if (i == 0) {
-            frontLeft.rawSetSpeed();
-            frontLeft.rawSetSteer();
-        } else if (i == 1) {
-            frontRight.rawSetSpeed();
-            frontRight.rawSetSteer();
-        } else if (i == 2) {
-            backLeft.rawSetSpeed();
-            backLeft.rawSetSteer();
-        } else if (i == 3) {
-            backRight.rawSetSpeed();
-            backRight.rawSetSteer();
-        }
     }
 
     public void setModules(SwerveModuleState[] desiredStates) {
@@ -155,37 +134,9 @@ public class SwerveDrive extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (RobotContainer.getController().getBButton()) {
-            zeroHeading();
-            resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-        }
-
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
-
-        SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
-        SmartDashboard.putNumber("setpoint state abs: front Right", frontRight.getAbsEncRaw());
-        SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
-        SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
-
-        SmartDashboard.putNumber("setpoint state rel: front left", frontLeft.getTurnPosRad());
-        SmartDashboard.putNumber("setpoint state rel: front Right", frontRight.getTurnPosRad());
-        SmartDashboard.putNumber("setpoint state rel: back left", backLeft.getTurnPosRad());
-        SmartDashboard.putNumber("setpoint state rel: back Right", backRight.getTurnPosRad());
-
-        // SmartDashboard.putNumber("neo val", frontRight.getTurnPosRad());
-        // SmartDashboard.putNumber("neo val left", frontLeft.getTurnPosRad());
-        SmartDashboard.putNumber("front left speed", frontLeft.getDriveSpeed());
-        SmartDashboard.putNumber("front right speed", frontRight.getDriveSpeed());
-        SmartDashboard.putNumber("back left speed", backLeft.getDriveSpeed());
-        SmartDashboard.putNumber("back right speed", backRight.getDriveSpeed());
-
-
-
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-        SmartDashboard.putBoolean("GyroCalibrating", gyro.isCalibrating());
-
         field.setRobotPose(odometer.getPoseMeters());
+        log();        
     }
 
     public SwerveModule[] getModules() {
@@ -195,6 +146,29 @@ public class SwerveDrive extends SubsystemBase {
 
     public boolean getFieldRelative() {
         return isFieldRelative;
+    }
+
+    private void log() {
+        // SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
+        // SmartDashboard.putNumber("setpoint state abs: front Right", frontRight.getAbsEncRaw());
+        // SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
+        // SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
+
+        // SmartDashboard.putNumber("setpoint state rel: front left", frontLeft.getTurnPosRad());
+        // SmartDashboard.putNumber("setpoint state rel: front Right", frontRight.getTurnPosRad());
+        // SmartDashboard.putNumber("setpoint state rel: back left", backLeft.getTurnPosRad());
+        // SmartDashboard.putNumber("setpoint state rel: back Right", backRight.getTurnPosRad());
+
+        // SmartDashboard.putNumber("neo val", frontRight.getTurnPosRad());
+        // SmartDashboard.putNumber("neo val left", frontLeft.getTurnPosRad());
+        // SmartDashboard.putNumber("front left speed", frontLeft.getDriveSpeed());
+        // SmartDashboard.putNumber("front right speed", frontRight.getDriveSpeed());
+        // SmartDashboard.putNumber("back left speed", backLeft.getDriveSpeed());
+        // SmartDashboard.putNumber("back right speed", backRight.getDriveSpeed());
+
+        SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        // SmartDashboard.putBoolean("GyroCalibrating", gyro.isCalibrating());
     }
 
 }

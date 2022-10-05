@@ -26,7 +26,7 @@ public class JoystickSwerve extends CommandBase {
     @Override
     public void execute() {
         states = swerve.controllerToModuleStates(joy);
-        swerve.moveSwerve(states);
+        swerve.setModules(states);
     }
 
     @Override
