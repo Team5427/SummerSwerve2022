@@ -71,7 +71,7 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
         xSpeed = controller.getLeftX();
         ySpeed = -controller.getLeftY();
-        x2Speed = Math.pow(controller.getRightX() , 2);
+        x2Speed = Math.pow(controller.getRightX() , 3);
 
         xSpeed = Math.abs(xSpeed) > Constants.CONTROLLER_DEADBAND ? xSpeed : 0; //apply deadband
         ySpeed = Math.abs(ySpeed) > Constants.CONTROLLER_DEADBAND ? ySpeed : 0;
@@ -85,10 +85,6 @@ public class SwerveDrive extends SubsystemBase {
             // isFieldRelative = !isFieldRelative;
         }
 
-        if (controller.getBButtonPressed()) {
-            zeroHeading();
-        }
-        
         if (isFieldRelative) {
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d());
         } else if (!isFieldRelative) {
@@ -154,17 +150,17 @@ public class SwerveDrive extends SubsystemBase {
         // SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
         // SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
 
-        // SmartDashboard.putNumber("setpoint state rel: front left", frontLeft.getTurnPosRad());
-        // SmartDashboard.putNumber("setpoint state rel: front Right", frontRight.getTurnPosRad());
-        // SmartDashboard.putNumber("setpoint state rel: back left", backLeft.getTurnPosRad());
-        // SmartDashboard.putNumber("setpoint state rel: back Right", backRight.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: front left", frontLeft.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: front Right", frontRight.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: back left", backLeft.getTurnPosRad());
+        SmartDashboard.putNumber("setpoint state rel: back Right", backRight.getTurnPosRad());
 
         // SmartDashboard.putNumber("neo val", frontRight.getTurnPosRad());
         // SmartDashboard.putNumber("neo val left", frontLeft.getTurnPosRad());
-        // SmartDashboard.putNumber("front left speed", frontLeft.getDriveSpeed());
-        // SmartDashboard.putNumber("front right speed", frontRight.getDriveSpeed());
-        // SmartDashboard.putNumber("back left speed", backLeft.getDriveSpeed());
-        // SmartDashboard.putNumber("back right speed", backRight.getDriveSpeed());
+        SmartDashboard.putNumber("front left speed", frontLeft.getDriveSpeed());
+        SmartDashboard.putNumber("front right speed", frontRight.getDriveSpeed());
+        SmartDashboard.putNumber("back left speed", backLeft.getDriveSpeed());
+        SmartDashboard.putNumber("back right speed", backRight.getDriveSpeed());
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());

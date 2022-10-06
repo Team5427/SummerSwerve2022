@@ -23,12 +23,13 @@ public final class Constants {
     public static final int FRONT_LEFT_SPEED_MOTOR = 8;
     public static final int FRONT_RIGHT_SPEED_MOTOR = 3;
     public static final int BACK_LEFT_SPEED_MOTOR = 6;
-    public static final int BACK_RIGHT_SPEED_MOTOR = 2;
+    public static final int BACK_RIGHT_SPEED_MOTOR = 10;
 
     public static final int FRONT_LEFT_TURN_MOTOR = 9;
     public static final int FRONT_RIGHT_TURN_MOTOR = 7;
     public static final int BACK_LEFT_TURN_MOTOR = 5;
-    public static final int BACK_RIGHT_TURN_MOTOR = 10;
+    public static final int BACK_RIGHT_TURN_MOTOR = 2;
+
 
     public static final int FRONT_LEFT_CANCODER = 12;
     public static final int FRONT_RIGHT_CANCODER = 13;
@@ -77,10 +78,10 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
     public static final double CONTROLLER_DEADBAND = 0.1;
-    public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 2;
+    public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
+    public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
     public static final double MAX_SPEED_TELEOP_M_PER_S = 4.3;
-    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI;
+    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 3;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
     //AUTON STUFF
@@ -100,7 +101,7 @@ public final class Constants {
     public static final double TURNING_FF_V = 0.019597;
     public static final double TURNING_FF_A = 0.00044001;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 2;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 4;
 
     public static final double SPEED_PID_P = 2.94;
     public static final double SPEED_FF_S = 0.097718;

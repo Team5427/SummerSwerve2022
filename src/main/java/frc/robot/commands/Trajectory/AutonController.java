@@ -62,7 +62,7 @@ public class AutonController {
             new PIDController(Constants.AUTON_X_P, 0, 0),
             new PIDController(Constants.AUTON_Y_P, 0, 0),
             thetaController,
-            m_robotDrive::moveSwerve,
+            m_robotDrive::setModules,
             m_robotDrive);
 
         // Reset odometry to the starting pose of the trajectory.
