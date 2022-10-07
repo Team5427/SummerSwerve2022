@@ -36,10 +36,10 @@ public final class Constants {
     public static final int BACK_LEFT_CANCODER = 14;
     public static final int BACK_RIGHT_CANCODER = 11;
 
-    public static final double FRONT_LEFT_OFFSET = 2.25;
-    public static final double FRONT_RIGHT_OFFSET = 0.64;
-    public static final double BACK_LEFT_OFFSET = 2.97;
-    public static final double BACK_RIGHT_OFFSET = 0.754;
+    public static final double FRONT_LEFT_OFFSET = 2.27;
+    public static final double FRONT_RIGHT_OFFSET = -2.47;
+    public static final double BACK_LEFT_OFFSET = 3.03;
+    public static final double BACK_RIGHT_OFFSET = 0.79;
     
     //Inversions
     public static final boolean FRONT_LEFT_TURNING_INVERT = true;
@@ -48,7 +48,7 @@ public final class Constants {
     public static final boolean BACK_RIGHT_TURNING_INVERT = true;
 
     public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
-    public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
+    public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
     public static final boolean BACK_LEFT_DRIVE_INVERT = true;
     public static final boolean BACK_RIGHT_DRIVE_INVERT = true;
 
@@ -70,7 +70,7 @@ public final class Constants {
 
 
     //Swerve Speed Numbers
-    public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0));
+    public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)); //Mk4 L2 SDS
     public static final double kTurningMotorGearRatio = ((15.0 / 32.0) * (10.0 / 60.0));
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_METERS * kDriveMotorGearRatio);
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
@@ -80,7 +80,7 @@ public final class Constants {
     public static final double CONTROLLER_DEADBAND = 0.1;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_SPEED_TELEOP_M_PER_S = 4.3;
+    public static final double MAX_SPEED_TELEOP_M_PER_S = 4;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 3;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
@@ -95,13 +95,13 @@ public final class Constants {
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
 
     //CONTROLLER CONSTANTS MODULES
-    public static final double TURNING_PID_P = 2.25;
-    public static final double TURNING_PID_D = 0.029483;
-    public static final double TURNING_FF_S = 0.15325;
-    public static final double TURNING_FF_V = 0.019597;
-    public static final double TURNING_FF_A = 0.00044001;
+    public static final double TURNING_PID_P = 3.0;
+    public static final double TURNING_PID_D = 0.2;
+    public static final double TURNING_FF_S = 0.088444;
+    public static final double TURNING_FF_V = 0.24913;
+    public static final double TURNING_FF_A = 0.011425;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 4;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 3;
 
     public static final double SPEED_PID_P = 2.94;
     public static final double SPEED_FF_S = 0.097718;
@@ -114,4 +114,11 @@ public final class Constants {
         BACK_LEFT,
         BACK_RIGHT
     }
+
+    //DEBUG VARS (Remove before comp if robot is stable)
+    public static final boolean FIELD_RELATIVE_SWITCHABLE = false;
+    public static final boolean FIELD_RELATIVE_ON_START = false;
+    public static final boolean DRIVE_PIDS_ENABLED = false;
+    public static final boolean DAMPENER_ENABLED = false;
+    public static final double DAMPENER_ON_START = 1.0;
 }

@@ -51,7 +51,7 @@ public class SwerveModule extends SubsystemBase {
         turnEnc = turnMotor.getEncoder();
         absEnc = new CANCoder(absEncID);
         speedMotor.setIdleMode(IdleMode.kCoast);
-        turnMotor.setIdleMode(IdleMode.kCoast);
+        turnMotor.setIdleMode(IdleMode.kBrake);
         turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -97,11 +97,13 @@ public class SwerveModule extends SubsystemBase {
             stop();
         } else {
             state = SwerveModuleState.optimize(state, getModState().angle);
-            // speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
-            speedMotor.set(state.speedMetersPerSecond/Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
+            if (Constants.DRIVE_PIDS_ENABLED) {
+                speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
+            } else {
+                speedMotor.set(state.speedMetersPerSecond/Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
+            }
             turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
         }
-        // turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
     }
 
     public void stop() {
