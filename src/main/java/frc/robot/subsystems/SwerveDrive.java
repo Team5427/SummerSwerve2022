@@ -43,7 +43,7 @@ public class SwerveDrive extends SubsystemBase {
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
 
         field = new Field2d();
-        SmartDashboard.putData(field);
+        // SmartDashboard.putData(field);
 
         zeroHeading();
     }
@@ -122,8 +122,8 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
-        field.setRobotPose(odometer.getPoseMeters());
-        log();        
+        field.setRobotPose(odometer.getPoseMeters().getX(), -odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().times(-1));
+        log();
     }
 
     public SwerveModule[] getModules() {
@@ -144,10 +144,10 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void log() {
-        // SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
-        // SmartDashboard.putNumber("setpoint state abs: front Right", frontRight.getAbsEncRaw());
-        // SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
-        // SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: front left", frontLeft.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: front Right", frontRight.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: back left", backLeft.getAbsEncRaw());
+        SmartDashboard.putNumber("setpoint state abs: back Right", backRight.getAbsEncRaw());
 
         // SmartDashboard.putNumber("setpoint state rel: front left", frontLeft.getTurnPosRad());
         // SmartDashboard.putNumber("setpoint state rel: front Right", frontRight.getTurnPosRad());
@@ -164,7 +164,11 @@ public class SwerveDrive extends SubsystemBase {
         // SmartDashboard.putNumber("Robot Heading", getHeading());
         // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putNumber("thing", backRight.getTurnPosRad() % (2 * Math.PI));
+        SmartDashboard.putNumber("gyro", gyro.getAngle());
+        SmartDashboard.putBoolean("FieldRelative", getFieldRelative());
         // SmartDashboard.putBoolean("GyroCalibrating", gyro.isCalibrating());
+        SmartDashboard.putString("odom", odometer.getPoseMeters().toString());
+        SmartDashboard.putData("Field5427", field);
     }
 
 }

@@ -87,8 +87,8 @@ public final class Constants {
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI; 
-    public static final double AUTON_X_P = 0.001; //FIXME
-    public static final double AUTON_Y_P = 0.001; //FIXME
+    public static final double AUTON_X_P = 0.1; //FIXME
+    public static final double AUTON_Y_P = 0.1; //FIXME
     public static final double AUTON_THETA_P = 0.001; //FIXME
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -116,9 +116,9 @@ public final class Constants {
     }
 
     //DEBUG VARS (Remove before comp if robot is stable)
-    public static final boolean FIELD_RELATIVE_SWITCHABLE = false;
+    public static final boolean FIELD_RELATIVE_SWITCHABLE = true;
     public static final boolean FIELD_RELATIVE_ON_START = false;
-    public static final boolean DRIVE_PIDS_ENABLED = false;
+    public static final boolean DRIVE_PIDS_ENABLED = true;
     public static final boolean DAMPENER_ENABLED = false;
     public static final double DAMPENER_ON_START = 1.0;
 }

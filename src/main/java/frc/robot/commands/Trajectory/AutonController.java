@@ -36,10 +36,8 @@ public class AutonController {
         // An example trajectory to follow. All units in meters.
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 List.of(
-                    new Pose2d(new Translation2d(Units.feetToMeters(25.053), Units.feetToMeters(5.604)), new Rotation2d(Units.feetToMeters(0),Units.feetToMeters(-4.137))), 
-                    new Pose2d(new Translation2d(Units.feetToMeters(25.866), Units.feetToMeters(2.175)), new Rotation2d(Units.feetToMeters(-0.849), Units.feetToMeters(-1.273))), 
-                    new Pose2d(new Translation2d(Units.feetToMeters(23.144), Units.feetToMeters(1.185)), new Rotation2d(Units.feetToMeters(-1.803), Units.feetToMeters(-0.035))), 
-                    new Pose2d(new Translation2d(Units.feetToMeters(21.5), Units.feetToMeters(3)), new Rotation2d(Units.feetToMeters(5.675), Units.feetToMeters(10.56)))),
+                    new Pose2d(new Translation2d(Units.feetToMeters(0), Units.feetToMeters(0)), new Rotation2d(0)), 
+                    new Pose2d(new Translation2d(Units.feetToMeters(5), Units.feetToMeters(5)), new Rotation2d(0))),
                 config);
         init(exampleTrajectory);
     }
