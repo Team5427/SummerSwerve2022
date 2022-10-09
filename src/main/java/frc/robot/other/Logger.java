@@ -8,15 +8,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class Logger {
 
-    private static int approvals = 0;
-
-    public static void approve() {
-        approvals++;
-        if (approvals == 1) { //MAKE THIS CONSTANT THE NUMBER OF SUBSYSTEMS WITHIN CODE
-            Work.setupWorkLoglist();
-            Comp.setupCompLoglist();
-        }
-    }
+    public static void init() {
+        Work.setupWorkLoglist();
+        Comp.setupCompLoglist();
+        Shuffleboard.getTab("SmartDashboard").getComponents().clear();
+        Shuffleboard.getTab("LiveWindow").getComponents().clear();
+    } 
 
     public static class Work {
 

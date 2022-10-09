@@ -47,7 +47,6 @@ public class SwerveDrive extends SubsystemBase {
         zeroHeading();
 
         log();
-        Logger.approve();
     }
 
     public void zeroHeading() {
