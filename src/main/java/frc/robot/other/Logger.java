@@ -9,10 +9,12 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class Logger {
 
     public static void init() {
-        Work.setupWorkLoglist();
-        Comp.setupCompLoglist();
         Shuffleboard.getTab("SmartDashboard").getComponents().clear();
         Shuffleboard.getTab("LiveWindow").getComponents().clear();
+        Shuffleboard.getTab("Work").getComponents().clear();
+        Shuffleboard.getTab("Comp").getComponents().clear();
+        Work.setupWorkLoglist();
+        Comp.setupCompLoglist();
     } 
 
     public static class Work {
@@ -25,10 +27,6 @@ public class Logger {
             workList.forEach((a, b) -> {
                 workEntryList.put(a, workTab.add(a, b).getEntry());
             });
-        }
-
-        public static void approveWorkLog() {
-
         }
 
         public static void post(String key, Object b) {
@@ -51,10 +49,6 @@ public class Logger {
             compList.forEach((a, b) -> {
                 compEntryList.put(a, compTab.add(a, b).getEntry());
             });
-        }
-
-        public static void approveCompLog() {
-
         }
 
         public static void post(String key, Object b) {
