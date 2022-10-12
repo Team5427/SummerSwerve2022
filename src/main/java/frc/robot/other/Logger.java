@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class Logger {
 
     public static void init() {
-        Shuffleboard.getTab("SmartDashboard").getComponents().clear();
-        Shuffleboard.getTab("LiveWindow").getComponents().clear();
         Shuffleboard.getTab("Work").getComponents().clear();
         Shuffleboard.getTab("Comp").getComponents().clear();
         Work.setupWorkLoglist();

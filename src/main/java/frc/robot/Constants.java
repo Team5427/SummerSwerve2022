@@ -80,8 +80,8 @@ public final class Constants {
     public static final double CONTROLLER_DEADBAND = 0.1;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_SPEED_TELEOP_M_PER_S = 4;
-    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 3;
+    public static final double MAX_SPEED_TELEOP_M_PER_S = 3.35;
+    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 2;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
     //AUTON STUFF
@@ -89,7 +89,7 @@ public final class Constants {
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI; 
     public static final double AUTON_X_P = 0.1; //FIXME
     public static final double AUTON_Y_P = 0.1; //FIXME
-    public static final double AUTON_THETA_P = 0.001; //FIXME
+    public static final double AUTON_THETA_P = 0.1; //FIXME
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
@@ -119,6 +119,8 @@ public final class Constants {
     public static final boolean FIELD_RELATIVE_SWITCHABLE = true;
     public static final boolean FIELD_RELATIVE_ON_START = false;
     public static final boolean DRIVE_PIDS_ENABLED = true;
-    public static final boolean DAMPENER_ENABLED = false;
-    public static final double DAMPENER_ON_START = 1.0;
+    public static final boolean DAMPENER_ENABLED = true;
+    public static final double DAMPENER_HIGH = 1.0;
+    public static final double DAMPENER_LOW = 0.3;
+    public static final boolean USE_NEW_LOGGER = false;
 }

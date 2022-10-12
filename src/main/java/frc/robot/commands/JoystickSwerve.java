@@ -32,7 +32,6 @@ public class JoystickSwerve extends CommandBase {
             swerve.zeroHeading();
             swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
         }
-        swerve.setDampener(-.75 * joy.getRightTriggerAxis() + 1);
         states = swerve.controllerToModuleStates(joy);
         swerve.setModules(states);
     }

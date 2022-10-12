@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.other.Logger;
@@ -37,7 +38,7 @@ public class SwerveDrive extends SubsystemBase {
         this.backRight = new SwerveModule(Constants.SwerveModuleType.BACK_RIGHT);
         this.gyro = m_gyro;
         isFieldRelative = Constants.FIELD_RELATIVE_ON_START;
-        dampener = Constants.DAMPENER_ON_START;
+        dampener = Constants.DAMPENER_HIGH;
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         yRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
@@ -69,9 +70,11 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
+        dampener = Constants.DAMPENER_ENABLED ? ((Constants.DAMPENER_LOW - 1) * controller.getRightTriggerAxis() + 1) : Constants.DAMPENER_HIGH;
+
         xSpeed = controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
-        x2Speed = Math.pow(controller.getRightX() * dampener, 3);
+        x2Speed = Math.pow(controller.getRightX(), 3) * dampener;
 
         xSpeed = Math.abs(xSpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? xSpeed : 0; //apply deadband
         ySpeed = Math.abs(ySpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? ySpeed : 0;
@@ -80,6 +83,10 @@ public class SwerveDrive extends SubsystemBase {
         xSpeed = xRateLimiter.calculate(xSpeed) * Constants.MAX_SPEED_TELEOP_M_PER_S; //apply slew + scale to m/s and rad/s
         ySpeed = yRateLimiter.calculate(ySpeed) * Constants.MAX_SPEED_TELEOP_M_PER_S;
         x2Speed = xRateLimiter2.calculate(x2Speed) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
+
+        if (controller.getPOV() == 0) {
+            xSpeed = 2;
+        }
 
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
@@ -135,36 +142,18 @@ public class SwerveDrive extends SubsystemBase {
         isFieldRelative = Constants.FIELD_RELATIVE_SWITCHABLE ? !isFieldRelative : isFieldRelative;
     }
 
-    public void setDampener(double s) {
-        dampener = Constants.DAMPENER_ENABLED ? s : dampener;
-    }
-
     private void log() {
-        Logger.Work.post("setpoint state abs: front left", frontLeft.getAbsEncRaw());
-        Logger.Work.post("setpoint state abs: front Right", frontRight.getAbsEncRaw());
-        Logger.Work.post("setpoint state abs: back left", backLeft.getAbsEncRaw());
-        Logger.Work.post("setpoint state abs: back Right", backRight.getAbsEncRaw());
-
-        // Logger.Work.post("setpoint state rel: front left", frontLeft.getTurnPosRad());
-        // Logger.Work.post("setpoint state rel: front Right", frontRight.getTurnPosRad());
-        // Logger.Work.post("setpoint state rel: back left", backLeft.getTurnPosRad());
-        // Logger.Work.post("setpoint state rel: back Right", backRight.getTurnPosRad());
-
-        // // Logger.Work.post("neo val", frontRight.getTurnPosRad());
-        // // Logger.Work.post("neo val left", frontLeft.getTurnPosRad());
-        // Logger.Work.post("front left speed", frontLeft.getDriveSpeed());
-        // Logger.Work.post("front right speed", frontRight.getDriveSpeed());
-        // Logger.Work.post("back left speed", backLeft.getDriveSpeed());
-        // Logger.Work.post("back right speed", backRight.getDriveSpeed());
-
-        // Logger.Work.post("Robot Heading", getHeading());
-        // Logger.Work.post("Robot Location", getPose().getTranslation().toString());
-        Logger.Work.post("thing", backRight.getTurnPosRad() % (2 * Math.PI));
-        Logger.Work.post("gyro", gyro.getAngle());
-        Logger.Work.post("FieldRelative", getFieldRelative());
-        // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
-        Logger.Work.post("odom", odometer.getPoseMeters().toString());
-        Logger.Work.post("Field5427", field);
+        if (Constants.USE_NEW_LOGGER) {
+            Logger.Work.post("FieldRelative", getFieldRelative());
+            // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
+            Logger.Work.post("odom", odometer.getPoseMeters().toString());
+            Logger.Work.post("Field5427", field);
+        } else {
+            SmartDashboard.putBoolean("FieldRelative", getFieldRelative());
+            // SmartDashboard.putBoolean("GyroCalibrating", gyro.isCalibrating());
+            SmartDashboard.putString("odom", odometer.getPoseMeters().toString());
+            SmartDashboard.putData("Field5427", field);
+            SmartDashboard.putNumber("key", backLeft.getTurnPosRad());
+        }
     }
-
 }
