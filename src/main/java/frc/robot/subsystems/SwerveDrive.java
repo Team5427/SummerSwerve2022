@@ -38,7 +38,7 @@ public class SwerveDrive extends SubsystemBase {
         this.backRight = new SwerveModule(Constants.SwerveModuleType.BACK_RIGHT);
         this.gyro = m_gyro;
         isFieldRelative = Constants.FIELD_RELATIVE_ON_START;
-        dampener = Constants.DAMPENER_HIGH;
+        dampener = 1;
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         yRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
@@ -70,11 +70,11 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
-        dampener = Constants.DAMPENER_ENABLED ? ((Constants.DAMPENER_LOW - 1) * controller.getRightTriggerAxis() + 1) : Constants.DAMPENER_HIGH;
+        dampener = ((Constants.DAMPENER_LOW_PERCENT - 1) * controller.getRightTriggerAxis() + 1);
 
-        xSpeed = controller.getLeftX() * dampener;
+        xSpeed = -controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
-        x2Speed = Math.pow(controller.getRightX(), 3) * dampener;
+        x2Speed = -Math.pow(controller.getRightX(), 3) * dampener;
 
         xSpeed = Math.abs(xSpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? xSpeed : 0; //apply deadband
         ySpeed = Math.abs(ySpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? ySpeed : 0;
@@ -85,7 +85,7 @@ public class SwerveDrive extends SubsystemBase {
         x2Speed = xRateLimiter2.calculate(x2Speed) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
 
         if (controller.getPOV() == 0) {
-            xSpeed = 2;
+            ySpeed = 2;
         }
 
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
@@ -125,7 +125,7 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
-        field.setRobotPose(odometer.getPoseMeters().getX(), -odometer.getPoseMeters().getY(), odometer.getPoseMeters().getRotation().times(-1));
+        field.setRobotPose(odometer.getPoseMeters());
         log();
     }
 

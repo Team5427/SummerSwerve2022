@@ -42,20 +42,20 @@ public final class Constants {
     public static final double BACK_RIGHT_OFFSET = 0.79;
     
     //Inversions
-    public static final boolean FRONT_LEFT_TURNING_INVERT = true;
-    public static final boolean FRONT_RIGHT_TURNING_INVERT = true;
-    public static final boolean BACK_LEFT_TURNING_INVERT = true;
-    public static final boolean BACK_RIGHT_TURNING_INVERT = true;
+    public static final boolean FRONT_LEFT_TURNING_INVERT = false;
+    public static final boolean FRONT_RIGHT_TURNING_INVERT = false;
+    public static final boolean BACK_LEFT_TURNING_INVERT = false;
+    public static final boolean BACK_RIGHT_TURNING_INVERT = false;
 
     public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
     public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
     public static final boolean BACK_LEFT_DRIVE_INVERT = true;
     public static final boolean BACK_RIGHT_DRIVE_INVERT = true;
 
-    public static final boolean FRONT_LEFT_CANCODER_INVERT = true;
-    public static final boolean FRONT_RIGHT_CANCODER_INVERT = true;
-    public static final boolean BACK_LEFT_CANCODER_INVERT = true;
-    public static final boolean BACK_RIGHT_CANCODER_INVERT = true;
+    public static final boolean FRONT_LEFT_CANCODER_INVERT = false;
+    public static final boolean FRONT_RIGHT_CANCODER_INVERT = false;
+    public static final boolean BACK_LEFT_CANCODER_INVERT = false;
+    public static final boolean BACK_RIGHT_CANCODER_INVERT = false;
 
     //Robot Physical Dimensions
     public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
@@ -63,10 +63,10 @@ public final class Constants {
     public static final double DT_WHEELBASE = Units.inchesToMeters(19.5); 
 
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
-        new Translation2d(DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),
         new Translation2d(DT_WHEELBASE / 2, DT_TRACKWIDTH / 2),
-        new Translation2d(-DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),
-        new Translation2d(-DT_WHEELBASE / 2, DT_TRACKWIDTH / 2));
+        new Translation2d(DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2),
+        new Translation2d(-DT_WHEELBASE / 2, DT_TRACKWIDTH / 2),
+        new Translation2d(-DT_WHEELBASE / 2, -DT_TRACKWIDTH / 2));
 
 
     //Swerve Speed Numbers
@@ -76,13 +76,16 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
-    public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196;
+    public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196; //do not touch
+    public static final double MAX_SPEED_TELEOP_M_PER_S = 4;
+    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 2;
+    public static final double MAX_NEO_SPEED_RPM = 5676.0;
+
+    //JoystickStuff
     public static final double CONTROLLER_DEADBAND = 0.1;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
-    public static final double MAX_SPEED_TELEOP_M_PER_S = 3.35;
-    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 2;
-    public static final double MAX_NEO_SPEED_RPM = 5676.0;
+    public static final double DAMPENER_LOW_PERCENT = 0.3;
 
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
@@ -95,7 +98,7 @@ public final class Constants {
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
 
     //CONTROLLER CONSTANTS MODULES
-    public static final double TURNING_PID_P = 3.0;
+    public static final double TURNING_PID_P = 2.4;
     public static final double TURNING_PID_D = 0.2;
     public static final double TURNING_FF_S = 0.088444;
     public static final double TURNING_FF_V = 0.24913;
@@ -118,9 +121,5 @@ public final class Constants {
     //DEBUG VARS (Remove before comp if robot is stable)
     public static final boolean FIELD_RELATIVE_SWITCHABLE = true;
     public static final boolean FIELD_RELATIVE_ON_START = false;
-    public static final boolean DRIVE_PIDS_ENABLED = true;
-    public static final boolean DAMPENER_ENABLED = true;
-    public static final double DAMPENER_HIGH = 1.0;
-    public static final double DAMPENER_LOW = 0.3;
-    public static final boolean USE_NEW_LOGGER = false;
+    public static final boolean USE_NEW_LOGGER = true;
 }
