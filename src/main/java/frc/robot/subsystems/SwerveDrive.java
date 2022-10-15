@@ -74,7 +74,8 @@ public class SwerveDrive extends SubsystemBase {
 
         xSpeed = -controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
-        x2Speed = -Math.pow(controller.getRightX(), 3) * dampener;
+        x2Speed = Math.signum(-controller.getRightX()) * Math.pow(Math.abs(controller.getRightX()), Constants.CONTROLLER_TURNING_EXPONENT * dampener) * dampener;
+        //dampens exponent, speed, and deadband
 
         xSpeed = Math.abs(xSpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? xSpeed : 0; //apply deadband
         ySpeed = Math.abs(ySpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? ySpeed : 0;
@@ -84,8 +85,9 @@ public class SwerveDrive extends SubsystemBase {
         ySpeed = yRateLimiter.calculate(ySpeed) * Constants.MAX_SPEED_TELEOP_M_PER_S;
         x2Speed = xRateLimiter2.calculate(x2Speed) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
 
-        if (controller.getPOV() == 0) {
-            ySpeed = 2;
+        if (controller.getPOV() != -1) {
+            ySpeed = Math.cos(Math.toRadians(360 - controller.getPOV()));
+            xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV()));
         }
 
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
@@ -111,7 +113,6 @@ public class SwerveDrive extends SubsystemBase {
         frontRight.setModState(desiredStates[1]);
         backLeft.setModState(desiredStates[2]);
         backRight.setModState(desiredStates[3]);
-
     }
 
     public Pose2d getPose() {

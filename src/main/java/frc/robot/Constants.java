@@ -83,6 +83,7 @@ public final class Constants {
 
     //JoystickStuff
     public static final double CONTROLLER_DEADBAND = 0.1;
+    public static final double CONTROLLER_TURNING_EXPONENT = 2.5;
     public static final double MAX_ACCEL_TELEOP_PERCENT_PER_S = 4;
     public static final double MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S = 3;
     public static final double DAMPENER_LOW_PERCENT = 0.3;
@@ -104,7 +105,7 @@ public final class Constants {
     public static final double TURNING_FF_V = 0.24913;
     public static final double TURNING_FF_A = 0.011425;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 3;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 2;
 
     public static final double SPEED_PID_P = 2.94;
     public static final double SPEED_FF_S = 0.097718;

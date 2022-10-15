@@ -39,36 +39,6 @@ public class SwerveModule {
         init();
     }
 
-    public void init() {
-        speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
-        turnMotor = new CANSparkMax(turnMotorID, MotorType.kBrushless);
-        speedMotor.restoreFactoryDefaults();
-        turnMotor.restoreFactoryDefaults();
-        speedMotor.setSmartCurrentLimit(40);
-        turnMotor.setSmartCurrentLimit(27);
-        speedMotor.setInverted(speedInv);
-        turnMotor.setInverted(turnInv);
-        speedEnc = speedMotor.getEncoder();
-        turnEnc = turnMotor.getEncoder();
-        absEnc = new CANCoder(absEncID);
-        speedMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setIdleMode(IdleMode.kBrake);
-        turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
-            new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
-        turningPID.enableContinuousInput(-Math.PI, Math.PI);
-        turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
-        speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
-        speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);
-        speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_METER);
-        speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
-        turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_RAD);
-        turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
-        speedEnc.setPosition(0);
-        absEnc.configFactoryDefault();
-        absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        turnEnc.setPosition(getAbsEncRad());
-    }
-
     public CANSparkMax getDriveSpark() {return speedMotor;}
     public CANSparkMax getTurnSpark() {return turnMotor;}
     public PIDController getDrivePID() {return speedPID;}
@@ -147,5 +117,35 @@ public class SwerveModule {
                 encInv = Constants.BACK_RIGHT_CANCODER_INVERT;
                 break;
         }
+    }
+    
+    public void init() {
+        speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
+        turnMotor = new CANSparkMax(turnMotorID, MotorType.kBrushless);
+        speedMotor.restoreFactoryDefaults();
+        turnMotor.restoreFactoryDefaults();
+        speedMotor.setSmartCurrentLimit(40);
+        turnMotor.setSmartCurrentLimit(27);
+        speedMotor.setInverted(speedInv);
+        turnMotor.setInverted(turnInv);
+        speedEnc = speedMotor.getEncoder();
+        turnEnc = turnMotor.getEncoder();
+        absEnc = new CANCoder(absEncID);
+        speedMotor.setIdleMode(IdleMode.kBrake);
+        turnMotor.setIdleMode(IdleMode.kBrake);
+        turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
+            new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
+        turningPID.enableContinuousInput(-Math.PI, Math.PI);
+        turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
+        speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
+        speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);
+        speedEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_METER);
+        speedEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S);
+        turnEnc.setPositionConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_ROT_TO_RAD);
+        turnEnc.setVelocityConversionFactor(Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S);
+        speedEnc.setPosition(0);
+        absEnc.configFactoryDefault();
+        absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        turnEnc.setPosition(getAbsEncRad());
     }
 }
