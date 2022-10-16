@@ -31,6 +31,7 @@ public class JoystickSwerve extends CommandBase {
         if (joy.getBButtonPressed()) {
             swerve.zeroHeading();
             swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+            swerve.resetMods();
         }
         states = swerve.controllerToModuleStates(joy);
         swerve.setModules(states);

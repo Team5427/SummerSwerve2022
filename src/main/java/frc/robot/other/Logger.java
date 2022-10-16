@@ -3,8 +3,11 @@ package frc.robot.other;
 import java.util.HashMap;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 
 public class Logger {
 
@@ -31,7 +34,13 @@ public class Logger {
             } else {
                 workList.put(key, b);                
             }
+        }
 
+        public static void postComplex(String key, Sendable b, WidgetType type) {
+            if (!workEntryList.containsKey(key)) {
+                workEntryList.put(key, NetworkTableInstance.getDefault().getTable("Shuffleboard").getEntry(key));
+                workTab.add(key, b).withWidget(type);
+            }
         }
     }
 
@@ -54,6 +63,13 @@ public class Logger {
                 compList.put(key, b);                
             }
 
+        }
+
+        public static void postComplex(String key, Sendable b, WidgetType type) {
+            if (!compEntryList.containsKey(key)) {
+                compEntryList.put(key, NetworkTableInstance.getDefault().getTable("Shuffleboard").getEntry(key));
+                compTab.add(key, b).withWidget(type);
+            }
         }
     }
 }

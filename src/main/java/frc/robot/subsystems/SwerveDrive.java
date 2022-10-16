@@ -10,8 +10,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.other.Logger;
@@ -55,7 +55,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        return Math.IEEEremainder((360 - gyro.getAngle()), 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -123,10 +123,18 @@ public class SwerveDrive extends SubsystemBase {
         odometer.resetPosition(pose, getRotation2d());
     }
 
+    public void resetMods() {
+        SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
+        for (int i = 0; i < 4; i++) {
+            modules[i].getTurnSpark().getEncoder().setPosition(modules[i].getAbsEncRad());
+        }
+    }
+
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
         field.setRobotPose(odometer.getPoseMeters());
+        
         log();
     }
 
@@ -144,17 +152,15 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void log() {
-        if (Constants.USE_NEW_LOGGER) {
-            Logger.Work.post("FieldRelative", getFieldRelative());
-            // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
-            Logger.Work.post("odom", odometer.getPoseMeters().toString());
-            Logger.Work.post("Field5427", field);
-        } else {
-            SmartDashboard.putBoolean("FieldRelative", getFieldRelative());
-            // SmartDashboard.putBoolean("GyroCalibrating", gyro.isCalibrating());
-            SmartDashboard.putString("odom", odometer.getPoseMeters().toString());
-            SmartDashboard.putData("Field5427", field);
-            SmartDashboard.putNumber("key", backLeft.getTurnPosRad());
-        }
+        Logger.Work.post("FieldRelative", getFieldRelative());
+        // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
+        Logger.Work.post("odom", odometer.getPoseMeters().toString());
+        // Logger.Work.post("Field5427", field);
+        // Logger.Work.post("key", backLeft.getTurnPosRad());
+        Logger.Work.post("gyro", getHeading());
+
+        Logger.Work.post("swerveDataBAD", ((backLeft.getTurnPosRad() % Math.PI) - backLeft.getAbsEncRad()));
+        Logger.Work.post("frontLefts", ((frontLeft.getTurnPosRad() % Math.PI) - frontLeft.getAbsEncRad()));
+        Logger.Work.postComplex("Field542", field, BuiltInWidgets.kField);
     }
 }
