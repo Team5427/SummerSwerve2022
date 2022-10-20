@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.other.Logger;
-import frc.robot.other.SwerveModule;
+import frc.robot.util.Logger;
+import frc.robot.util.SwerveModule;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -75,9 +75,9 @@ public class SwerveDrive extends SubsystemBase {
         xSpeed = -controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
         x2Speed = Math.signum(-controller.getRightX()) * Math.pow(Math.abs(controller.getRightX()), Constants.CONTROLLER_TURNING_EXPONENT * dampener) * dampener;
-        //dampens exponent, speed, and deadband
+        //dampens exponent as well as speed
 
-        xSpeed = Math.abs(xSpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? xSpeed : 0; //apply deadband
+        xSpeed = Math.abs(xSpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? xSpeed : 0; //apply deadband with dampener
         ySpeed = Math.abs(ySpeed) > (Constants.CONTROLLER_DEADBAND * dampener) ? ySpeed : 0;
         x2Speed = Math.abs(x2Speed) > (Constants.CONTROLLER_DEADBAND * dampener) ? x2Speed : 0;
 
@@ -155,12 +155,13 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("FieldRelative", getFieldRelative());
         // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
         Logger.Work.post("odom", odometer.getPoseMeters().toString());
-        // Logger.Work.post("Field5427", field);
         // Logger.Work.post("key", backLeft.getTurnPosRad());
         Logger.Work.post("gyro", getHeading());
 
-        Logger.Work.post("swerveDataBAD", ((backLeft.getTurnPosRad() % Math.PI) - backLeft.getAbsEncRad()));
-        Logger.Work.post("frontLefts", ((frontLeft.getTurnPosRad() % Math.PI) - frontLeft.getAbsEncRad()));
+        Logger.Work.post("backLeft", Math.abs(Math.IEEEremainder(backLeft.getTurnPosRad(), Math.PI) - backLeft.getAbsEncRad()));
+        Logger.Work.post("frontLeft", Math.abs(Math.IEEEremainder(frontLeft.getTurnPosRad(), Math.PI) - frontLeft.getAbsEncRad()));
+        Logger.Work.post("backRight", Math.abs(Math.IEEEremainder(backRight.getTurnPosRad(), Math.PI) - backRight.getAbsEncRad()));
+        Logger.Work.post("frontRight", Math.abs(Math.IEEEremainder(frontRight.getTurnPosRad(), Math.PI) - frontRight.getAbsEncRad()));
         Logger.Work.postComplex("Field542", field, BuiltInWidgets.kField);
     }
 }

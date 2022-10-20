@@ -1,4 +1,4 @@
-package frc.robot.other;
+package frc.robot.util;
 
 import java.util.HashMap;
 
@@ -38,7 +38,7 @@ public class Logger {
 
         public static void postComplex(String key, Sendable b, WidgetType type) {
             if (!workEntryList.containsKey(key)) {
-                workEntryList.put(key, NetworkTableInstance.getDefault().getTable("Shuffleboard").getEntry(key));
+                workEntryList.put(key, NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Work").getEntry(key));
                 workTab.add(key, b).withWidget(type);
             }
         }
@@ -67,7 +67,7 @@ public class Logger {
 
         public static void postComplex(String key, Sendable b, WidgetType type) {
             if (!compEntryList.containsKey(key)) {
-                compEntryList.put(key, NetworkTableInstance.getDefault().getTable("Shuffleboard").getEntry(key));
+                compEntryList.put(key, NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Comp").getEntry(key));
                 compTab.add(key, b).withWidget(type);
             }
         }

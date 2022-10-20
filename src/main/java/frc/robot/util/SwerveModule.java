@@ -1,4 +1,4 @@
-package frc.robot.other;
+package frc.robot.util;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -13,7 +13,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class SwerveModule {
 
@@ -33,6 +35,7 @@ public class SwerveModule {
     private PIDController speedPID;
     private SimpleMotorFeedforward speedFF;
     private double encoderOffset;
+    private Timer timer;
 
     public SwerveModule (Constants.SwerveModuleType type) {
         determineIDs(type);
@@ -67,7 +70,7 @@ public class SwerveModule {
         if (Math.abs(state.speedMetersPerSecond) <= 0.02) {
             stop();
         } else {
-            state = SwerveModuleState.optimize(state, getModState().angle);
+            state = SwerveModuleState.optimize(fixModule(state), getModState().angle);
             speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
             turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
         }
@@ -76,6 +79,23 @@ public class SwerveModule {
     public void stop() {
         speedMotor.stopMotor();
         turnMotor.stopMotor();
+    }
+
+    public SwerveModuleState fixModule(SwerveModuleState p_state) {
+        // if (Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()) > Constants.MODULE_FUCKED_THRESHOLD) {
+        if (RobotContainer.getController().getXButton()) {
+            timer.start();
+            if (timer.get() > 0.25) { //FIXME needs to be tuned
+                turnEnc.setPosition(getAbsEncRad());
+                timer.stop();
+                timer.reset();
+            }
+            return new SwerveModuleState(p_state.speedMetersPerSecond, new Rotation2d(0));
+        } else {
+            timer.stop();
+            timer.reset();
+            return p_state;
+        }
     }
 
     private void determineIDs(Constants.SwerveModuleType type) {
@@ -147,5 +167,6 @@ public class SwerveModule {
         absEnc.configFactoryDefault();
         absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         turnEnc.setPosition(getAbsEncRad());
+        timer = new Timer();
     }
 }

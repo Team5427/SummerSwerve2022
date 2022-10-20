@@ -105,12 +105,16 @@ public final class Constants {
     public static final double TURNING_FF_V = 0.24913;
     public static final double TURNING_FF_A = 0.011425;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM * 3;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = TURNING_MAX_SPEED_RAD_S * 3;
 
     public static final double SPEED_PID_P = 2.94;
     public static final double SPEED_FF_S = 0.097718;
     public static final double SPEED_FF_V = 2.5872;
     public static final double SPEED_FF_A = 0.22077;
+    public static final double SPEED_MAX_SPEED_M_S = SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S * MAX_NEO_SPEED_RPM;
+    public static final double SPEED_MAX_ACCEL_M_S_S = SPEED_MAX_SPEED_M_S * 3;
+
+    public static final double MODULE_OFF_THRESHOLD = 12.0; //FIXME needs to be found
 
     public static enum SwerveModuleType {
         FRONT_LEFT,
