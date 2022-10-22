@@ -158,10 +158,10 @@ public class SwerveDrive extends SubsystemBase {
         // Logger.Work.post("key", backLeft.getTurnPosRad());
         Logger.Work.post("gyro", getHeading());
 
-        Logger.Work.post("backLeft", Math.abs(Math.IEEEremainder(backLeft.getTurnPosRad(), Math.PI) - backLeft.getAbsEncRad()));
-        Logger.Work.post("frontLeft", Math.abs(Math.IEEEremainder(frontLeft.getTurnPosRad(), Math.PI) - frontLeft.getAbsEncRad()));
-        Logger.Work.post("backRight", Math.abs(Math.IEEEremainder(backRight.getTurnPosRad(), Math.PI) - backRight.getAbsEncRad()));
-        Logger.Work.post("frontRight", Math.abs(Math.IEEEremainder(frontRight.getTurnPosRad(), Math.PI) - frontRight.getAbsEncRad()));
+        Logger.Work.post("backLeft", Math.IEEEremainder(Math.abs(Math.IEEEremainder(backLeft.getTurnPosRad(), Math.PI) - backLeft.getAbsEncRad()), Math.PI));
+        Logger.Work.post("frontLeft", Math.IEEEremainder(Math.abs(Math.IEEEremainder(frontLeft.getTurnPosRad(), Math.PI) - frontLeft.getAbsEncRad()), Math.PI));
+        Logger.Work.post("backRight", Math.IEEEremainder(Math.abs(Math.IEEEremainder(backRight.getTurnPosRad(), Math.PI) - backRight.getAbsEncRad()), Math.PI));
+        Logger.Work.post("frontRight", Math.IEEEremainder(Math.abs(Math.IEEEremainder(frontRight.getTurnPosRad(), Math.PI) - frontRight.getAbsEncRad()), Math.PI));
         Logger.Work.postComplex("Field542", field, BuiltInWidgets.kField);
     }
 }

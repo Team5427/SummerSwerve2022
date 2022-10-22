@@ -82,18 +82,10 @@ public class SwerveModule {
     }
 
     public SwerveModuleState fixModule(SwerveModuleState p_state) {
-        // if (Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()) > Constants.MODULE_FUCKED_THRESHOLD) {
-        if (RobotContainer.getController().getXButton()) {
-            timer.start();
-            if (timer.get() > 0.25) { //FIXME needs to be tuned
-                turnEnc.setPosition(getAbsEncRad());
-                timer.stop();
-                timer.reset();
-            }
-            return new SwerveModuleState(p_state.speedMetersPerSecond, new Rotation2d(0));
+        if (Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD) {
+            turnEnc.setPosition(getAbsEncRad());
+            return p_state;
         } else {
-            timer.stop();
-            timer.reset();
             return p_state;
         }
     }

@@ -114,7 +114,7 @@ public final class Constants {
     public static final double SPEED_MAX_SPEED_M_S = SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S * MAX_NEO_SPEED_RPM;
     public static final double SPEED_MAX_ACCEL_M_S_S = SPEED_MAX_SPEED_M_S * 3;
 
-    public static final double MODULE_OFF_THRESHOLD = 12.0; //FIXME needs to be found
+    public static final double MODULE_BAD_THRESHOLD = 0.15; //FIXME needs to be found
 
     public static enum SwerveModuleType {
         FRONT_LEFT,
