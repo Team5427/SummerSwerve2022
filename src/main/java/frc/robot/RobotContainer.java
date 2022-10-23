@@ -10,8 +10,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.JoystickSwerve;
-import frc.robot.commands.Trajectory.AutonController;
+import frc.robot.commands.Auton.TestAuton;
 import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -22,7 +23,6 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class RobotContainer {
 
-  private static AutonController autonController;
   private static SwerveDrive swerveDrive;
   private static AHRS ahrs;
   private static XboxController joy;
@@ -58,8 +58,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    autonController = new AutonController();
-    return autonController.getAutonCommand().andThen(() -> getSwerve().stopMods());
+    SequentialCommandGroup testAuton = new TestAuton();
+    return testAuton;
   }
 
   public static SwerveDrive getSwerve() {return swerveDrive;}

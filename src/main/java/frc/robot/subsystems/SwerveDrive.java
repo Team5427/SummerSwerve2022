@@ -30,6 +30,7 @@ public class SwerveDrive extends SubsystemBase {
     private double dampener;
     private SwerveDriveOdometry odometer;
     private Field2d field;
+    private static int resetCounter;
 
     public SwerveDrive (AHRS m_gyro) {
         this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
@@ -151,6 +152,10 @@ public class SwerveDrive extends SubsystemBase {
         isFieldRelative = Constants.FIELD_RELATIVE_SWITCHABLE ? !isFieldRelative : isFieldRelative;
     }
 
+    public static void incrementResetCounter() {
+        resetCounter++;
+    }
+
     private void log() {
         Logger.Work.post("FieldRelative", getFieldRelative());
         // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
@@ -163,5 +168,6 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("backRight", Math.IEEEremainder(Math.abs(Math.IEEEremainder(backRight.getTurnPosRad(), Math.PI) - backRight.getAbsEncRad()), Math.PI));
         Logger.Work.post("frontRight", Math.IEEEremainder(Math.abs(Math.IEEEremainder(frontRight.getTurnPosRad(), Math.PI) - frontRight.getAbsEncRad()), Math.PI));
         Logger.Work.postComplex("Field542", field, BuiltInWidgets.kField);
+        Logger.Work.post("resetCOutner", resetCounter);
     }
 }

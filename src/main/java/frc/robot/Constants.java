@@ -91,8 +91,7 @@ public final class Constants {
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI; 
-    public static final double AUTON_X_P = 0.1; //FIXME
-    public static final double AUTON_Y_P = 0.1; //FIXME
+    public static final double AUTON_TRANSLATION_P = 0.1; //FIXME
     public static final double AUTON_THETA_P = 0.1; //FIXME
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -114,7 +113,7 @@ public final class Constants {
     public static final double SPEED_MAX_SPEED_M_S = SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S * MAX_NEO_SPEED_RPM;
     public static final double SPEED_MAX_ACCEL_M_S_S = SPEED_MAX_SPEED_M_S * 3;
 
-    public static final double MODULE_BAD_THRESHOLD = 0.15; //FIXME needs to be found
+    public static final double MODULE_BAD_THRESHOLD = 0.075; //FIXME needs to be found
 
     public static enum SwerveModuleType {
         FRONT_LEFT,

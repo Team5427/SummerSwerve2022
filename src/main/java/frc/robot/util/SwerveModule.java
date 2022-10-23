@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 
 public class SwerveModule {
 
@@ -25,6 +26,7 @@ public class SwerveModule {
     private boolean speedInv;
     private boolean turnInv;
     private boolean encInv;
+    private boolean singleLog;
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
     private RelativeEncoder speedEnc;
@@ -82,10 +84,13 @@ public class SwerveModule {
     }
 
     public SwerveModuleState fixModule(SwerveModuleState p_state) {
-        if (Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD) {
+        if ((Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD)) {
+            singleLog = false;
             turnEnc.setPosition(getAbsEncRad());
+            SwerveDrive.incrementResetCounter();
             return p_state;
         } else {
+            singleLog = true;
             return p_state;
         }
     }
