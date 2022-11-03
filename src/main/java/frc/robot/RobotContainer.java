@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.JoystickSwerve;
 import frc.robot.commands.Auton.TestAuton;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.util.PathMaker;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,6 +37,9 @@ public class RobotContainer {
 
     swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
+
+    PathMaker.initPaths("Test1");
+    System.out.println(Filesystem.getDeployDirectory().toPath().resolve("pathplanner").toFile().list());
 
     configureButtonBindings();
   }

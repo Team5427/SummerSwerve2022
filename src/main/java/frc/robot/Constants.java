@@ -93,6 +93,7 @@ public final class Constants {
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI; 
     public static final double AUTON_TRANSLATION_P = 0.1; //FIXME
     public static final double AUTON_THETA_P = 0.1; //FIXME
+    public static final double MAX_AUTON_SPEED_M_PER_S = 2;
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);

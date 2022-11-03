@@ -8,14 +8,14 @@ import frc.robot.util.PathMaker;
 public class TestAuton extends SequentialCommandGroup{
     public TestAuton() {
         addRequirements(RobotContainer.getSwerve());
-        addCommands(PathMaker.getCommand("Grog"), new RunCommand(() -> {
+        addCommands(PathMaker.getCommand("Test1"), new RunCommand(() -> {
             System.out.println("yay it finished");
         }));
     }
 
     @Override
     public void initialize() {
-        RobotContainer.getSwerve().resetOdometry(PathMaker.getTraj("Grog").getInitialPose());
+        RobotContainer.getSwerve().resetOdometry(PathMaker.getTraj("Test1").getInitialPose());
     }
 
     @Override
