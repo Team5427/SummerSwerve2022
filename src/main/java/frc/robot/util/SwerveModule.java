@@ -13,9 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 
 public class SwerveModule {
@@ -26,7 +24,6 @@ public class SwerveModule {
     private boolean speedInv;
     private boolean turnInv;
     private boolean encInv;
-    private boolean singleLog;
     private CANSparkMax speedMotor;
     private CANSparkMax turnMotor;
     private RelativeEncoder speedEnc;
@@ -37,7 +34,6 @@ public class SwerveModule {
     private PIDController speedPID;
     private SimpleMotorFeedforward speedFF;
     private double encoderOffset;
-    private Timer timer;
 
     public SwerveModule (Constants.SwerveModuleType type) {
         determineIDs(type);
@@ -85,12 +81,10 @@ public class SwerveModule {
 
     public SwerveModuleState fixModule(SwerveModuleState p_state) {
         if ((Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD)) {
-            singleLog = false;
             turnEnc.setPosition(getAbsEncRad());
             SwerveDrive.incrementResetCounter();
             return p_state;
         } else {
-            singleLog = true;
             return p_state;
         }
     }
@@ -164,6 +158,5 @@ public class SwerveModule {
         absEnc.configFactoryDefault();
         absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         turnEnc.setPosition(getAbsEncRad());
-        timer = new Timer();
     }
 }

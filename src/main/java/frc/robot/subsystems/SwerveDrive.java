@@ -169,5 +169,9 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("frontRight", Math.IEEEremainder(Math.abs(Math.IEEEremainder(frontRight.getTurnPosRad(), Math.PI) - frontRight.getAbsEncRad()), Math.PI));
         Logger.Work.postComplex("Field542", field, BuiltInWidgets.kField);
         Logger.Work.post("resetCOutner", resetCounter);
+        Logger.Work.post("abs FR", frontRight.getAbsEncRad());
+        Logger.Work.post("abs FL", frontLeft.getAbsEncRad());
+        Logger.Work.post("abs BR", backRight.getAbsEncRad());
+        Logger.Work.post("abs BL", backLeft.getAbsEncRad());
     }
 }

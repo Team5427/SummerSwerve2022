@@ -98,7 +98,7 @@ public final class Constants {
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
 
     //CONTROLLER CONSTANTS MODULES
-    public static final double TURNING_PID_P = 2.7;
+    public static final double TURNING_PID_P = 3;
     public static final double TURNING_PID_D = 0.2;
     public static final double TURNING_FF_S = 0.088444;
     public static final double TURNING_FF_V = 0.24913;
