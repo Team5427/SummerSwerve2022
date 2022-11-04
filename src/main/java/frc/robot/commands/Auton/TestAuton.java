@@ -8,9 +8,12 @@ import frc.robot.util.PathMaker;
 public class TestAuton extends SequentialCommandGroup{
     public TestAuton() {
         addRequirements(RobotContainer.getSwerve());
-        addCommands(PathMaker.getCommand("Test1"), new RunCommand(() -> {
-            System.out.println("yay it finished");
-        }));
+        addCommands(
+            PathMaker.getCommand("Test1"), 
+            new RunCommand(() -> {
+                System.out.println("yay it finished");
+            })
+        );
     }
 
     @Override

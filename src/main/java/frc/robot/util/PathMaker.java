@@ -7,26 +7,29 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 
 public class PathMaker {
-    private static HashMap<String, PathPlannerTrajectory> trajList;
-    private static HashMap<String, PPSwerveControllerCommand> commandList;
+    private static HashMap<String, PathPlannerTrajectory> trajList = new HashMap<String, PathPlannerTrajectory>();
+    private static HashMap<String, PPSwerveControllerCommand> commandList = new HashMap<String, PPSwerveControllerCommand>();
     private static SwerveDrive driveTrain;
     private static PIDController xTranslationPID, yTranslationPID;
     private static PIDController thetaPID;
 
-    public static void initPaths(String... args) {
+    public static void initPaths() {
+        String[] args = Filesystem.getDeployDirectory().toPath().resolve("pathplanner").toFile().list();
         xTranslationPID = new PIDController(Constants.AUTON_TRANSLATION_P, 0, 0);
         yTranslationPID = new PIDController(Constants.AUTON_TRANSLATION_P, 0, 0);
         thetaPID = new PIDController(Constants.AUTON_THETA_P, 0, 0);
         driveTrain = RobotContainer.getSwerve();
         for (int i = 0; i < args.length; i++) {
-            trajList.put(args[i], PathPlanner.loadPath(args[i], Constants.MAX_SPEED_TELEOP_M_PER_S, Constants.MAX_AUTON_ACCEL_M_PER_S2));
-            commandList.put(args[i], new PPSwerveControllerCommand(
-                trajList.get(args[i]), 
+            String string = args[i].split(".")[0];
+            trajList.put(string, PathPlanner.loadPath(string, Constants.MAX_SPEED_TELEOP_M_PER_S, Constants.MAX_AUTON_ACCEL_M_PER_S2));
+            commandList.put(string, new PPSwerveControllerCommand(
+                trajList.get(string), 
                 driveTrain::getPose, 
                 Constants.SWERVE_DRIVE_KINEMATICS, 
                 xTranslationPID,
