@@ -55,6 +55,10 @@ public class SwerveDrive extends SubsystemBase {
         gyro.zeroYaw();
     }
 
+    public void setGyroOffset(double angleDeg) {
+        gyro.setAngleAdjustment(angleDeg);
+    }
+
     public double getHeading() {
         return Math.IEEEremainder((360 - gyro.getAngle()), 360);
     }
@@ -142,6 +146,12 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveModule[] getModules() {
         SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
         return modules;
+    }
+
+    public void setBrake(boolean driveBrake, boolean steerBrake) {
+        for (int i = 0; i < 4; i++) {
+            getModules()[i].setBrake(driveBrake, steerBrake);
+        }
     }
 
     public boolean getFieldRelative() {

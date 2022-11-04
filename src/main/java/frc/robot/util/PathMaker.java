@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -26,10 +27,10 @@ public class PathMaker {
         thetaPID = new PIDController(Constants.AUTON_THETA_P, 0, 0);
         driveTrain = RobotContainer.getSwerve();
         for (int i = 0; i < args.length; i++) {
-            String string = args[i].split(".")[0];
-            trajList.put(string, PathPlanner.loadPath(string, Constants.MAX_SPEED_TELEOP_M_PER_S, Constants.MAX_AUTON_ACCEL_M_PER_S2));
-            commandList.put(string, new PPSwerveControllerCommand(
-                trajList.get(string), 
+            String pathName = args[i].split(".")[0]; //remove .path extension
+            trajList.put(pathName, PathPlanner.loadPath(pathName, Constants.MAX_SPEED_TELEOP_M_PER_S, Constants.MAX_AUTON_ACCEL_M_PER_S2));
+            commandList.put(pathName, new PPSwerveControllerCommand(
+                trajList.get(pathName), 
                 driveTrain::getPose, 
                 Constants.SWERVE_DRIVE_KINEMATICS, 
                 xTranslationPID,
@@ -47,5 +48,9 @@ public class PathMaker {
 
     public static PathPlannerTrajectory getTraj(String name) {
         return trajList.get(name);
+    }
+
+    public static Set<String> allPathNames() {
+        return trajList.keySet();
     }
 }

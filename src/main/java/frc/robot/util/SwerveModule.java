@@ -89,6 +89,11 @@ public class SwerveModule {
         }
     }
 
+    public void setBrake(boolean driveBrake, boolean steerBrake) {
+        speedMotor.setIdleMode(driveBrake ? IdleMode.kBrake : IdleMode.kCoast);
+        turnMotor.setIdleMode(steerBrake ? IdleMode.kBrake : IdleMode.kCoast);
+    }
+
     private void determineIDs(Constants.SwerveModuleType type) {
         switch(type) {
             case FRONT_LEFT:
@@ -142,8 +147,7 @@ public class SwerveModule {
         speedEnc = speedMotor.getEncoder();
         turnEnc = turnMotor.getEncoder();
         absEnc = new CANCoder(absEncID);
-        speedMotor.setIdleMode(IdleMode.kBrake);
-        turnMotor.setIdleMode(IdleMode.kBrake);
+        setBrake(false, false);
         turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);

@@ -18,6 +18,7 @@ public class TestAuton extends SequentialCommandGroup{
 
     @Override
     public void initialize() {
+        RobotContainer.getSwerve().setGyroOffset(PathMaker.getTraj("Test1").getInitialPose().getRotation().getDegrees());
         RobotContainer.getSwerve().resetOdometry(PathMaker.getTraj("Test1").getInitialPose());
     }
 
