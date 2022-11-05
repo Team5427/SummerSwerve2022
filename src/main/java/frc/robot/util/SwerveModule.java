@@ -14,12 +14,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveDrive;
 
 public class SwerveModule {
 
     private int speedMotorID;
     private int turnMotorID;
+    private int fckUp;
     private int absEncID;
     private boolean speedInv;
     private boolean turnInv;
@@ -82,16 +82,25 @@ public class SwerveModule {
     public SwerveModuleState fixModule(SwerveModuleState p_state) {
         if ((Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD)) {
             turnEnc.setPosition(getAbsEncRad());
-            SwerveDrive.incrementResetCounter();
+            incrementError();
             return p_state;
         } else {
             return p_state;
         }
     }
 
+
     public void setBrake(boolean driveBrake, boolean steerBrake) {
         speedMotor.setIdleMode(driveBrake ? IdleMode.kBrake : IdleMode.kCoast);
         turnMotor.setIdleMode(steerBrake ? IdleMode.kBrake : IdleMode.kCoast);
+    }
+
+    public int getErrors() {
+        return fckUp;
+    }
+
+    public void incrementError() {
+        fckUp++;
     }
 
     private void determineIDs(Constants.SwerveModuleType type) {
@@ -162,5 +171,6 @@ public class SwerveModule {
         absEnc.configFactoryDefault();
         absEnc.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         turnEnc.setPosition(getAbsEncRad());
+        fckUp = 0;
     }
 }
