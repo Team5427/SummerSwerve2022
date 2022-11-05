@@ -7,13 +7,13 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6124871087597903,
-        "y": 4.0
+        "x": 4.381875109904067,
+        "y": 3.9961118383775234
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "waitTime": 0
     },

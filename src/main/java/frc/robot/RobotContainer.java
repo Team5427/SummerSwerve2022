@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
@@ -38,6 +39,7 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
     PathMaker.initPaths();
+    // System.out.println(Filesystem.getDeployDirectory().toPath().resolve("pathplanner").toFile().list()[0]);
 
     configureButtonBindings();
   }
