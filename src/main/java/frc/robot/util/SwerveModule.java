@@ -70,6 +70,7 @@ public class SwerveModule {
         } else {
             state = SwerveModuleState.optimize(fixModule(state), getModState().angle);
             speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
+            // speedMotor.set(state.speedMetersPerSecond / Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
             turnMotor.setVoltage(turningPID.calculate(getTurnPosRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
         }
     }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.JoystickSwerve;
@@ -38,7 +39,7 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
-    PathMaker.initPaths();
+    PathMaker.initPaths("Test1", "Test2");
     // System.out.println(Filesystem.getDeployDirectory().toPath().resolve("pathplanner").toFile().list()[0]);
 
     configureButtonBindings();
@@ -63,8 +64,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    SequentialCommandGroup testAuton = new TestAuton();
-    return testAuton;
+    return new TestAuton();
   }
 
   public static SwerveDrive getSwerve() {return swerveDrive;}

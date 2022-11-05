@@ -90,11 +90,11 @@ public final class Constants {
     public static final double DAMPENER_LOW_PERCENT = 0.3;
 
     //AUTON STUFF
-    public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
+    public static final double MAX_AUTON_ACCEL_M_PER_S2 = 3;
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI/4; 
-    public static final double AUTON_TRANSLATION_P = .1; //FIXME lmao these r bbq values for rn
-    public static final double AUTON_THETA_P = .1; //FIXME
-    public static final double MAX_AUTON_SPEED_M_PER_S = 2;
+    public static final double AUTON_TRANSLATION_P = 0.001; //FIXME lmao these r bbq values for rn
+    public static final double AUTON_THETA_P = 0.001; //FIXME
+    public static final double MAX_AUTON_SPEED_M_PER_S = 4;
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
