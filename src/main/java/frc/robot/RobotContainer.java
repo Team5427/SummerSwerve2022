@@ -4,18 +4,18 @@
 
 package frc.robot;
 
+import java.util.Set;
+
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.JoystickSwerve;
 import frc.robot.commands.Auton.TestAuton;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.util.Logger;
 import frc.robot.util.PathMaker;
 
 /**
@@ -39,8 +39,8 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
-    PathMaker.initPaths("Test1", "Test2");
-    // System.out.println(Filesystem.getDeployDirectory().toPath().resolve("pathplanner").toFile().list()[0]);
+    PathMaker.initPaths(Set.of("Test1", "Test2")); //Static helper calls have to be at end of contructor
+    Logger.init();
 
     configureButtonBindings();
   }

@@ -31,7 +31,6 @@ public final class Constants {
     public static final int BACK_LEFT_TURN_MOTOR = 5;
     public static final int BACK_RIGHT_TURN_MOTOR = 2;
 
-
     public static final int FRONT_LEFT_CANCODER = 12;
     public static final int FRONT_RIGHT_CANCODER = 13;
     public static final int BACK_LEFT_CANCODER = 14;
@@ -92,8 +91,8 @@ public final class Constants {
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 3;
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI/4; 
-    public static final double AUTON_TRANSLATION_P = 0.001; //FIXME lmao these r bbq values for rn
-    public static final double AUTON_THETA_P = 0.001; //FIXME
+    public static final double AUTON_TRANSLATION_P = 1.5; //FIXME lmao these r bbq values for rn
+    public static final double AUTON_THETA_P = 3; //FIXME
     public static final double MAX_AUTON_SPEED_M_PER_S = 4;
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
