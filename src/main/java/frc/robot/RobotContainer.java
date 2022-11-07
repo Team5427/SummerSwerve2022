@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.JoystickSwerve;
-import frc.robot.commands.Auton.TestAuton;
+import frc.robot.commands.Auton.AutonSheet;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.util.Logger;
 import frc.robot.util.PathMaker;
@@ -39,7 +39,9 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
-    PathMaker.initPaths(Set.of("Test1", "Test2")); //Static helper calls have to be at end of contructor
+    //NEED TO BE AT END OF CONSTRUCTOR
+    PathMaker.initPaths(Set.of("Test1", "Test2"));
+    AutonSheet.initAutons();
     Logger.init();
 
     configureButtonBindings();
@@ -64,7 +66,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return new TestAuton();
+    return AutonSheet.testAuton;
   }
 
   public static SwerveDrive getSwerve() {return swerveDrive;}
