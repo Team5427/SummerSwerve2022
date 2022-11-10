@@ -31,6 +31,7 @@ public class PathMaker {
                 yTranslationPID,
                 thetaPID,
                 driveTrain::setModules,
+                driveTrain::stopMods,
                 driveTrain)
             );
         });

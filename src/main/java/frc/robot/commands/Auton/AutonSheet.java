@@ -13,14 +13,16 @@ public class AutonSheet {
         test1 = PathMaker.getCommand("Test1");
 
         testAuton = new SequentialCommandGroup(
-            new InstantCommand(() -> {
-                RobotContainer.getSwerve().resetOdometry(test1.getTrajectory().getInitialHolonomicPose());
-            }),
-            test1,
-            new InstantCommand(() -> {
-                PathMaker.resetPaths();
-                RobotContainer.getSwerve().stopMods();
-            })
-        );
+            resetToFirstTrajectory(test1),
+            test1
+        ).andThen(() -> {
+            PathMaker.resetPaths();
+        });
+    }
+
+    private static InstantCommand resetToFirstTrajectory(PratsSwerveControllerCommand firstDriveTrainCommand) {
+        return new InstantCommand(() -> {
+            RobotContainer.getSwerve().resetOdometry(firstDriveTrainCommand.getTrajectory().getInitialHolonomicPose());
+        });
     }
 }

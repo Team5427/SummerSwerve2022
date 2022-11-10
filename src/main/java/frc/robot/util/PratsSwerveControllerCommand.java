@@ -35,6 +35,7 @@ public class PratsSwerveControllerCommand extends CommandBase {
     private final Consumer<SwerveModuleState[]> outputModuleStates;
     private final HashMap<String, Command> eventMap;
     private final Field2d field = new Field2d();
+    private final Runnable stopMods;
 
     private ArrayList<PathPlannerTrajectory.EventMarker> unpassedMarkers;
 
@@ -58,6 +59,7 @@ public class PratsSwerveControllerCommand extends CommandBase {
      * @param yController        The Trajectory Tracker PID controller for the robot's y position.
      * @param rotationController The Trajectory Tracker PID controller for angle for the robot.
      * @param outputModuleStates The raw output module states from the position controllers.
+     * @param stopModules        Stops modules after the command finishes.
      * @param eventMap           Map of event marker names to the commands that should run when reaching that marker.
      *                           This SHOULD NOT contain any commands requiring the same subsystems as this command, or it will be interrupted
      * @param requirements       The subsystems to require.
@@ -70,6 +72,7 @@ public class PratsSwerveControllerCommand extends CommandBase {
             PIDController yController,
             PIDController rotationController,
             Consumer<SwerveModuleState[]> outputModuleStates,
+            Runnable stopModules,
             HashMap<String, Command> eventMap,
             Subsystem... requirements) {
         this.trajectory = trajectory;
@@ -78,9 +81,11 @@ public class PratsSwerveControllerCommand extends CommandBase {
         this.controller = new PPHolonomicDriveController(xController, yController, rotationController);
         this.outputModuleStates = outputModuleStates;
         this.eventMap = eventMap;
+        this.stopMods = stopModules;
 
         addRequirements(requirements);
     }
+
 
     /**
      * Constructs a new PratsSwerveControllerCommand that when executed will follow the
@@ -102,6 +107,7 @@ public class PratsSwerveControllerCommand extends CommandBase {
      * @param yController        The Trajectory Tracker PID controller for the robot's y position.
      * @param rotationController The Trajectory Tracker PID controller for angle for the robot.
      * @param outputModuleStates The raw output module states from the position controllers.
+     * @param stopModules        Stops modules after the command finishes.
      * @param requirements       The subsystems to require.
      */
     public PratsSwerveControllerCommand(
@@ -112,8 +118,9 @@ public class PratsSwerveControllerCommand extends CommandBase {
             PIDController yController,
             PIDController rotationController,
             Consumer<SwerveModuleState[]> outputModuleStates,
+            Runnable stopModules,
             Subsystem... requirements) {
-        this(trajectory, poseSupplier, kinematics, xController, yController, rotationController, outputModuleStates, new HashMap<>(), requirements);
+        this(trajectory, poseSupplier, kinematics, xController, yController, rotationController, outputModuleStates, stopModules, new HashMap<>(), requirements);
     }
 
     @Override
@@ -162,6 +169,7 @@ public class PratsSwerveControllerCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         this.timer.stop();
+        this.stopMods.run();
 
         if(interrupted){
             this.outputModuleStates.accept(this.kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0)));
