@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.Set;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -40,7 +38,7 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
     //NEED TO BE AT END OF CONSTRUCTOR
-    PathMaker.initPaths(Set.of("Test1", "Test2"));
+    PathMaker.initPaths("Test1", "Test2");
     AutonSheet.initAutons();
     Logger.init();
 

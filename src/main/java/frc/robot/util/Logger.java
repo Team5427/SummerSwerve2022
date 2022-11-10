@@ -29,11 +29,13 @@ public class Logger {
         }
 
         public static void post(String key, Object b) {
-            if (workList.containsKey(key)) {
-                workEntryList.get(key).setValue(b);
-            } else {
-                workList.put(key, b);                
-            }
+            // if (b != null) {
+                if (workList.containsKey(key)) {
+                    workEntryList.get(key).setValue(b);
+                } else {
+                    workList.put(key, b);                
+                }
+            // }
         }
 
         public static void postComplex(String key, Sendable b, WidgetType type) {

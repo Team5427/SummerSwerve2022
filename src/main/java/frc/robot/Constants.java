@@ -77,7 +77,7 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196; //do not touch
-    public static final double MAX_SPEED_TELEOP_M_PER_S = 4;
+    public static final double MAX_SPEED_TELEOP_M_PER_S = 3;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 2;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
@@ -89,23 +89,23 @@ public final class Constants {
     public static final double DAMPENER_LOW_PERCENT = 0.3;
 
     //AUTON STUFF
-    public static final double MAX_AUTON_ACCEL_M_PER_S2 = 3;
+    public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
     public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI/4; 
     public static final double AUTON_TRANSLATION_P = 1.5; //FIXME lmao these r bbq values for rn
     public static final double AUTON_THETA_P = 3; //FIXME
-    public static final double MAX_AUTON_SPEED_M_PER_S = 4;
+    public static final double MAX_AUTON_SPEED_M_PER_S = 2;
 
     public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
         MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2);
 
     //CONTROLLER CONSTANTS MODULES
-    public static final double TURNING_PID_P = 2.5;
+    public static final double TURNING_PID_P = 2.9;
     public static final double TURNING_PID_D = 0.2;
     public static final double TURNING_FF_S = 0.088444;
     public static final double TURNING_FF_V = 0.24913;
     public static final double TURNING_FF_A = 0.011425;
     public static final double TURNING_MAX_SPEED_RAD_S = SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S * MAX_NEO_SPEED_RPM;
-    public static final double TURNING_MAX_ACCEL_RAD_S_S = TURNING_MAX_SPEED_RAD_S * 3;
+    public static final double TURNING_MAX_ACCEL_RAD_S_S = TURNING_MAX_SPEED_RAD_S * 4;
 
     public static final double SPEED_PID_P = 2.94;
     public static final double SPEED_FF_S = 0.097718;

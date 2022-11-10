@@ -14,10 +14,11 @@ public class AutonSheet {
 
         testAuton = new SequentialCommandGroup(
             new InstantCommand(() -> {
-                RobotContainer.getSwerve().resetOdometry(test1.getTrajectory().getInitialPose());        
+                RobotContainer.getSwerve().resetOdometry(test1.getTrajectory().getInitialHolonomicPose());
             }),
             test1,
             new InstantCommand(() -> {
+                PathMaker.resetPaths();
                 RobotContainer.getSwerve().stopMods();
             })
         );

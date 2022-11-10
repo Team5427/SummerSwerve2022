@@ -16,7 +16,8 @@ public class PathMaker {
     private static PIDController xTranslationPID, yTranslationPID;
     private static PIDController thetaPID;
 
-    public static void initPaths(Set<String> args) {
+    public static void initPaths(String... sArgs) {
+        Set<String> args = Set.of(sArgs);
         xTranslationPID = new PIDController(Constants.AUTON_TRANSLATION_P, 0, 0);
         yTranslationPID = new PIDController(Constants.AUTON_TRANSLATION_P, 0, 0);
         thetaPID = new PIDController(Constants.AUTON_THETA_P, 0, 0);
@@ -31,10 +32,7 @@ public class PathMaker {
                 thetaPID,
                 driveTrain::setModules,
                 driveTrain)
-            ).andThen(() -> {
-                resetPaths();
-                driveTrain.stopMods();
-            });
+            );
         });
     }
 
@@ -42,9 +40,9 @@ public class PathMaker {
         return commandList.get(name);
     }
 
-    private static void resetPaths() {
+    public static void resetPaths() {
         Set<String> s = commandList.keySet();
         commandList.clear();
-        initPaths(s);
+        initPaths(s.toArray(String[]::new));
     }
 }
