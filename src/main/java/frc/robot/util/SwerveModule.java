@@ -61,7 +61,7 @@ public class SwerveModule {
 
 
     public SwerveModuleState getModState() {
-        return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getTurnPosRad()));
+        return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getAbsEncRad()));
     }
 
     public void setModState(SwerveModuleState state) {

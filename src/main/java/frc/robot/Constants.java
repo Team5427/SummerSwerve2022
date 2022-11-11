@@ -36,10 +36,10 @@ public final class Constants {
     public static final int BACK_LEFT_CANCODER = 14;
     public static final int BACK_RIGHT_CANCODER = 11;
 
-    public static final double FRONT_LEFT_OFFSET = 2.27;
-    public static final double FRONT_RIGHT_OFFSET = -2.47;
+    public static final double FRONT_LEFT_OFFSET = -0.9;
+    public static final double FRONT_RIGHT_OFFSET = 0.664;
     public static final double BACK_LEFT_OFFSET = 3.03;
-    public static final double BACK_RIGHT_OFFSET = 0.79;
+    public static final double BACK_RIGHT_OFFSET = -2.39;
     
     //Inversions
     public static final boolean FRONT_LEFT_TURNING_INVERT = false;
@@ -47,10 +47,10 @@ public final class Constants {
     public static final boolean BACK_LEFT_TURNING_INVERT = false;
     public static final boolean BACK_RIGHT_TURNING_INVERT = false;
 
-    public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
-    public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
+    public static final boolean FRONT_LEFT_DRIVE_INVERT = true;
+    public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
     public static final boolean BACK_LEFT_DRIVE_INVERT = true;
-    public static final boolean BACK_RIGHT_DRIVE_INVERT = true;
+    public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
 
     public static final boolean FRONT_LEFT_CANCODER_INVERT = false;
     public static final boolean FRONT_RIGHT_CANCODER_INVERT = false;
@@ -58,9 +58,9 @@ public final class Constants {
     public static final boolean BACK_RIGHT_CANCODER_INVERT = false;
 
     //Robot Physical Dimensions
-    public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
-    public static final double DT_TRACKWIDTH = Units.inchesToMeters(17.5625); //Its called jank swerve for a reason
-    public static final double DT_WHEELBASE = Units.inchesToMeters(19.5); 
+    public static final double DT_WHEEL_DIAMETER_METERS = Units.inchesToMeters(3.83); //THIS
+    public static final double DT_TRACKWIDTH = Units.inchesToMeters(17.5); //Its called jank swerve for a reason //THIS
+    public static final double DT_WHEELBASE = Units.inchesToMeters(19.475); //THIS
 
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
         new Translation2d(DT_WHEELBASE / 2, DT_TRACKWIDTH / 2),
@@ -70,7 +70,7 @@ public final class Constants {
 
 
     //Swerve Speed Numbers
-    public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)); //Mk4 L2 SDS
+    public static final double kDriveMotorGearRatio = ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0)); //Mk4 L2 SDS //ERROR
     public static final double kTurningMotorGearRatio = ((15.0 / 32.0) * (10.0 / 60.0));
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_METER = (Math.PI * DT_WHEEL_DIAMETER_METERS * kDriveMotorGearRatio);
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_METER / 60;
