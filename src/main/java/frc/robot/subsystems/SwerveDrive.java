@@ -179,5 +179,9 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("abs BL", backLeft.getAbsEncRaw());
 
         Logger.Work.post("speeds", frontRight.getDriveSpeed());
+
+        Logger.Work.post("speed RPM", frontRight.backToRPM());
+
+        Logger.Work.post("state", frontRight.getModState().toString());
     }
 }

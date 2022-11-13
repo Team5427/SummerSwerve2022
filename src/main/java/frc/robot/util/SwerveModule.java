@@ -30,6 +30,7 @@ public class SwerveModule {
     private RelativeEncoder turnEnc;
     private CANCoder absEnc;
     private ProfiledPIDController turningPID;
+    private PIDController pidTurnSHANK;
     private SimpleMotorFeedforward turningFF;
     private PIDController speedPID;
     private SimpleMotorFeedforward speedFF;
@@ -64,6 +65,10 @@ public class SwerveModule {
         return new SwerveModuleState(getDriveSpeed(), new Rotation2d(getAbsEncRad()));
     }
 
+    public double backToRPM() {
+        return getDriveSpeed()/Constants.SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S;
+    }
+
     public void setModState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) <= 0.02) {
             stop();
@@ -71,7 +76,8 @@ public class SwerveModule {
             state = SwerveModuleState.optimize(fixModule(state), getModState().angle);
             speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
             // speedMotor.set(state.speedMetersPerSecond / Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
-            turnMotor.setVoltage(turningPID.calculate(getAbsEncRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
+            // turnMotor.setVoltage(turningPID.calculate(getAbsEncRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
+            turnMotor.set(pidTurnSHANK.calculate(getAbsEncRad(), state.angle.getRadians()));
         }
     }
 
@@ -81,13 +87,14 @@ public class SwerveModule {
     }
 
     public SwerveModuleState fixModule(SwerveModuleState p_state) {
-        if ((Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD)) {
-            turnEnc.setPosition(getAbsEncRad());
-            incrementError();
-            return p_state;
-        } else {
-            return p_state;
-        }
+        // if ((Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD)) {
+        //     turnEnc.setPosition(getAbsEncRad());
+        //     incrementError();
+        //     return p_state;
+        // } else {
+        //     return p_state;
+        // }
+        return p_state;
     }
 
 
@@ -161,6 +168,8 @@ public class SwerveModule {
         turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
+        pidTurnSHANK = new PIDController(Constants.TURNING_P, 0, 0);
+        pidTurnSHANK.enableContinuousInput(-Math.PI, Math.PI);
         turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
         speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
         speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);
