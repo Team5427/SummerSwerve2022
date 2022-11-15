@@ -78,7 +78,7 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196; //do not touch
     public static final double MAX_SPEED_TELEOP_M_PER_S = 4.25;
-    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 2;
+    public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 3;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 
     //JoystickStuff
@@ -90,7 +90,7 @@ public final class Constants {
 
     //AUTON STUFF
     public static final double MAX_AUTON_ACCEL_M_PER_S2 = 1;
-    public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI/4; 
+    public static final double MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2 = Math.PI * 3 * 2; 
     public static final double AUTON_TRANSLATION_P = 1.5; //FIXME lmao these r bbq values for rn
     public static final double AUTON_THETA_P = 3; //FIXME
     public static final double MAX_AUTON_SPEED_M_PER_S = 2;

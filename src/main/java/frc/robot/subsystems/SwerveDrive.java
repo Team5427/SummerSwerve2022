@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,6 +10,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -28,6 +31,7 @@ public class SwerveDrive extends SubsystemBase {
     private ChassisSpeeds chassisSpeeds;
     private boolean isFieldRelative;
     private double dampener;
+    private ProfiledPIDController faceTargetPID;
     private SwerveDriveOdometry odometer;
     private Field2d field;
 
@@ -43,6 +47,8 @@ public class SwerveDrive extends SubsystemBase {
         yRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
+        faceTargetPID = new ProfiledPIDController(.3, 0, 0, new Constraints(Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, Constants.MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2));
+        faceTargetPID.setTolerance(2, 10);
 
         field = new Field2d();
         zeroHeading();
@@ -73,8 +79,9 @@ public class SwerveDrive extends SubsystemBase {
         backRight.stop();
     }
 
-    public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
-        dampener = ((Constants.DAMPENER_LOW_PERCENT - 1) * controller.getRightTriggerAxis() + 1);
+    public SwerveModuleState[] controllerToModuleStates(XboxController controller, Limelight limelight) {
+        dampener = ((Constants.DAMPENER_LOW_PERCENT - 1) * controller.getLeftTriggerAxis() + 1);
+        double visionDampener = controller.getRightTriggerAxis();
 
         xSpeed = -controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
@@ -92,6 +99,19 @@ public class SwerveDrive extends SubsystemBase {
         if (controller.getPOV() != -1) {
             ySpeed = Math.cos(Math.toRadians(360 - controller.getPOV()));
             xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV()));
+        }
+
+        if (visionDampener > .1) {
+            double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
+            if (faceTargetPID.atGoal()) {
+                resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
+            }
+            if (visionDampener > .9) {
+                x2Speed = visionSpeed;
+            } else {
+                // x2Speed = x2Speed * (1 - visionDampener) + visionSpeed * visionDampener;
+                x2Speed = visionSpeed;
+            }
         }
 
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
@@ -132,6 +152,10 @@ public class SwerveDrive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             modules[i].getTurnSpark().getEncoder().setPosition(modules[i].getAbsEncRad());
         }
+    }
+
+    private void resetTargetingPID(double limelightValue, double angularSpeed) {
+        faceTargetPID.reset(new State(limelightValue, angularSpeed));
     }
 
     @Override

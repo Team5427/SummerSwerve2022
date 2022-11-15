@@ -6,12 +6,14 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.JoystickSwerve;
 import frc.robot.commands.Auton.AutonSheet;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.util.Logger;
 import frc.robot.util.PathMaker;
@@ -27,12 +29,14 @@ public class RobotContainer {
   private static SwerveDrive swerveDrive;
   private static AHRS ahrs;
   private static XboxController joy;
+  private static Limelight limelight;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     ahrs = new AHRS(SPI.Port.kMXP);
     joy = new XboxController(0);
+    limelight = new Limelight(NetworkTableInstance.getDefault().getTable("limelight-scrappy"));
 
     swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
@@ -70,4 +74,5 @@ public class RobotContainer {
   public static SwerveDrive getSwerve() {return swerveDrive;}
   public static AHRS getAHRS() {return ahrs;}
   public static XboxController getController() {return joy;}
+  public static Limelight getLimelight() {return limelight;}
 }
