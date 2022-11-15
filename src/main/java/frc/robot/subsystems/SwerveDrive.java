@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.Logger;
+import frc.robot.util.OdometryMath2022;
 import frc.robot.util.SwerveModule;
 
 public class SwerveDrive extends SubsystemBase {
@@ -48,6 +49,7 @@ public class SwerveDrive extends SubsystemBase {
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
         faceTargetPID = new ProfiledPIDController(.3, 0, 0, new Constraints(Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, Constants.MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2));
+        //edit and add to constants
         faceTargetPID.setTolerance(2, 10);
 
         field = new Field2d();
@@ -82,6 +84,7 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveModuleState[] controllerToModuleStates(XboxController controller, Limelight limelight) {
         dampener = ((Constants.DAMPENER_LOW_PERCENT - 1) * controller.getLeftTriggerAxis() + 1);
         double visionDampener = controller.getRightTriggerAxis();
+        boolean targetVis = limelight.targetVisible();
 
         xSpeed = -controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
@@ -102,15 +105,19 @@ public class SwerveDrive extends SubsystemBase {
         }
 
         if (visionDampener > .1) {
-            double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
-            if (faceTargetPID.atGoal()) {
-                resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
-            }
-            if (visionDampener > .9) {
-                x2Speed = visionSpeed;
+            if (targetVis) {
+                double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
+                if (faceTargetPID.atGoal()) {
+                    resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
+                }
+                if (visionDampener > .9) {
+                    x2Speed = visionSpeed;
+                } else {
+                    // x2Speed = x2Speed * (1 - visionDampener) + visionSpeed * visionDampener;
+                    x2Speed = visionSpeed;
+                }
             } else {
-                // x2Speed = x2Speed * (1 - visionDampener) + visionSpeed * visionDampener;
-                x2Speed = visionSpeed;
+                x2Speed = xRateLimiter2.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S * 2;
             }
         }
 
