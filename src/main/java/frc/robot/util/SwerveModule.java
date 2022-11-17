@@ -76,8 +76,8 @@ public class SwerveModule {
             state = SwerveModuleState.optimize(fixModule(state), getModState().angle);
             speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
             // speedMotor.set(state.speedMetersPerSecond / Constants.MAX_PHYSICAL_SPEED_M_PER_SEC);
-            // turnMotor.setVoltage(turningPID.calculate(getAbsEncRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
-            turnMotor.set(pidTurnSHANK.calculate(getAbsEncRad(), state.angle.getRadians()));
+            turnMotor.setVoltage(turningPID.calculate(getAbsEncRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
+            // turnMotor.set(pidTurnSHANK.calculate(getAbsEncRad(), state.angle.getRadians()));
         }
     }
 

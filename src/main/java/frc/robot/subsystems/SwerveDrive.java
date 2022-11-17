@@ -50,7 +50,7 @@ public class SwerveDrive extends SubsystemBase {
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
         faceTargetPID = new ProfiledPIDController(.3, 0, 0, new Constraints(Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, Constants.MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2));
         //edit and add to constants
-        faceTargetPID.setTolerance(2, 10);
+        faceTargetPID.setTolerance(2, 2);
 
         field = new Field2d();
         zeroHeading();
@@ -72,6 +72,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
+    }
+
+    public Rotation2d getYawRotation2d() {
+        return Rotation2d.fromDegrees(Math.IEEEremainder((360 - gyro.getYaw()), 360)); //NOT AFFECTED BY SET ANGLE ADJUSTMENT
     }
 
     public void stopMods() {
@@ -100,8 +104,8 @@ public class SwerveDrive extends SubsystemBase {
         x2Speed = xRateLimiter2.calculate(x2Speed) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
 
         if (controller.getPOV() != -1) {
-            ySpeed = Math.cos(Math.toRadians(360 - controller.getPOV()));
-            xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV()));
+            ySpeed = Math.cos(Math.toRadians(360 - controller.getPOV())) * dampener;
+            xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV())) * dampener;
         }
 
         if (visionDampener > .1) {
@@ -109,6 +113,7 @@ public class SwerveDrive extends SubsystemBase {
                 double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
                 if (faceTargetPID.atGoal()) {
                     resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
+                    setGyroOffset(OdometryMath2022.gyroTargetOffset()); //
                 }
                 if (visionDampener > .9) {
                     x2Speed = visionSpeed;
@@ -121,7 +126,8 @@ public class SwerveDrive extends SubsystemBase {
             }
         }
 
-        chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getRotation2d()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
+
+        chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getPose().getRotation()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
         //DO NOT FLIP.
@@ -203,7 +209,7 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("frontLeft", frontLeft.getErrors());
         Logger.Work.post("backRight", backRight.getErrors());
         Logger.Work.post("frontRight", frontRight.getErrors());
-        Logger.Work.postComplex("Field542", field, BuiltInWidgets.kField);
+        Logger.Work.postComplex("Field5427", field, BuiltInWidgets.kField);
         Logger.Work.post("abs FR", frontRight.getAbsEncRaw());
         Logger.Work.post("abs FL", frontLeft.getAbsEncRaw());
         Logger.Work.post("abs BR", backRight.getAbsEncRaw());

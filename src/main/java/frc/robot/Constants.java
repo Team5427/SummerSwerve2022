@@ -125,6 +125,11 @@ public final class Constants {
         BACK_RIGHT
     }
 
+    //VISION CONSTANTS
+    public static final double LIMELIGHT_MOUNT_ANGLE_RAD = 25; //FIXME
+    public static final double LIMELIGHT_LENS_HEIGHT_M = 25; //FIXME
+    public static final double GOAL_HEIGHT_M = 2.64; //FIXME
+
     //DEBUG VARS (Remove before comp if robot is stable)
     public static final boolean FIELD_RELATIVE_SWITCHABLE = true;
     public static final boolean FIELD_RELATIVE_ON_START = false;

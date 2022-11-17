@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase{
     private NetworkTable table_m;
@@ -50,5 +51,9 @@ public class Limelight extends SubsystemBase{
         } else {
             table_m.getEntry("ledMode").setNumber(1);
         }
+    }
+
+    public double distanceToTargetMeters() {
+        return ((Constants.GOAL_HEIGHT_M - Constants.LIMELIGHT_LENS_HEIGHT_M)/Math.tan(targetY() + Constants.LIMELIGHT_MOUNT_ANGLE_RAD));
     }
 }
