@@ -87,7 +87,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveModuleState[] controllerToModuleStates(XboxController controller, Limelight limelight) {
         dampener = ((Constants.DAMPENER_LOW_PERCENT - 1) * controller.getLeftTriggerAxis() + 1);
-        double visionDampener = controller.getRightTriggerAxis();
+        double shootButton = controller.getRightTriggerAxis();
         boolean targetVis = limelight.targetVisible();
 
         xSpeed = -controller.getLeftX() * dampener;
@@ -108,24 +108,24 @@ public class SwerveDrive extends SubsystemBase {
             xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV())) * dampener;
         }
 
-        if (visionDampener > .1) {
+
+        if (shootButton > .1) {
             if (targetVis) {
                 double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
                 if (faceTargetPID.atGoal()) {
                     resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
-                    setGyroOffset(OdometryMath2022.gyroTargetOffset()); //
+                    setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate
                 }
-                if (visionDampener > .9) {
+                if (shootButton > .9) {
                     x2Speed = visionSpeed;
                 } else {
-                    // x2Speed = x2Speed * (1 - visionDampener) + visionSpeed * visionDampener;
+                    // x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
                     x2Speed = visionSpeed;
                 }
             } else {
                 x2Speed = xRateLimiter2.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S * 2;
             }
         }
-
 
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getPose().getRotation()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
@@ -134,10 +134,11 @@ public class SwerveDrive extends SubsystemBase {
         //WILL BREAK SPACE TIME FABRIC.
         //DUCK WILL NOT BE PROUD.
 
-        //DO NOT CHANGE ANYTHING HERE
+        //DO NOT CHANGE ANYTHING HERE WITHOUT ASKING PRAT
         //EVER
         //THIS IS SACRED CODE
         //IT WAS WRITTEN 35000 FEET IN THE AIR TRAVELING AT 582 MILES PER HOUR
+        //AND WAS LATER EDITED 35000 FEET IN THE AIR TRAVELING AT 620 MILES PER HOUR
 
         SwerveModuleState[] states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 

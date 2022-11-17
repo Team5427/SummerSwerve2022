@@ -15,7 +15,6 @@ public class JoystickSwerve extends CommandBase {
     private XboxController joy;
     private SwerveDrive swerve;
     private Limelight limelight;
-    private int controlMode;
 
     public JoystickSwerve () {
         joy = RobotContainer.getController();
