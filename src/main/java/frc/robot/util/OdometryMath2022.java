@@ -35,9 +35,9 @@ public class OdometryMath2022 extends SubsystemBase {
 
     public static int robotEasiestTurnToTarget() {
         if (hubTriangleRot.minus(robotPose.getRotation()).getRadians() > 0) {
-            return -1;
+            return -1; //FIXME might need to invert if doesnt move in right direction when target not on screen
         } else {
-            return 1;
+            return 1; //same
         }
     }
 

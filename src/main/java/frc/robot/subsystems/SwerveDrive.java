@@ -49,7 +49,7 @@ public class SwerveDrive extends SubsystemBase {
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
         faceTargetPID = new ProfiledPIDController(.3, 0, 0, new Constraints(Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, Constants.MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2));
-        //edit and add to constants
+        //edit and add to constants //FIXME tune and maybe invert P (if it goes in wrong direction)
         faceTargetPID.setTolerance(2, 2);
 
         field = new Field2d();
@@ -114,7 +114,7 @@ public class SwerveDrive extends SubsystemBase {
                 double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
                 if (faceTargetPID.atGoal()) {
                     resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
-                    setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate
+                    setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
                 }
                 if (shootButton > .9) {
                     x2Speed = visionSpeed;
