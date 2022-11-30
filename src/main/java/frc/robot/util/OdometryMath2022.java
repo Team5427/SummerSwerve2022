@@ -15,6 +15,19 @@ public class OdometryMath2022 extends SubsystemBase {
     private static Rotation2d hubTriangleRot;
     private static Rotation2d gyroYaw;
 
+    public OdometryMath2022() {
+        hubTrans = new Translation2d(Units.feetToMeters(27), Units.feetToMeters(27/2));
+        robotPose = RobotContainer.getSwerve().getPose();
+        hubTriangleTrans = robotPose.getTranslation().minus(hubTrans);
+        hubTriangleRot = new Rotation2d(smartArcAngle(hubTriangleTrans.getX(), hubTriangleTrans.getY(), Math.hypot(hubTriangleTrans.getX(), hubTriangleTrans.getY())));
+        gyroYaw = RobotContainer.getSwerve().getYawRotation2d();
+        log();
+    }
+
+    private void log() {
+        Logger.Work.post("easiest turn", OdometryMath2022.robotEasiestTurnToTarget());
+    }
+
     @Override
     public void periodic() {
         hubTrans = new Translation2d(Units.feetToMeters(27), Units.feetToMeters(27/2));
@@ -22,7 +35,7 @@ public class OdometryMath2022 extends SubsystemBase {
         hubTriangleTrans = robotPose.getTranslation().minus(hubTrans);
         hubTriangleRot = new Rotation2d(smartArcAngle(hubTriangleTrans.getX(), hubTriangleTrans.getY(), Math.hypot(hubTriangleTrans.getX(), hubTriangleTrans.getY())));
         gyroYaw = RobotContainer.getSwerve().getYawRotation2d();
-        
+        log();
     }
 
     private double smartArcAngle(double inputX, double inputY, double distance) {

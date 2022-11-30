@@ -16,8 +16,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -127,7 +127,8 @@ public class PratsSwerveControllerCommand extends CommandBase {
         this.unpassedMarkers = new ArrayList<>();
         this.unpassedMarkers.addAll(this.trajectory.getMarkers());
 
-        SmartDashboard.putData("PratsSwerveControllerCommand_field", this.field);
+        Logger.Work.postComplex("PratsSwerveControllerCommand_field", this.field, BuiltInWidgets.kField); //might not work
+        Logger.Work.postComplex("PratsSwerveControllerCommand_field", this.field, BuiltInWidgets.kField);
         this.field.getObject("traj").setTrajectory(this.trajectory);
 
         this.timer.reset();
@@ -145,9 +146,9 @@ public class PratsSwerveControllerCommand extends CommandBase {
         this.field.setRobotPose(currentPose);
         PathPlannerServer.sendPathFollowingData(new Pose2d(desiredState.poseMeters.getTranslation(), desiredState.holonomicRotation), currentPose);
 
-        SmartDashboard.putNumber("PratsSwerveControllerCommand_xError", currentPose.getX() - desiredState.poseMeters.getX());
-        SmartDashboard.putNumber("PratsSwerveControllerCommand_yError", currentPose.getY() - desiredState.poseMeters.getY());
-        SmartDashboard.putNumber("PratsSwerveControllerCommand_rotationError", currentPose.getRotation().getRadians() - desiredState.holonomicRotation.getRadians());
+        Logger.Work.post("PratsSwerveControllerCommand_xError", currentPose.getX() - desiredState.poseMeters.getX());
+        Logger.Work.post("PratsSwerveControllerCommand_yError", currentPose.getY() - desiredState.poseMeters.getY());
+        Logger.Work.post("PratsSwerveControllerCommand_rotationError", currentPose.getRotation().getRadians() - desiredState.holonomicRotation.getRadians());
 
         ChassisSpeeds targetChassisSpeeds = this.controller.calculate(currentPose, desiredState);
         SwerveModuleState[] targetModuleStates = this.kinematics.toSwerveModuleStates(targetChassisSpeeds);
@@ -168,7 +169,8 @@ public class PratsSwerveControllerCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         this.timer.stop();
-        this.stopMods.run();
+        if (this.trajectory.getEndState().velocityMetersPerSecond <= .05)
+            this.stopMods.run(); //watches out for non-zero endstates
 
         if(interrupted){
             this.outputModuleStates.accept(this.kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0)));

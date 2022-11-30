@@ -20,26 +20,25 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     
     //Robot Ports
-    public static final int FRONT_LEFT_SPEED_MOTOR = 8;
-    public static final int FRONT_RIGHT_SPEED_MOTOR = 3;
-    
-    public static final int BACK_LEFT_SPEED_MOTOR = 6;
-    public static final int BACK_RIGHT_SPEED_MOTOR = 10;
+    public static final int FRONT_LEFT_SPEED_MOTOR = 10; //after robot switch would be 10, 6, 3, 8 // 8, 3, 6, 10
+    public static final int FRONT_RIGHT_SPEED_MOTOR = 6;
+    public static final int BACK_LEFT_SPEED_MOTOR = 3;
+    public static final int BACK_RIGHT_SPEED_MOTOR = 8;
 
-    public static final int FRONT_LEFT_TURN_MOTOR = 9;
-    public static final int FRONT_RIGHT_TURN_MOTOR = 7;
-    public static final int BACK_LEFT_TURN_MOTOR = 5;
-    public static final int BACK_RIGHT_TURN_MOTOR = 2;
+    public static final int FRONT_LEFT_TURN_MOTOR = 2; //after robot switch would be 2, 5, 7, 9 // 9, 7, 5, 2
+    public static final int FRONT_RIGHT_TURN_MOTOR = 5;
+    public static final int BACK_LEFT_TURN_MOTOR = 7;
+    public static final int BACK_RIGHT_TURN_MOTOR = 9;
 
-    public static final int FRONT_LEFT_CANCODER = 12;
-    public static final int FRONT_RIGHT_CANCODER = 13;
-    public static final int BACK_LEFT_CANCODER = 14;
-    public static final int BACK_RIGHT_CANCODER = 11;
+    public static final int FRONT_LEFT_CANCODER = 11; //12, 13, 14, 11
+    public static final int FRONT_RIGHT_CANCODER = 14;
+    public static final int BACK_LEFT_CANCODER = 13;
+    public static final int BACK_RIGHT_CANCODER = 12;
 
-    public static final double FRONT_LEFT_OFFSET = -0.9;
-    public static final double FRONT_RIGHT_OFFSET = 0.664;
-    public static final double BACK_LEFT_OFFSET = 3.03;
-    public static final double BACK_RIGHT_OFFSET = -2.39;
+    public static final double FRONT_LEFT_OFFSET = -2.39; //-0.9, 0.664, 3.03, -2.39
+    public static final double FRONT_RIGHT_OFFSET = 3.03;
+    public static final double BACK_LEFT_OFFSET = .664;
+    public static final double BACK_RIGHT_OFFSET = -.9;
     
     //Inversions
     public static final boolean FRONT_LEFT_TURNING_INVERT = false;
@@ -47,10 +46,10 @@ public final class Constants {
     public static final boolean BACK_LEFT_TURNING_INVERT = false;
     public static final boolean BACK_RIGHT_TURNING_INVERT = false;
 
-    public static final boolean FRONT_LEFT_DRIVE_INVERT = true;
-    public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
-    public static final boolean BACK_LEFT_DRIVE_INVERT = true;
-    public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
+    public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
+    public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
+    public static final boolean BACK_LEFT_DRIVE_INVERT = false;
+    public static final boolean BACK_RIGHT_DRIVE_INVERT = true;
 
     public static final boolean FRONT_LEFT_CANCODER_INVERT = false;
     public static final boolean FRONT_RIGHT_CANCODER_INVERT = false;

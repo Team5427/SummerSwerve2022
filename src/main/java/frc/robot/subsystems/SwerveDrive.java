@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.util.Logger;
 import frc.robot.util.OdometryMath2022;
 import frc.robot.util.SwerveModule;
@@ -28,11 +32,11 @@ public class SwerveDrive extends SubsystemBase {
     private double xSpeed;
     private double ySpeed;
     private double x2Speed;
-    private SlewRateLimiter xRateLimiter, yRateLimiter, xRateLimiter2;
+    private SlewRateLimiter xRateLimiter, yRateLimiter, xRateLimiter2, visionLimiter;
     private ChassisSpeeds chassisSpeeds;
     private boolean isFieldRelative;
     private double dampener;
-    private ProfiledPIDController faceTargetPID;
+    private PIDController faceTargetPID;
     private SwerveDriveOdometry odometer;
     private Field2d field;
 
@@ -47,10 +51,11 @@ public class SwerveDrive extends SubsystemBase {
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         yRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
+        visionLimiter = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S * 1.25);
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
-        faceTargetPID = new ProfiledPIDController(.3, 0, 0, new Constraints(Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S, Constants.MAX_AUTON_ANGULAR_ACCEL_RAD_PER_S2));
+        faceTargetPID = new PIDController(.065, 0, 0);
         //edit and add to constants //FIXME tune and maybe invert P (if it goes in wrong direction)
-        faceTargetPID.setTolerance(2, 2);
+        faceTargetPID.setTolerance(2);
 
         field = new Field2d();
         zeroHeading();
@@ -76,6 +81,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public Rotation2d getYawRotation2d() {
         return Rotation2d.fromDegrees(Math.IEEEremainder((360 - gyro.getYaw()), 360)); //NOT AFFECTED BY SET ANGLE ADJUSTMENT
+        // return 4.0;
     }
 
     public void stopMods() {
@@ -110,9 +116,10 @@ public class SwerveDrive extends SubsystemBase {
 
 
         if (shootButton > .1) {
+
             if (targetVis) {
-                double visionSpeed = faceTargetPID.calculate(limelight.targetX(), new State(0, 0));
-                if (faceTargetPID.atGoal()) {
+                double visionSpeed = faceTargetPID.calculate(limelight.targetX(), 0);
+                if (faceTargetPID.atSetpoint()) {
                     resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
                     setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
                 }
@@ -122,23 +129,25 @@ public class SwerveDrive extends SubsystemBase {
                     // x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
                     x2Speed = visionSpeed;
                 }
+                // System.out.println(x2Speed);
+
             } else {
-                x2Speed = xRateLimiter2.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S * 2;
+                x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S ;
+            
             }
         }
-
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getPose().getRotation()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
         //DO NOT FLIP.
         //WILL BREAK SPACE TIME FABRIC.
-        //DUCK WILL NOT BE PROUD.
+        //DUK WILL NOT BE PROUD.
 
         //DO NOT CHANGE ANYTHING HERE WITHOUT ASKING PRAT
         //EVER
         //THIS IS SACRED CODE
-        //IT WAS WRITTEN 35000 FEET IN THE AIR TRAVELING AT 582 MILES PER HOUR
-        //AND WAS LATER EDITED 35000 FEET IN THE AIR TRAVELING AT 620 MILES PER HOUR
+        //IT WAS WRITTEN 35000 FEET IN THE AIR TRAVELING AT 582 MILES PER HOUR (Spring break '22 -> flight to newark)
+        //AND WAS LATER EDITED 35000 FEET IN THE AIR TRAVELING AT 620 MILES PER HOUR (Thanksgiving break '22 -> flight to chicago)
 
         SwerveModuleState[] states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
@@ -169,7 +178,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private void resetTargetingPID(double limelightValue, double angularSpeed) {
-        faceTargetPID.reset(new State(limelightValue, angularSpeed));
+        faceTargetPID.reset();
     }
 
     @Override
@@ -180,15 +189,13 @@ public class SwerveDrive extends SubsystemBase {
         log();
     }
 
-    public SwerveModule[] getModules() {
-        SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
-        return modules;
+    public List<SwerveModule> getModules() {
+        List<SwerveModule> list = List.of(frontLeft, frontRight, backLeft, backRight);
+        return list;
     }
 
     public void setBrake(boolean driveBrake, boolean steerBrake) {
-        for (int i = 0; i < 4; i++) {
-            getModules()[i].setBrake(driveBrake, steerBrake);
-        }
+        getModules().forEach((mod) -> mod.setBrake(driveBrake, steerBrake));        
     }
 
     public boolean getFieldRelative() {
@@ -221,5 +228,7 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("speed RPM", frontRight.backToRPM());
 
         Logger.Work.post("state", frontRight.getModState().toString());
+        // Logger.Work.post("gyro yaw", OdometryMath2022.gyroTargetOffset());
+        Logger.Work.post("x2speed", x2Speed);        
     }
 }

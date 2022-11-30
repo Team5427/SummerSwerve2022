@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
@@ -16,6 +17,7 @@ import frc.robot.commands.Auton.AutonSheet;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.util.Logger;
+import frc.robot.util.OdometryMath2022;
 import frc.robot.util.PathMaker;
 
 /**
@@ -30,6 +32,7 @@ public class RobotContainer {
   private static AHRS ahrs;
   private static XboxController joy;
   private static Limelight limelight;
+  private static OdometryMath2022 odom;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -41,12 +44,13 @@ public class RobotContainer {
     swerveDrive = new SwerveDrive(ahrs);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
 
-    //NEED TO BE AT END OF CONSTRUCTOR
+    //NEED TO BE AT END OF CONSTRUCTOR - LOGGER LAST
     PathMaker.initPaths("Test1", "Test2");
     AutonSheet.initAutons();
-    Logger.init();
 
     configureButtonBindings();
+    odom = new OdometryMath2022();
+    Logger.init();
   }
 
   /**
