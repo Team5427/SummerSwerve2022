@@ -46,10 +46,10 @@ public final class Constants {
     public static final boolean BACK_LEFT_TURNING_INVERT = false;
     public static final boolean BACK_RIGHT_TURNING_INVERT = false;
 
-    public static final boolean FRONT_LEFT_DRIVE_INVERT = false;
-    public static final boolean FRONT_RIGHT_DRIVE_INVERT = true;
-    public static final boolean BACK_LEFT_DRIVE_INVERT = false;
-    public static final boolean BACK_RIGHT_DRIVE_INVERT = true;
+    public static final boolean FRONT_LEFT_DRIVE_INVERT = true;
+    public static final boolean FRONT_RIGHT_DRIVE_INVERT = false;
+    public static final boolean BACK_LEFT_DRIVE_INVERT = true;
+    public static final boolean BACK_RIGHT_DRIVE_INVERT = false;
 
     public static final boolean FRONT_LEFT_CANCODER_INVERT = false;
     public static final boolean FRONT_RIGHT_CANCODER_INVERT = false;

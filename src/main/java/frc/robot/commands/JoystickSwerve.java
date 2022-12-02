@@ -33,7 +33,7 @@ public class JoystickSwerve extends CommandBase {
         if (joy.getAButtonPressed()) {swerve.toggleFieldRelative();}
         if (joy.getBButtonPressed()) {
             swerve.zeroHeading();
-            swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+            swerve.resetOdometry(new Pose2d(5.93, 3.84, new Rotation2d(0)));
             swerve.resetMods();
         }
 

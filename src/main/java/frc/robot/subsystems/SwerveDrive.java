@@ -39,6 +39,7 @@ public class SwerveDrive extends SubsystemBase {
     private PIDController faceTargetPID;
     private SwerveDriveOdometry odometer;
     private Field2d field;
+    private boolean usingOdometryTargeting = false;
 
     public SwerveDrive (AHRS m_gyro) {
         this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
@@ -55,7 +56,7 @@ public class SwerveDrive extends SubsystemBase {
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
         faceTargetPID = new PIDController(.065, 0, 0);
         //edit and add to constants //FIXME tune and maybe invert P (if it goes in wrong direction)
-        faceTargetPID.setTolerance(2);
+        faceTargetPID.setTolerance(5);
 
         field = new Field2d();
         zeroHeading();
@@ -118,21 +119,23 @@ public class SwerveDrive extends SubsystemBase {
         if (shootButton > .1) {
 
             if (targetVis) {
+                usingOdometryTargeting = false;
                 double visionSpeed = faceTargetPID.calculate(limelight.targetX(), 0);
                 if (faceTargetPID.atSetpoint()) {
                     resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
-                    setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
+                    // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
                 }
                 if (shootButton > .9) {
                     x2Speed = visionSpeed;
                 } else {
-                    // x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
-                    x2Speed = visionSpeed;
+                    x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
+                    // x2Speed = visionSpeed;
                 }
                 // System.out.println(x2Speed);
 
             } else {
-                x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S ;
+                usingOdometryTargeting = true;
+                x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
             
             }
         }
@@ -229,6 +232,7 @@ public class SwerveDrive extends SubsystemBase {
 
         Logger.Work.post("state", frontRight.getModState().toString());
         // Logger.Work.post("gyro yaw", OdometryMath2022.gyroTargetOffset());
-        Logger.Work.post("x2speed", x2Speed);        
+        Logger.Work.post("x2speed", x2Speed);
+        Logger.Work.post("usingOdom", usingOdometryTargeting);       
     }
 }
