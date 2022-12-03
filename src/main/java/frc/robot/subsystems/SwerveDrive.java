@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -41,6 +43,9 @@ public class SwerveDrive extends SubsystemBase {
     private Field2d field;
     private boolean usingOdometryTargeting = false;
 
+    // PhotonCamera camera;
+
+
     public SwerveDrive (AHRS m_gyro) {
         this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
         this.frontRight = new SwerveModule(Constants.SwerveModuleType.FRONT_RIGHT);
@@ -57,6 +62,8 @@ public class SwerveDrive extends SubsystemBase {
         faceTargetPID = new PIDController(.065, 0, 0);
         //edit and add to constants //FIXME tune and maybe invert P (if it goes in wrong direction)
         faceTargetPID.setTolerance(5);
+
+        // camera = new PhotonCamera("photonvision");
 
         field = new Field2d();
         zeroHeading();
@@ -92,10 +99,9 @@ public class SwerveDrive extends SubsystemBase {
         backRight.stop();
     }
 
-    public SwerveModuleState[] controllerToModuleStates(XboxController controller, Limelight limelight) {
+    public SwerveModuleState[] controllerToModuleStates(XboxController controller) {
         dampener = ((Constants.DAMPENER_LOW_PERCENT - 1) * controller.getLeftTriggerAxis() + 1);
         double shootButton = controller.getRightTriggerAxis();
-        boolean targetVis = limelight.targetVisible();
 
         xSpeed = -controller.getLeftX() * dampener;
         ySpeed = -controller.getLeftY() * dampener;
@@ -116,29 +122,29 @@ public class SwerveDrive extends SubsystemBase {
         }
 
 
-        if (shootButton > .1) {
+        // if (shootButton > .1) {
 
-            if (targetVis) {
-                usingOdometryTargeting = false;
-                double visionSpeed = faceTargetPID.calculate(limelight.targetX(), 0);
-                if (faceTargetPID.atSetpoint()) {
-                    resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
-                    // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
-                }
-                if (shootButton > .9) {
-                    x2Speed = visionSpeed;
-                } else {
-                    x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
-                    // x2Speed = visionSpeed;
-                }
-                // System.out.println(x2Speed);
+        //     if (targetVis) {
+        //         usingOdometryTargeting = false;
+        //         double visionSpeed = faceTargetPID.calculate(limelight.targetX(), 0);
+        //         if (faceTargetPID.atSetpoint()) {
+        //             resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
+        //             // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
+        //         }
+        //         if (shootButton > .9) {
+        //             x2Speed = visionSpeed;
+        //         } else {
+        //             x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
+        //             // x2Speed = visionSpeed;
+        //         }
+        //         // System.out.println(x2Speed);
 
-            } else {
-                usingOdometryTargeting = true;
-                x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
+        //     } else {
+        //         usingOdometryTargeting = true;
+        //         x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
             
-            }
-        }
+        //     }
+        // }
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getPose().getRotation()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
@@ -209,6 +215,12 @@ public class SwerveDrive extends SubsystemBase {
         isFieldRelative = Constants.FIELD_RELATIVE_SWITCHABLE ? !isFieldRelative : isFieldRelative;
     }
 
+    // public String getAprilTag(){
+    //     if(camera.getLatestResult().hasTargets())
+    //         return camera.getLatestResult().getBestTarget().getCameraToTarget().toString();
+    //     return "";
+    // }
+
     private void log() {
         Logger.Work.post("FieldRelative", getFieldRelative());
         // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
@@ -233,6 +245,8 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("state", frontRight.getModState().toString());
         // Logger.Work.post("gyro yaw", OdometryMath2022.gyroTargetOffset());
         Logger.Work.post("x2speed", x2Speed);
-        Logger.Work.post("usingOdom", usingOdometryTargeting);       
+        Logger.Work.post("usingOdom", usingOdometryTargeting);   
+        
+        // Logger.Work.post("AprilTag", getAprilTag());
     }
 }

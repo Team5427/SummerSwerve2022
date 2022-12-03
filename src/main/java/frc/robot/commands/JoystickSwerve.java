@@ -6,7 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Limelight;
+// import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 
 public class JoystickSwerve extends CommandBase {
@@ -14,13 +14,13 @@ public class JoystickSwerve extends CommandBase {
     private SwerveModuleState[] states;
     private XboxController joy;
     private SwerveDrive swerve;
-    private Limelight limelight;
+    // private Limelight limelight;
 
     public JoystickSwerve () {
         joy = RobotContainer.getController();
         swerve = RobotContainer.getSwerve();
-        limelight = RobotContainer.getLimelight();
-        addRequirements(swerve, limelight);
+        // limelight = RobotContainer.getLimelight();
+        addRequirements(swerve);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class JoystickSwerve extends CommandBase {
             swerve.resetMods();
         }
 
-        states = swerve.controllerToModuleStates(joy, limelight);
+        states = swerve.controllerToModuleStates(joy);
         
         swerve.setModules(states);
     }
