@@ -5,6 +5,7 @@ import java.util.List;
 import com.kauailabs.navx.frc.AHRS;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -43,7 +45,7 @@ public class SwerveDrive extends SubsystemBase {
     private Field2d field;
     private boolean usingOdometryTargeting = false;
 
-    // PhotonCamera camera;
+    PhotonCamera camera;
 
 
     public SwerveDrive (AHRS m_gyro) {
@@ -63,7 +65,7 @@ public class SwerveDrive extends SubsystemBase {
         //edit and add to constants //FIXME tune and maybe invert P (if it goes in wrong direction)
         faceTargetPID.setTolerance(5);
 
-        // camera = new PhotonCamera("photonvision");
+        camera = new PhotonCamera("scrappyvision");
 
         field = new Field2d();
         zeroHeading();
@@ -121,30 +123,42 @@ public class SwerveDrive extends SubsystemBase {
             xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV())) * dampener;
         }
 
+        boolean targetVis = camera.getLatestResult().hasTargets();
 
-        // if (shootButton > .1) {
 
-        //     if (targetVis) {
-        //         usingOdometryTargeting = false;
-        //         double visionSpeed = faceTargetPID.calculate(limelight.targetX(), 0);
-        //         if (faceTargetPID.atSetpoint()) {
-        //             resetTargetingPID(limelight.targetX(), Math.toDegrees(visionSpeed));
-        //             // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
-        //         }
-        //         if (shootButton > .9) {
-        //             x2Speed = visionSpeed;
-        //         } else {
-        //             x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
-        //             // x2Speed = visionSpeed;
-        //         }
-        //         // System.out.println(x2Speed);
+        if (shootButton > .1) {
 
-        //     } else {
-        //         usingOdometryTargeting = true;
-        //         x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
+            if (targetVis) {
+                PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+                usingOdometryTargeting = false;
+
+                double yaw = target.getYaw();
+                double pitch = target.getPitch();
+                double area = target.getArea();
+                double skew = target.getSkew();
+
+                double visionSpeed = faceTargetPID.calculate(yaw, 0);
+                
+                visionSpeed = (Math.abs(visionSpeed) > .3)?(Math.copySign(.3, visionSpeed)):visionSpeed;
+                SmartDashboard.putNumber("visionSpeed", visionSpeed);
+                if (faceTargetPID.atSetpoint()) {
+                    resetTargetingPID(yaw, Math.toDegrees(visionSpeed));
+                    // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
+                }
+                if (shootButton > .9) {
+                    x2Speed = visionSpeed;
+                } else {
+                    x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
+                    // x2Speed = visionSpeed;
+                }
+                // System.out.println(x2Speed);
+
+            } else {
+                usingOdometryTargeting = true;
+                x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
             
-        //     }
-        // }
+            }
+        }
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getPose().getRotation()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
@@ -215,11 +229,11 @@ public class SwerveDrive extends SubsystemBase {
         isFieldRelative = Constants.FIELD_RELATIVE_SWITCHABLE ? !isFieldRelative : isFieldRelative;
     }
 
-    // public String getAprilTag(){
-    //     if(camera.getLatestResult().hasTargets())
-    //         return camera.getLatestResult().getBestTarget().getCameraToTarget().toString();
-    //     return "";
-    // }
+    public String getAprilTag(){
+        if(camera.getLatestResult().hasTargets())
+            return "" + camera.getLatestResult().getBestTarget().getFiducialId();
+        return "-999999";
+    }
 
     private void log() {
         Logger.Work.post("FieldRelative", getFieldRelative());
@@ -247,6 +261,8 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("x2speed", x2Speed);
         Logger.Work.post("usingOdom", usingOdometryTargeting);   
         
-        // Logger.Work.post("AprilTag", getAprilTag());
+        SmartDashboard.putString("AprilTag", getAprilTag());
+        SmartDashboard.putBoolean("has tag", camera.getLatestResult().hasTargets());
+
     }
 }
