@@ -30,7 +30,6 @@ public class SwerveModule {
     private RelativeEncoder turnEnc;
     private CANCoder absEnc;
     private ProfiledPIDController turningPID;
-    private PIDController pidTurnSHANK;
     private SimpleMotorFeedforward turningFF;
     private PIDController speedPID;
     private SimpleMotorFeedforward speedFF;
@@ -154,8 +153,6 @@ public class SwerveModule {
         turningPID = new ProfiledPIDController(Constants.TURNING_PID_P, Constants.TURNING_PID_D, 0, 
             new Constraints(Constants.TURNING_MAX_SPEED_RAD_S, Constants.TURNING_MAX_ACCEL_RAD_S_S));
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
-        pidTurnSHANK = new PIDController(Constants.TURNING_P, 0, 0);
-        pidTurnSHANK.enableContinuousInput(-Math.PI, Math.PI);
         turningFF = new SimpleMotorFeedforward(Constants.TURNING_FF_S, Constants.TURNING_FF_V, Constants.TURNING_FF_A);
         speedPID = new PIDController(Constants.SPEED_PID_P, 0, 0);
         speedFF = new SimpleMotorFeedforward(Constants.SPEED_FF_S, Constants.SPEED_FF_V, Constants.SPEED_FF_A);

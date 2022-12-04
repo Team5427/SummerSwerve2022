@@ -244,6 +244,7 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("FieldRelative", getFieldRelative());
         // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
         Logger.Work.post("odom", odometer.getPoseMeters().toString());
+        Logger.Work.post("estimator pose", poseEstimator.getEstimatedPosition());
         // Logger.Work.post("key", backLeft.getTurnPosRad());
         Logger.Work.post("gyro", getHeading());
 
