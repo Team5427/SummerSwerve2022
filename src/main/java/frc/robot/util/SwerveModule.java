@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAnalogSensor.Mode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -74,7 +73,7 @@ public class SwerveModule {
         if (Math.abs(state.speedMetersPerSecond) <= 0.02) {
             stop();
         } else {
-            state = SwerveModuleState.optimize(fixModule(state), getModState().angle);
+            state = SwerveModuleState.optimize(state, getModState().angle);
             speedMotor.setVoltage(speedPID.calculate(getDriveSpeed(), state.speedMetersPerSecond) + speedFF.calculate(state.speedMetersPerSecond));
             turnMotor.setVoltage(turningPID.calculate(getAbsEncRad(), state.angle.getRadians()) + turningFF.calculate(turningPID.getSetpoint().velocity));
         }
@@ -84,18 +83,6 @@ public class SwerveModule {
         speedMotor.stopMotor();
         turnMotor.stopMotor();
     }
-
-    public SwerveModuleState fixModule(SwerveModuleState p_state) {
-        // if ((Math.abs(Math.IEEEremainder(Math.abs(Math.IEEEremainder(getTurnPosRad(), Math.PI) - getAbsEncRad()), Math.PI)) > Constants.MODULE_BAD_THRESHOLD)) {
-        //     turnEnc.setPosition(getAbsEncRad());
-        //     incrementError();
-        //     return p_state;
-        // } else {
-        //     return p_state;
-        // }
-        return p_state;
-    }
-
 
     public void setBrake(boolean driveBrake, boolean steerBrake) {
         speedMotor.setIdleMode(driveBrake ? IdleMode.kBrake : IdleMode.kCoast);

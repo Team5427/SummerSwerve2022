@@ -6,14 +6,13 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.JoystickSwerve;
 import frc.robot.commands.Auton.AutonSheet;
+import frc.robot.subsystems.AprilTagPi;
 // import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.util.Logger;
@@ -32,6 +31,7 @@ public class RobotContainer {
   private static AHRS ahrs;
   private static XboxController joy;
   // private static Limelight limelight;
+  private static AprilTagPi pi;
   private static OdometryMath2022 odom;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -40,16 +40,18 @@ public class RobotContainer {
     ahrs = new AHRS(SPI.Port.kMXP);
     joy = new XboxController(0);
     // limelight = new Limelight(NetworkTableInstance.getDefault().getTable("limelight-scrappy"));
+    pi = new AprilTagPi("scrappyvision");
 
-    swerveDrive = new SwerveDrive(ahrs);
+    swerveDrive = new SwerveDrive(ahrs, pi);
     swerveDrive.setDefaultCommand(new JoystickSwerve());
+
+    odom = new OdometryMath2022();
 
     //NEED TO BE AT END OF CONSTRUCTOR - LOGGER LAST
     PathMaker.initPaths("Test1", "Test2");
     AutonSheet.initAutons();
 
     configureButtonBindings();
-    odom = new OdometryMath2022();
     Logger.init();
   }
 
@@ -78,5 +80,7 @@ public class RobotContainer {
   public static SwerveDrive getSwerve() {return swerveDrive;}
   public static AHRS getAHRS() {return ahrs;}
   public static XboxController getController() {return joy;}
+  public static AprilTagPi getPi() {return pi;}
   // public static Limelight getLimelight() {return limelight;}
+  public static OdometryMath2022 getOdomInstance() {return odom;}
 }

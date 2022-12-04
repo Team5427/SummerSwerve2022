@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -115,8 +117,6 @@ public final class Constants {
     public static final double SPEED_MAX_SPEED_M_S = SWERVE_CONVERSION_FACTOR_RPM_TO_METER_PER_S * MAX_NEO_SPEED_RPM;
     public static final double SPEED_MAX_ACCEL_M_S_S = SPEED_MAX_SPEED_M_S * 3;
 
-    public static final double MODULE_BAD_THRESHOLD = 0.1; //FIXME needs to be found
-
     public static enum SwerveModuleType {
         FRONT_LEFT,
         FRONT_RIGHT,
@@ -128,6 +128,8 @@ public final class Constants {
     public static final double LIMELIGHT_MOUNT_ANGLE_RAD = 25; //FIXME angle between back of limelight and front of vertical bar
     public static final double LIMELIGHT_LENS_HEIGHT_M = 25; //FIXME height of lens
     public static final double GOAL_HEIGHT_M = 2.64;
+    public static final Translation3d CAMERA_TRANSLATION = new Translation3d(0, 0, 0); //FIXME
+    public static final Rotation3d CAMERA_ROTATION = new Rotation3d(0, 0, 0); //FIXME
 
     //DEBUG VARS (Remove before comp if robot is stable)
     public static final boolean FIELD_RELATIVE_SWITCHABLE = true;

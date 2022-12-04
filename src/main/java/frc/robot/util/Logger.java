@@ -14,6 +14,7 @@ public class Logger {
     public static void init() {
         Work.setupWorkLoglist();
         Comp.setupCompLoglist();
+
     } 
 
     public static class Work {

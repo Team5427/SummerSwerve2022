@@ -4,20 +4,19 @@ import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -42,18 +41,18 @@ public class SwerveDrive extends SubsystemBase {
     private double dampener;
     private PIDController faceTargetPID;
     private SwerveDriveOdometry odometer;
+    private SwerveDrivePoseEstimator poseEstimator;
     private Field2d field;
     private boolean usingOdometryTargeting = false;
+    private AprilTagPi aprilTagPi;
 
-    PhotonCamera camera;
-
-
-    public SwerveDrive (AHRS m_gyro) {
+    public SwerveDrive (AHRS m_gyro, AprilTagPi pi) {
         this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
         this.frontRight = new SwerveModule(Constants.SwerveModuleType.FRONT_RIGHT);
         this.backLeft = new SwerveModule(Constants.SwerveModuleType.BACK_LEFT);
         this.backRight = new SwerveModule(Constants.SwerveModuleType.BACK_RIGHT);
         this.gyro = m_gyro;
+        this.aprilTagPi = pi;
         isFieldRelative = Constants.FIELD_RELATIVE_ON_START;
         dampener = 1;
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
@@ -61,12 +60,19 @@ public class SwerveDrive extends SubsystemBase {
         xRateLimiter2 = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S);
         visionLimiter = new SlewRateLimiter(Constants.MAX_ANGULAR_ACCEL_TELEOP_PERCENT_PER_S * 1.25);
         odometer = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, new Rotation2d(0));
+        poseEstimator = new SwerveDrivePoseEstimator(
+            getRotation2d(), 
+            new Pose2d(
+                new Translation2d(), 
+                new Rotation2d()), 
+            Constants.SWERVE_DRIVE_KINEMATICS,
+            new MatBuilder<>(Nat.N3(), Nat.N1()).fill(.02, .02, .01),
+            new MatBuilder<>(Nat.N1(), Nat.N1()).fill(.1),
+            new MatBuilder<>(Nat.N3(), Nat.N1()).fill(.01, .01, .01)
+        );
         faceTargetPID = new PIDController(.065, 0, 0);
         //edit and add to constants //FIXME tune and maybe invert P (if it goes in wrong direction)
         faceTargetPID.setTolerance(5);
-
-        camera = new PhotonCamera("scrappyvision");
-
         field = new Field2d();
         zeroHeading();
 
@@ -123,36 +129,28 @@ public class SwerveDrive extends SubsystemBase {
             xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV())) * dampener;
         }
 
-        boolean targetVis = camera.getLatestResult().hasTargets();
+        boolean targetVis = aprilTagPi.hasTarget();
 
 
         if (shootButton > .1) {
 
             if (targetVis) {
-                PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
                 usingOdometryTargeting = false;
-
-                double yaw = target.getYaw();
-                double pitch = target.getPitch();
-                double area = target.getArea();
-                double skew = target.getSkew();
-
+                double yaw = aprilTagPi.getTarget().getYaw();
                 double visionSpeed = faceTargetPID.calculate(yaw, 0);
                 
-                visionSpeed = (Math.abs(visionSpeed) > .3)?(Math.copySign(.3, visionSpeed)):visionSpeed;
-                SmartDashboard.putNumber("visionSpeed", visionSpeed);
+                visionSpeed = (Math.abs(visionSpeed) > .3)?(Math.copySign(.3, visionSpeed)):visionSpeed; //makes pid stupid near the end
                 if (faceTargetPID.atSetpoint()) {
                     resetTargetingPID(yaw, Math.toDegrees(visionSpeed));
+                    addVisionMeasurement(RobotContainer.getPi().getVisionBasedRobotPose());
                     // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
                 }
                 if (shootButton > .9) {
                     x2Speed = visionSpeed;
                 } else {
-                    x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
-                    // x2Speed = visionSpeed;
+                    // x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
+                    x2Speed = visionSpeed; //use this whenever debugging to see what vision speed is
                 }
-                // System.out.println(x2Speed);
-
             } else {
                 usingOdometryTargeting = true;
                 x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
@@ -193,6 +191,18 @@ public class SwerveDrive extends SubsystemBase {
         odometer.resetPosition(pose, getRotation2d());
     }
 
+    public Pose2d getBestEstimatorPose() {
+        return poseEstimator.getEstimatedPosition();
+    }
+
+    public void addVisionMeasurement(Pose2d visionMeasurement) {
+        poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp());
+    }
+
+    public void resetEstimator(Pose2d pose) {
+        poseEstimator.resetPosition(pose, getRotation2d());
+    }
+
     public void resetMods() {
         SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
         for (int i = 0; i < 4; i++) {
@@ -207,6 +217,7 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
+        poseEstimator.update(getRotation2d(), frontLeft.getModState(), frontRight.getModState(), backLeft.getModState(), backRight.getModState());
         field.setRobotPose(odometer.getPoseMeters());
         
         log();
@@ -228,13 +239,7 @@ public class SwerveDrive extends SubsystemBase {
     public void toggleFieldRelative() {
         isFieldRelative = Constants.FIELD_RELATIVE_SWITCHABLE ? !isFieldRelative : isFieldRelative;
     }
-
-    public String getAprilTag(){
-        if(camera.getLatestResult().hasTargets())
-            return "" + camera.getLatestResult().getBestTarget().getFiducialId();
-        return "-999999";
-    }
-
+    
     private void log() {
         Logger.Work.post("FieldRelative", getFieldRelative());
         // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
@@ -261,8 +266,8 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("x2speed", x2Speed);
         Logger.Work.post("usingOdom", usingOdometryTargeting);   
         
-        SmartDashboard.putString("AprilTag", getAprilTag());
-        SmartDashboard.putBoolean("has tag", camera.getLatestResult().hasTargets());
+        SmartDashboard.putString("AprilTag Info", aprilTagPi.getTarget().toString());
+        SmartDashboard.putBoolean("has tag", aprilTagPi.hasTarget());
 
     }
 }
