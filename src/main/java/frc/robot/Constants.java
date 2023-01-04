@@ -78,7 +78,7 @@ public final class Constants {
     public static final double SWERVE_CONVERSION_FACTOR_ROT_TO_RAD = 2 * Math.PI * kTurningMotorGearRatio;
     public static final double SWERVE_CONVERSION_FACTOR_RPM_TO_RAD_PER_S = SWERVE_CONVERSION_FACTOR_ROT_TO_RAD / 60;
     public static final double MAX_PHYSICAL_SPEED_M_PER_SEC = 4.4196; //do not touch
-    public static final double MAX_SPEED_TELEOP_M_PER_S = 4;
+    public static final double MAX_SPEED_TELEOP_M_PER_S = 4.3;
     public static final double MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S = Math.PI * 2;
     public static final double MAX_NEO_SPEED_RPM = 5676.0;
 

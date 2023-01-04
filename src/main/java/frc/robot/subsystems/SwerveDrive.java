@@ -44,7 +44,7 @@ public class SwerveDrive extends SubsystemBase {
     private SwerveDrivePoseEstimator poseEstimator;
     private Field2d field;
     private boolean usingOdometryTargeting = false;
-    private AprilTagPi aprilTagPi;
+    // private AprilTagPi aprilTagPi;
 
     public SwerveDrive (AHRS m_gyro, AprilTagPi pi) {
         this.frontLeft = new SwerveModule(Constants.SwerveModuleType.FRONT_LEFT);
@@ -52,7 +52,7 @@ public class SwerveDrive extends SubsystemBase {
         this.backLeft = new SwerveModule(Constants.SwerveModuleType.BACK_LEFT);
         this.backRight = new SwerveModule(Constants.SwerveModuleType.BACK_RIGHT);
         this.gyro = m_gyro;
-        this.aprilTagPi = pi;
+        // this.aprilTagPi = pi;
         isFieldRelative = Constants.FIELD_RELATIVE_ON_START;
         dampener = 1;
         xRateLimiter = new SlewRateLimiter(Constants.MAX_ACCEL_TELEOP_PERCENT_PER_S);
@@ -129,34 +129,34 @@ public class SwerveDrive extends SubsystemBase {
             xSpeed = Math.sin(Math.toRadians(360 - controller.getPOV())) * dampener;
         }
 
-        boolean targetVis = aprilTagPi.hasTarget();
+        // boolean targetVis = aprilTagPi.hasTarget();
 
 
-        if (shootButton > .1) {
+        // if (shootButton > .1) {
 
-            if (targetVis) {
-                usingOdometryTargeting = false;
-                double yaw = aprilTagPi.getTarget().getYaw();
-                double visionSpeed = faceTargetPID.calculate(yaw, 0);
+        //     if (targetVis) {
+        //         usingOdometryTargeting = false;
+        //         // double yaw = aprilTagPi.getTarget().getYaw();
+        //         double visionSpeed = faceTargetPID.calculate(yaw, 0);
                 
-                visionSpeed = (Math.abs(visionSpeed) > .3)?(Math.copySign(.3, visionSpeed)):visionSpeed; //makes pid stupid near the end
-                if (faceTargetPID.atSetpoint()) {
-                    resetTargetingPID(yaw, Math.toDegrees(visionSpeed));
-                    addVisionMeasurement(RobotContainer.getPi().getVisionBasedRobotPose());
-                    // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
-                }
-                if (shootButton > .9) {
-                    x2Speed = visionSpeed;
-                } else {
-                    // x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
-                    x2Speed = visionSpeed; //use this whenever debugging to see what vision speed is
-                }
-            } else {
-                usingOdometryTargeting = true;
-                x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
+        //         visionSpeed = (Math.abs(visionSpeed) > .3)?(Math.copySign(.3, visionSpeed)):visionSpeed; //makes pid stupid near the end
+        //         if (faceTargetPID.atSetpoint()) {
+        //             resetTargetingPID(yaw, Math.toDegrees(visionSpeed));
+        //             addVisionMeasurement(RobotContainer.getPi().getVisionBasedRobotPose());
+        //             // setGyroOffset(OdometryMath2022.gyroTargetOffset()); //might need to negate //FIXME
+        //         }
+        //         if (shootButton > .9) {
+        //             x2Speed = visionSpeed;
+        //         } else {
+        //             // x2Speed = x2Speed * (1 - shootButton) + visionSpeed * shootButton;
+        //             x2Speed = visionSpeed; //use this whenever debugging to see what vision speed is
+        //         }
+        //     } else {
+        //         usingOdometryTargeting = true;
+        //         x2Speed = visionLimiter.calculate(OdometryMath2022.robotEasiestTurnToTarget()) * Constants.MAX_ANGULAR_SPEED_TELEOP_RAD_PER_S;
             
-            }
-        }
+        //     }
+        // }
         chassisSpeeds = isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, x2Speed, getPose().getRotation()) : new ChassisSpeeds(ySpeed, xSpeed, x2Speed);
         
         //IF YOU ARE WONDERING WHY YSPEED IS IN XSPEED PARAM OF CHASSIS SPEEDS STOP WHAT YOU ARE DOING AND ASK PRAT.
@@ -244,7 +244,7 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("FieldRelative", getFieldRelative());
         // Logger.Work.post("GyroCalibrating", gyro.isCalibrating());
         Logger.Work.post("odom", odometer.getPoseMeters().toString());
-        Logger.Work.post("estimator pose", poseEstimator.getEstimatedPosition());
+        // Logger.Work.post("estimator pose", poseEstimator.getEstimatedPosition());
         // Logger.Work.post("key", backLeft.getTurnPosRad());
         Logger.Work.post("gyro", getHeading());
 
@@ -267,8 +267,8 @@ public class SwerveDrive extends SubsystemBase {
         Logger.Work.post("x2speed", x2Speed);
         Logger.Work.post("usingOdom", usingOdometryTargeting);   
         
-        SmartDashboard.putString("AprilTag Info", aprilTagPi.getTarget().toString());
-        SmartDashboard.putBoolean("has tag", aprilTagPi.hasTarget());
+        // SmartDashboard.putString("AprilTag Info", aprilTagPi.getTarget().toString());
+        // SmartDashboard.putBoolean("has tag", aprilTagPi.hasTarget());
 
     }
 }

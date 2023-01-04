@@ -14,7 +14,6 @@ public class Logger {
     public static void init() {
         Work.setupWorkLoglist();
         Comp.setupCompLoglist();
-
     } 
 
     public static class Work {
@@ -63,7 +62,6 @@ public class Logger {
             } else {
                 compList.put(key, b);                
             }
-
         }
 
         public static void postComplex(String key, Sendable b, WidgetType type) {

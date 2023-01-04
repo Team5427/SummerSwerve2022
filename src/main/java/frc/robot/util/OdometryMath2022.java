@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class OdometryMath2022 extends SubsystemBase {
@@ -38,7 +39,7 @@ public class OdometryMath2022 extends SubsystemBase {
         log();
     }
 
-    private double smartArcAngle(double inputX, double inputY, double distance) {
+    private static double smartArcAngle(double inputX, double inputY, double distance) {
         if (inputX < 0 ) {
             return (Math.PI - Math.asin(inputY/distance));
         } else {
@@ -48,11 +49,20 @@ public class OdometryMath2022 extends SubsystemBase {
 
     public static int robotEasiestTurnToTarget() {
         if (hubTriangleRot.minus(robotPose.getRotation()).getRadians() > 0) {
-            return -1; //FIXME might need to invert if doesnt move in right direction when target not on screen
+            return -1; //works
         } else {
             return 1; //same
         }
     }
+
+    public static double robotAngleToTarget(Translation2d targetTranslationMeters) {
+        Translation2d trans = robotPose.getTranslation().minus(targetTranslationMeters);
+        Rotation2d rot = new Rotation2d(smartArcAngle(trans.getX(), trans.getY(), Math.hypot(trans.getX(), trans.getY())));
+        return rot.minus(robotPose.getRotation()).getRadians();
+
+    }
+
+
 
     public static double gyroTargetOffset() {
         return hubTriangleRot.minus(gyroYaw).getRadians();
